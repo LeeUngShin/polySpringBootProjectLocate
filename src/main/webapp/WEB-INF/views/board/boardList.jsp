@@ -6,7 +6,7 @@
 		<meta charset="UTF-8">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-		<link rel="stylesheet" href = "../../resources/css/project.css">
+		<link rel="stylesheet" href = "/resources/css/project.css">
 	</head>
 	<body>
 		<div id="container">
@@ -26,7 +26,7 @@
 					<c:forEach var="board" items="${paging.content}">
 				    <tr>
 				      <th scope="row">${board.num}</th>
-				      <td><a href="/board/detail/${board.num}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
+				      <td><a href="/board/detail/${board.num}/${currentPage}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
 				      <td>${board.member.id}</td>
 					  <td>${board.regDate}</td>
 				    </tr>

@@ -3,6 +3,9 @@ package com.example.polySpringBootProject.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ToString  // ToString 메서드 사용가능
 @Getter  // Getter 메서드 사용가능
 @Builder  // 빌드패턴(클래스) 자동 생성 - 빌더 클래스는 setter 메서드 제공(체이닝 방식)
@@ -24,6 +27,9 @@ public class BoardEntity extends BaseEntity {
     @Lob  // 일반 속성
     private String content;
 
+    @Column  // 파일첨부 여부(1 : 파일첨부O, 0 : 파일첨부x)
+    private int fileAttached;
+
 //    @CreationTimestamp
 //    @Temporal(TemporalType.TIMESTAMP)
 //    LocalDateTime regDate;
@@ -32,8 +38,12 @@ public class BoardEntity extends BaseEntity {
 //    @Temporal(TemporalType.TIMESTAMP)
 //    LocalDateTime modDate;
 
-    //@ToString.Exclude
-    @ManyToOne  // 다 대 일 (다 : 주인, 자식, 일 : 주인X, 부모)
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)  // 다 대 일 (다 : 주인, 자식, 일 : 주인X, 부모)
     @JoinColumn(name="member_id")  // 연관관계 주인임을 나타냄 , name = 외래키 이름
     private MemberEntity member;
+
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BoardFileEntity> boardFileEntities = new ArrayList<>();
+
 }

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +27,26 @@ public class MemberService {
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
-    public boolean join(JoinDto joinForm) {
+    public boolean join(JoinDto joinDto, BindingResult bindingResult) {
 
-        String encodePw = passwordEncoder.encode(joinForm.getPw());
+        String encodePw = passwordEncoder.encode(joinDto.getPw());
+
+        boolean duplicatedId = memberRepository.existsById(joinDto.getId());
+        System.out.println("중복아이디 존재 " + duplicatedId);
+        if(duplicatedId==true){
+
+            bindingResult.rejectValue("id", "duplicatedId", "중복된 아이디입니다.");
+            return false;
+        }
 
         MemberEntity member = MemberEntity.builder()
-                .id(joinForm.getId())
+                .id(joinDto.getId())
                 .pw(encodePw)
-                .name(joinForm.getName())
-                .post(joinForm.getPost())
-                .addr(joinForm.getAddr())
-                .addrDetail(joinForm.getAddrDetail())
-                .email(joinForm.getEmail())
+                .name(joinDto.getName())
+                .post(joinDto.getPost())
+                .addr(joinDto.getAddr())
+                .addrDetail(joinDto.getAddrDetail())
+                .email(joinDto.getEmail())
                 .role(RoleType.ROLE_USER)
                 .build();
 

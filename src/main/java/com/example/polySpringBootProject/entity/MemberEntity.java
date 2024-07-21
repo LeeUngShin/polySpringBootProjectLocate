@@ -64,8 +64,9 @@ public class MemberEntity extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
-    @OneToMany(mappedBy = "member",  // 일 대 다 (다 : 주인, 자식, 일 : 주인X, 부모)
-            cascade=CascadeType.REMOVE)  //  mappedBy : 연관관계 주인이 아님을 나타냄, 값으로 주인에서 사용하는 외래키 필드명을 씀
+    // 일 대 다 (다 : 주인, 자식, 일 : 주인X, 부모)
+    //  mappedBy : 연관관계 주인이 아님을 나타냄, 값으로 주인에서 사용하는 외래키 필드명을 씀
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BoardEntity> boardDatas = new ArrayList<>();
 
 }

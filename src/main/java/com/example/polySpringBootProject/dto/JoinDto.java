@@ -1,6 +1,7 @@
 package com.example.polySpringBootProject.dto;
 
 import com.example.polySpringBootProject.entity.MemberEntity;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @ToString  // ToString 메서드 사용가능
@@ -12,13 +13,27 @@ import lombok.*;
 @NoArgsConstructor  // 매개변수가 없는 생성자 자동생성
 public class JoinDto {
 
+    @NotBlank(message = "아이디를 입력하세요")
     private String id;
+    
+    @NotBlank(message = "패스워드를 입력하세요")
     private String pw;
+    
+    private String pwCheck;
+    
+    @NotBlank(message = "이름을 입력하세요")
     private String name;
+    
+    @NotBlank(message = "주소 입력하세요")
     private String post;
+    
+    @NotBlank(message = "주소를 입력하세요")
     private String addr;
+    
+    @NotBlank(message = "상세주소를 입력하세요")
     private String addrDetail;
-    private int age;
+    
+    @NotBlank(message = "이메일을 입력하세요")
     private String email;
 
     public static JoinDto entityToDto(MemberEntity member) {
@@ -28,7 +43,6 @@ public class JoinDto {
         joinForm.setPw(member.getPw());
         joinForm.setName(member.getName());
         joinForm.setAddr(member.getAddr());
-        joinForm.setAge(member.getAge());
         joinForm.setEmail(member.getEmail());
 
         return joinForm;

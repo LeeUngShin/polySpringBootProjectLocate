@@ -3,7 +3,7 @@
 
 		  <header id="header">
 		    <a href="/home">
-		      <img src="../../../resources/img/logo.PNG">
+		      <img src="/img/logo.PNG">
 		    </a>
 			
 			<% 

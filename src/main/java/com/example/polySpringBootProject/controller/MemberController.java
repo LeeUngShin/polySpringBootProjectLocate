@@ -2,19 +2,25 @@ package com.example.polySpringBootProject.controller;
 
 import com.example.polySpringBootProject.dto.JoinDto;
 import com.example.polySpringBootProject.service.MemberService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -42,20 +48,40 @@ public class MemberController {
     /**
      * 회원가입 처리
      * @param request
-     * @param joinForm
+     * @param joinDto
      * @return
      */
     @RequestMapping(value="/join", method=RequestMethod.POST)
-    public String joinProcess(HttpServletRequest request, @ModelAttribute JoinDto joinForm) {  // joinForm의 변수명과 회원가입 템플릿의 name값은 동일해야 함
+    public String joinProcess(HttpServletRequest request,
+                              @Valid @ModelAttribute JoinDto joinDto,
+                              BindingResult bindingResult,
+                              Model model) {  // joinDto의 변수명과 회원가입 템플릿의 name값은 동일해야 함
 
-        boolean joinSuccess = memberService.join(joinForm);
+        boolean joinSuccess = memberService.join(joinDto, bindingResult);
+
+        if(!joinDto.getPw().equals(joinDto.getPwCheck())){
+            bindingResult.rejectValue("pwCheck", "pwInCorrect", "비밀번호가 불일치합니다.");
+        }
+
+        if(bindingResult.hasErrors()){
+            List<FieldError> errorList = bindingResult.getFieldErrors();
+            log.info("에러리스트 : " + errorList);
+            Map<String, String> errMsg = new HashMap<>();
+            for(FieldError fieldError : errorList){
+                errMsg.put(fieldError.getField(), fieldError.getDefaultMessage());
+                model.addAttribute("errorMsg", errMsg);
+                model.addAttribute("joinDto", joinDto);
+            }
+            return "member/join";
+        }
+
         if(joinSuccess) {
             System.out.println("회원가입 성공");
             return "redirect:/home";
         }
         else {
             System.out.println("회원가입 실패");
-            request.setAttribute("inputId", joinForm.getId());
+            request.setAttribute("inputId", joinDto.getId());
             return "member/join";
         }
     }
@@ -72,19 +98,35 @@ public class MemberController {
     }
 
     @RequestMapping(value="/login", method = RequestMethod.POST)
-    public String loginProcess(HttpServletRequest request, HttpSession session) {
+    public String loginProcess(HttpServletRequest request,
+                               HttpServletResponse response,
+                               HttpSession session,
+                               @RequestParam(name = "idMemory", defaultValue = "false") boolean idMemory) {
 
         String id =request.getParameter("id");
         String pw =request.getParameter("pw");
         boolean loginSuccess = memberService.login(id, pw, session);
 
+        Cookie rememberCookie = new Cookie("REMEMBER", request.getParameter("id"));
+        rememberCookie.setPath("/");
+        boolean check = idMemory;
+        System.out.println("아이디를 기억할까 체크여부 : " + check);
+        if (check) {
+            rememberCookie.setMaxAge(60 * 60 * 24 * 30);
+
+        } else {
+            rememberCookie.setMaxAge(0);
+        }
+        response.addCookie(rememberCookie); // 쿠키추가
+
         if(loginSuccess) {
-            log.info("로그인 했더니 현재 세션 데이터" + session.getAttribute("member"));
+            log.info("로그인 했더니 현재 세션 데이터" + session.getAttribute("loginId"));
+
             return "redirect:/home";
         }
         else {
             System.out.println("로그인 실패");
-            return "member/login";
+            return "redirect:/member/login";
         }
     }
 

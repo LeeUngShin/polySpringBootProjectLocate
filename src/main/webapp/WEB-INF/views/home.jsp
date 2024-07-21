@@ -5,13 +5,13 @@
 		<meta charset="UTF-8">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href = "${path}/resources/css/project.css">
+		<link rel="stylesheet" type="text/css" href = "/css/project.css">
 	</head>
 	<body>
 		<div id="container">
 		  <header id="header">
 		    <a href="/home">
-		      <img src=".${path}/resources/img/logo.PNG">
+		      <img src="/img/logo.PNG">
 		    </a>
 			
 			<% 
@@ -62,7 +62,7 @@
 		            <a class="nav-link active" aria-current="page" href="#">Home</a>
 		          </li>
 		          <li class="nav-item">
-		            <a class="nav-link" href="/board/list?page=1">게시판</a>
+		            <a class="nav-link" href="/board/page">게시판</a>
 		          </li>
 		          <li class="nav-item dropdown">
 		            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

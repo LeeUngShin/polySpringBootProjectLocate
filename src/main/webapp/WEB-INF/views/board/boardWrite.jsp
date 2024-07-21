@@ -5,7 +5,7 @@
 		<meta charset="UTF-8">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-		<link rel="stylesheet" href = "../../resources/css/project.css">
+		<link rel="stylesheet" href = "/resources/css/project.css">
 		
 	</head>
 	
@@ -16,7 +16,7 @@
 		<div class="section" id="boardWriteForm">
 			<h2>게시글 등록</h2>
 			<hr>
-			<form action="/board/write" method="POST">
+			<form action="/board/write" method="POST" enctype="multipart/form-data">
 				<div class="mb-3">
 				  <label for="formGroupExampleInput" class="form-label">제목</label>
 				  <input type="text" class="form-control" id="formGroupExampleInput"style="width:920px" name="title">
@@ -25,6 +25,10 @@
 				  <label for="formGroupExampleInput2" class="form-label">내용</label>
 				  <textarea id="formGroupExampleInput2" name="content" class="form-control" rows="10" cols="118" style="resize:none" name="content"></textarea>
 				</div>
+				<div class="mb-3">
+                    <label for="formGroupExampleInput2" class="form-label">파일</label>
+				    <input type="file" class="form-control" id="formGroupExampleInput" style="width:920px" name="boardFile">
+                </div>
 				<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 				<button type=submit" class="btn btn-outline-secondary" id="writeButton">
 					<i class="bi bi-pencil"></i>

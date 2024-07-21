@@ -6,7 +6,7 @@
 		<meta charset="UTF-8">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-		<link rel="stylesheet" href = "../../resources/css/project.css">
+		<link rel="stylesheet" href = "/resources/css/project.css">
 	</head>
 	<body>
 		<div id="container">
@@ -16,57 +16,55 @@
 				<table class="table table-striped table-hover" >
 				  <thead class="table-dark">
 				    <tr>
-				      <th scope="col" width=200px>글번호${key}-</th>
+				      <th scope="col" width=200px>글번호</th>
 				      <th scope="col" width=500px>제목</th>
 					  <th scope="col" width=200px>작성자</th>
 				      <th scope="col" width=200px>작성일자</th>
 				    </tr>
 				  </thead>
 				  <tbody class="table-group-divider">
-					<c:forEach var="board" items="${searchPaging.content}">
-				    <tr>
-				      <th scope="row">${board.num}</th>
-				      <td><a href="/board/detail/${board.num}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
-				      <td>${board.member.id}</td>
-					  <td>${board.regDate}</td>
-				    </tr>
+					<c:forEach var="board" items="${boardList.content}">
+                        <tr>
+                          <th scope="row">${board.num}</th>
+                          <td><a href="/board/detail/${board.num}/${currentPage}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
+                          <td>${board.writer}</td>
+                          <td>${board.regTime}</td>
+                        </tr>
 					</c:forEach>
 				  </tbody>
 				</table>
 				
 				<div id="pageNum">
 					<div style="flex-grow: 1;padding-left: 150px;">
-					<c:choose>
-						<c:when test="${searchPaging.isFirst()}">
-						이전
-						</c:when>
-						<c:otherwise>
-							<a href="/board/search?page=${currentPage-1}&keyword=${key}">이전</a>
-						</c:otherwise>
-					</c:choose>
-
-					<c:forEach begin="1" end="${totalPage}" var="count">
-						<c:choose>
-							<c:when test = "${count != currentPage}">
-								<c:if test = "${(currentPage-2 <= count && count <= currentPage+2)}">
-									<a href="/board/search?page=${count}&keyword=${key}">${count}</a>
-								</c:if>
-							</c:when>
-							<c:otherwise>
-								${count}
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-
-					<c:choose>
-						<c:when test="${searchPaging.isLast()}">
-							다음
-						</c:when>
-						<c:otherwise>
-							<a href="/board/search?page=${currentPage+1}&keyword=${key}">다음</a>
-						</c:otherwise>
-					</c:choose>
-					</div>
+					    <a href="/board/page?page=1&keyword=${keyword}">처음</a>
+                        <c:choose>
+                           <c:when test="${boardList.isFirst()}">  <!--첫페이지이면 전페이지가 없음-->
+                            이전
+                           </c:when>
+                            <c:otherwise>
+                                <a href="/board/page?page=${currentPage-1}&keyword=${keyword}">이전</a>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:forEach begin="${startPage}" end="${endPage}" var="count">
+                            <c:choose>
+                                <c:when test = "${count != currentPage}">
+                                    <a href="/board/page?page=${count}&keyword=${keyword}">${count}</a>
+                                </c:when>
+                                <c:otherwise>
+                                    ${count}
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${boardList.isLast()}">
+                                다음
+                            </c:when>
+                            <c:otherwise>
+                                <a href="/board/page?page=${currentPage+1}&keyword=${keyword}">다음</a>
+                            </c:otherwise>
+                        </c:choose>
+                        <a href="/board/page?page=${boardList.totalPages}&keyword=${keyword}">마지막</a>
+                    </div>
 	
 					<form action="/board/write">
 						<div class="d-grid gap-2 d-md-flex justify-content-md-end boardButton">
@@ -77,14 +75,15 @@
 						</div>
 					</form>
 				</div>
-				<div class = "serachInput">
-					<form action="/board/search">
+				<div id = "searchInput">
+					<form action="/board/page">
 						<input type="hidden" name="page" value="1">
 						<input type="text" name="keyword">
 						<input type="submit" value="검색">
 					</form>
 				</div>
 			</div>
+			<div id="Test">hi</div>
 			
 			<%@ include file = "../footer.jsp" %>
 		</div>

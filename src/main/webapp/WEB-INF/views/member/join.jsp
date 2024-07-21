@@ -5,7 +5,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-		<link rel="stylesheet" href = "../../../resources/css/project.css">
+		<link rel="stylesheet" href = "/resources/css/project.css">
 	</head>
 	<body>
 
@@ -14,32 +14,41 @@
 		    <div class="mb-3">
 		      <label for="exampleInputEmail1" class="form-label">아이디</label>
 		      <input type="text" class="form-control" id="exampleInputEmail1"name="id" required>
+		      <c:if test="${not empty errorMsg.id}">
+              	<span class="error">${errorMsg.id}</span><br>
+              </c:if>
 		    </div>
 		    <div class="mb-3">
 		      <label for="exampleInputPassword1" class="form-label">비밀번호</label>
 		      <input type="password" class="form-control" id="exampleInputPassword1" name ="pw" required>
 		    </div>
 		    <div class="mb-3">
+                 <label for="exampleInputPassword2" class="form-label">비밀번호</label>
+                 <input type="password" class="form-control" id="exampleInputPassword2" name ="pwCheck" required>
+            </div>
+            <c:if test="${not empty errorMsg.pwCheck}">
+                <span class="error">${errorMsg.pwCheck}</span><br>
+            </c:if>
+		    <div class="mb-3">
 		      <label for="exampleInputName1" class="form-label">이름</label>
 		      <input type="text" class="form-control" id ="exampleInputName1" name="name" required>
 		    </div>
 			<div class="mb-3">
 				<label class="form-label">주소</label><br>
-				<input type="text" class="form-control" id="sample6_postcode" placeholder="우편번호" name="post" style="width:150px; display:inline-block">
+				<input type="text" class="form-control" id="sample6_postcode" placeholder="우편번호" name="post" style="width:150px; display:inline-block" required>
 				<input type="button" class="form-control" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" style="width:150px; display:inline-block">
 			</div>
 			<div class="mb-3">
-				<input type="text" class="form-control" id="sample6_address" name="addr" placeholder="주소" >
+				<input type="text" class="form-control" id="sample6_address" name="addr" placeholder="주소" required>
 			</div>
 			<div class="mb-3">
-				<input type="text" class="form-control" id="sample6_detailAddress" name="addrDetail"" placeholder="상세주소" style="width:304px; display:inline-block">
+				<input type="text" class="form-control" id="sample6_detailAddress" name="addrDetail"" placeholder="상세주소" style="width:304px; display:inline-block" required>
 				<input type="text" class="form-control" id="sample6_extraAddress" placeholder="참고항목"style="width:90px; display:inline-block">
 			</div>
 		    <div class="mb-3">
 		      <label for="exampleInputEmail1" class="form-label">이메일</label>
-		      <input type="email" class="form-control" id ="exampleInputEmail1" name=email required>
+		      <input type="email" class="form-control" id ="exampleInputEmail1" name="email" required>
 		    </div>
-
 		    
 		    <!-- <div class="col-auto">
 		      <label for="exampleInputEamil1" class="form-label">이메일</label>
