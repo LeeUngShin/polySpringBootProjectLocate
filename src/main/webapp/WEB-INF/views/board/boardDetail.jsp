@@ -32,13 +32,14 @@
 				      <td colspan="6" style="white-space:pre;" id="boardContent">${boardDto.content}</td>
 				    </tr>
 				    <tr>
-				        <td><img src="/upload/${board.storedFileName}" alt=""></td>
+				        <th>이미지</th>
+				        <td colspan="6"><img src="/upload/${boardDto.storedFileName}" alt=""></td>
 				    </tr>
 
 				</table>
 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end boardButton">
-                    <form action="/board/page?page=${currentPage}" method="GET">
+                    <form action="/board/page" method="GET">
                         <input type=hidden name="boardId" value=${boardDto.num}>
                         <button type="submit" class="btn btn-outline-secondary" id="writeFormButton">
                             <i class="bi bi-pencil"></i>
@@ -67,7 +68,7 @@
 				</c:if>
 			</div>
 
-			
+
 			<%@include file = "../footer.jsp" %>
 		</div>
 		  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

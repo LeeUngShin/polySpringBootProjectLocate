@@ -26,7 +26,7 @@
 					<c:forEach var="board" items="${boardList.content}">
                         <tr>
                           <th scope="row">${board.num}</th>
-                          <td><a href="/board/detail/${board.num}/${currentPage}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
+                          <td><a href="/board/detail/${board.num}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
                           <td>${board.writer}</td>
                           <td>${board.regTime}</td>
                         </tr>
@@ -78,6 +78,10 @@
 				<div id = "searchInput">
 					<form action="/board/page">
 						<input type="hidden" name="page" value="1">
+						<select name="searchCategory">
+						    <option value="title">제목</option>
+						    <option value="content">내용</option>
+						    <option value="writer">작성자</option>
 						<input type="text" name="keyword">
 						<input type="submit" value="검색">
 					</form>

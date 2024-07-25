@@ -166,16 +166,24 @@ public class BoardService {
 //        return boardRepository.findAll(pageable);
 //    }
 
-    public Page<BoardDto> paging(Pageable pageable, String keyword){
+    public Page<BoardDto> paging(Pageable pageable, String keyword, String searchCategory){
         int page = pageable.getPageNumber()-1;  // 0페이지부터 시작하기 때문에 1페이지를 보려면 0페이지를 불러와야함
         int pageLimit = 7;  // 한 페이지에 보여줄 게시글 갯수
         //Page<BoardEntity> boardEntities=  boardRepository.findAll(PageRequest.of(page,pageLimit, Sort.by(Sort.Direction.DESC, "num")));
-        Page<BoardEntity> boardEntities;
+        Page<BoardEntity> boardEntities = null;
         // PageRequest : Pageable의 구현체
         if(keyword =="" || keyword==null) {
             boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
         }else {
-            boardEntities = boardRepository.findByTitleContaining(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), keyword);
+            if(searchCategory.equals("title")) {
+                boardEntities = boardRepository.findByTitleContaining(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), keyword);
+            }
+            else if(searchCategory.equals("content")){
+                boardEntities = boardRepository.findByContentContaining(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), keyword);
+            }
+            else if(searchCategory.equals("writer")) {
+                boardEntities = boardRepository.findBySearchId(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), keyword);
+            }
         }
 
         

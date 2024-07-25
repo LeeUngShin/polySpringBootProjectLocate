@@ -54,24 +54,21 @@ public class BoardController {
         return "redirect:/board/detail/"+ num;
     }
 
-    @RequestMapping(value="/detail/{boardNum}/{currentPage}", method=RequestMethod.GET)
+    @RequestMapping(value="/detail/{boardNum}", method=RequestMethod.GET)
     public String boardDetail(HttpServletRequest request,
-                              @PathVariable("boardNum") Long boardNum,
-                              @PathVariable("currentPage") int currentPage) {
+                              @PathVariable("boardNum") Long boardNum) {
         /*
             해당 게시글의 조회수를 하나 올리고 게시글 데이터를 가져와서 detail.jsp 출력
          */
-
+        log.info("로그1");
         BoardDto boardDto = boardService.boardDetail(boardNum);
+        log.info("로그2");
 
         request.setAttribute("boardDto", boardDto);
-        request.setAttribute("currentPage", currentPage);
+        //request.setAttribute("currentPage", currentPage);
 
         return "board/boardDetail";
     }
-
-
-
     @RequestMapping(value="/delete/{boardNum}", method=RequestMethod.POST)
     public String boardDelete(HttpServletRequest request,
                               @PathVariable("boardNum") Long boardNum) {
@@ -134,10 +131,11 @@ public class BoardController {
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public String paging(@PageableDefault(page = 1)Pageable pageable,
                          @RequestParam(value = "keyword", required = false) String keyword,
+                         @RequestParam(value="searchCategory", required = false) String searchCategory,
                          Model model){
 
         System.out.println(pageable.getPageNumber());
-        Page<BoardDto> boardList = boardService.paging(pageable, keyword);
+        Page<BoardDto> boardList = boardService.paging(pageable, keyword, searchCategory);
         int currentPage = boardList.getNumber()+1;  // 파라미터로 받은 현재페이지
 
         // 총 Page 개수 20개이고 페이지 선택을 3개씩 보여준다면

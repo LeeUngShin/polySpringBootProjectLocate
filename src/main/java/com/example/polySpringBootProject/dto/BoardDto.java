@@ -25,7 +25,7 @@ public class BoardDto {
     
     private MultipartFile boardFile;  // 파일을 담는 용도
     private String originalFileName;  // 원본 파일 이름
-    private String storedFIleName;  // 서버 저장용 파일 이름
+    private String storedFileName;  // 서버 저장용 파일 이름
     private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
 
     public BoardDto(Long num, String title, String content, LocalDateTime regTime, String writer) {
@@ -58,7 +58,7 @@ public class BoardDto {
             // 단일 파일 첨부이기 때문에 리스트에는 파일객체 1개만 있어서 get(0)으로 가져오면 됨
             // get(0) -> BoardFileEntity 객체 반환
             boardDto.setOriginalFileName(board.getBoardFileEntities().get(0).getOriginalFileName());
-            boardDto.setStoredFIleName(board.getBoardFileEntities().get(0).getStoredFileName());
+            boardDto.setStoredFileName(board.getBoardFileEntities().get(0).getStoredFileName());
         }
         return boardDto;
     }
