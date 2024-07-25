@@ -23,19 +23,15 @@ public class MemberEntity extends BaseEntity{
     private Long num;
 
     @Column(length = 200, unique = true)  // 일반 속성
-    //@NotBlank(message = "password cannot be blank")
     private String id;
 
     @Column(length = 200, nullable=false)  // 일반 속성
-    //@NotBlank(message = "password cannot be blank")
     private String pw;
 
     @Column(length=40, nullable=false)
-    //@NotBlank(message = "name cannot be blank")
     private String name;
 
     @Column(length=40)
-    //@NotBlank(message = "address cannot be blank")
     private String post;
 
     @Column(length=40)

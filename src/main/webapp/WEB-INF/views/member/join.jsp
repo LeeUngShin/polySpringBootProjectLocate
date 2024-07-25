@@ -8,12 +8,12 @@
 		<link rel="stylesheet" href = "/resources/css/project.css">
 	</head>
 	<body>
-
+    <div id="ung">aa</div>
 		<form action="/member/join" method="post" id="registerForm">
 		  <div id="registerform">
 		    <div class="mb-3">
-		      <label for="exampleInputEmail1" class="form-label">아이디</label>
-		      <input type="text" class="form-control" id="exampleInputEmail1"name="id" required>
+		      <label for="exampleInputId1" class="form-label">아이디</label>
+		      <input type="text" class="form-control" id="exampleInputId1"name="id" required>
 		      <c:if test="${not empty errorMsg.id}">
               	<span class="error">${errorMsg.id}</span><br>
               </c:if>
@@ -45,24 +45,24 @@
 				<input type="text" class="form-control" id="sample6_detailAddress" name="addrDetail"" placeholder="상세주소" style="width:304px; display:inline-block" required>
 				<input type="text" class="form-control" id="sample6_extraAddress" placeholder="참고항목"style="width:90px; display:inline-block">
 			</div>
-		    <div class="mb-3">
-		      <label for="exampleInputEmail1" class="form-label">이메일</label>
-		      <input type="email" class="form-control" id ="exampleInputEmail1" name="email" required>
-		    </div>
-		    
-		    <!-- <div class="col-auto">
-		      <label for="exampleInputEamil1" class="form-label">이메일</label>
-		      <input type="email" class="form-control" id="exampleInputEmail1" required>
-		      <div class="input-group">
-		        <div class="input-group-text">@</div>
-		        <select class="form-select" aria-label="Default select example">
-		          <option selected>메일을 선택하세요</option>
-		          <option value="1">naver.com</option>
-		          <option value="2">google.com</option>
-		          <option value="3">daum.net</option>
-		        </select>
-		      </div>
-		    </div> -->
+	           <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">이메일</label>
+               </div>
+            <div style="display: flex;">
+               <div class="mb-3" style="flex-basis: 300px; flex-grow: 1;">
+                  <input type="text" class="form-control" id="exampleInputEmail1" name="email" required>
+               </div>
+               <div class="input-group-text" style="flex-basis: 50px; margin-bottom: 16px;">@</div>
+               <div class="col-12" style="flex-basis: 170px;">
+                 <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
+                 <select class="form-select" id="inlineFormSelectPref" name="email2">
+                    <option selected>이메일을 선택하세요</option>
+                    <option value="@naver.com">naver.com</option>
+                    <option value="@daum.net">daum.net</option>
+                    <option value="@google.com">google.com</option>
+                 </select>
+               </div>
+            </div>
 		    <button type="submit" class="btn btn-primary">회원가입</button>
 		</div>
 		</form>

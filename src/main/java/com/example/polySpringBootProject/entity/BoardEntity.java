@@ -28,6 +28,9 @@ public class BoardEntity extends BaseEntity {
     @Lob  // 일반 속성
     private String content;
 
+    @Column
+    private String notice;
+
     @Column  // 파일첨부 여부(1 : 파일첨부O, 0 : 파일첨부x)
     private int fileAttached;
 

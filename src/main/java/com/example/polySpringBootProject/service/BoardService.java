@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +51,7 @@ public class BoardService {
                     .content(boardDto.getContent())
                     .member(m)
                     .fileAttached(0)  // 파일 없음 표시
+                    .notice(boardDto.getNotice())
                     .build();
             BoardEntity savedBoard = boardRepository.save(board);
             Long savedId = savedBoard.getNum();
@@ -83,6 +85,7 @@ public class BoardService {
             BoardEntity board = BoardEntity.builder()
                     .title(boardDto.getTitle())
                     .content(boardDto.getContent())
+                    .notice(boardDto.getNotice())
                     .member(m)
                     .fileAttached(1)
                     .build();
@@ -173,7 +176,12 @@ public class BoardService {
         Page<BoardEntity> boardEntities = null;
         // PageRequest : Pageable의 구현체
         if(keyword =="" || keyword==null) {
-            boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
+            //if(sort.equals("numAsc")){
+            //    boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "num")));
+            //}else if(sort.equals("numDesc")) {
+                boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
+            //} else {
+           // }
         }else {
             if(searchCategory.equals("title")) {
                 boardEntities = boardRepository.findByTitleContaining(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), keyword);
@@ -204,8 +212,24 @@ public class BoardService {
         // 위의 내용을 담을 수 있는 매개변수 생성자 BoardDto에 만들기
         Page<BoardDto> boardDtos = boardEntities.map
                 (board -> new BoardDto(board.getNum(), board.getTitle(), board.getContent(),
-                        board.getCreatedTime(), board.getMember().getId()));
+                        board.getCreatedTime(), board.getMember().getId(), board.getNotice()));
         return boardDtos;
+    }
+
+    public List<BoardDto> noticeList(){
+        List<BoardEntity> boardEntities = boardRepository.findByNoticeOrderByNumDesc("Y");
+        List<BoardDto> noticeBoardDtos= new ArrayList<>();
+        for(BoardEntity boardEntity : boardEntities){
+            BoardDto boardDto = new BoardDto();
+            boardDto.setNum(boardEntity.getNum());
+            boardDto.setTitle(boardEntity.getTitle());
+            boardDto.setContent(boardEntity.getContent());
+            boardDto.setRegTime(boardEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            boardDto.setNotice(boardEntity.getNotice());
+            noticeBoardDtos.add(boardDto);
+        }
+
+        return noticeBoardDtos;
     }
 
 //    public Page<BoardEntity> searchList(int page, String keyword){

@@ -12,17 +12,35 @@
 		<div id="container">
 			<%@include file = "../header.jsp" %>
 			<%@include file = "../nav.jsp" %>
-			<div class="section "> 
+			<div class="section ">
 				<table class="table table-striped table-hover" >
 				  <thead class="table-dark">
 				    <tr>
-				      <th scope="col" width=200px>글번호</th>
+				      <th scope="col" width=200px>글번호
+				      <!--
+				        <c:if test="${sortStd==desc}">
+				            <a href="/board/page?page=1&sort=numDesc"><i class="bi bi-arrow-down-circle"></i></a>
+				        </c:if>
+				        <c:if test="${sortStd==asc}">
+				            <a href="/board/page?page=1&sort=numAsc"><i class="bi bi-arrow-up-circle"></i></a>
+				        </c:if>
+				        -->
+				      </th>
 				      <th scope="col" width=500px>제목</th>
 					  <th scope="col" width=200px>작성자</th>
 				      <th scope="col" width=200px>작성일자</th>
 				    </tr>
 				  </thead>
 				  <tbody class="table-group-divider">
+				    <c:forEach var="board" items="${noticeBoardList}">
+                        <tr>
+                            <th scope="row">${board.num}</th>
+                            <td><i class="bi bi-bell"></i>
+                                <a href="/board/detail/${board.num}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
+                            <td>${board.writer}</td>
+                            <td>${board.regTime}</td>
+                        </tr>
+                  	</c:forEach>
 					<c:forEach var="board" items="${boardList.content}">
                         <tr>
                           <th scope="row">${board.num}</th>
@@ -36,19 +54,19 @@
 				
 				<div id="pageNum">
 					<div style="flex-grow: 1;padding-left: 150px;">
-					    <a href="/board/page?page=1&keyword=${keyword}">처음</a>
+					    <a href="/board/page?page=1&searchCategory=${searchCategory}&keyword=${keyword}">처음</a>
                         <c:choose>
                            <c:when test="${boardList.isFirst()}">  <!--첫페이지이면 전페이지가 없음-->
                             이전
                            </c:when>
                             <c:otherwise>
-                                <a href="/board/page?page=${currentPage-1}&keyword=${keyword}">이전</a>
+                                <a href="/board/page?page=${currentPage-1}&searchCategory=${searchCategory}&keyword=${keyword}">이전</a>
                             </c:otherwise>
                         </c:choose>
                         <c:forEach begin="${startPage}" end="${endPage}" var="count">
                             <c:choose>
                                 <c:when test = "${count != currentPage}">
-                                    <a href="/board/page?page=${count}&keyword=${keyword}">${count}</a>
+                                    <a href="/board/page?page=${count}&searchCategory=${searchCategory}&keyword=${keyword}">${count}</a>
                                 </c:when>
                                 <c:otherwise>
                                     ${count}
@@ -60,10 +78,10 @@
                                 다음
                             </c:when>
                             <c:otherwise>
-                                <a href="/board/page?page=${currentPage+1}&keyword=${keyword}">다음</a>
+                                <a href="/board/page?page=${currentPage+1}&searchCategory=${searchCategory}&keyword=${keyword}">다음</a>
                             </c:otherwise>
                         </c:choose>
-                        <a href="/board/page?page=${boardList.totalPages}&keyword=${keyword}">마지막</a>
+                        <a href="/board/page?page=${boardList.totalPages}&searchCategory=${searchCategory}&keyword=${keyword}">마지막</a>
                     </div>
 	
 					<form action="/board/write">

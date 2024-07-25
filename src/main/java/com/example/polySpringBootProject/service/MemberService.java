@@ -39,6 +39,10 @@ public class MemberService {
             return false;
         }
 
+        String email = joinDto.getEmail() + joinDto.getEmail2();
+        System.out.println(joinDto.getEmail());
+        System.out.println(joinDto.getEmail2());
+        System.out.println("이메일 조합 후 : " + email );
         MemberEntity member = MemberEntity.builder()
                 .id(joinDto.getId())
                 .pw(encodePw)
@@ -46,7 +50,7 @@ public class MemberService {
                 .post(joinDto.getPost())
                 .addr(joinDto.getAddr())
                 .addrDetail(joinDto.getAddrDetail())
-                .email(joinDto.getEmail())
+                .email(email)
                 .role(RoleType.ROLE_USER)
                 .build();
 

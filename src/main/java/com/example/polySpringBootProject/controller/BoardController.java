@@ -132,10 +132,20 @@ public class BoardController {
     public String paging(@PageableDefault(page = 1)Pageable pageable,
                          @RequestParam(value = "keyword", required = false) String keyword,
                          @RequestParam(value="searchCategory", required = false) String searchCategory,
+                         //@RequestParam(value="sort", required = false) String sort,
                          Model model){
+//        String sortStd="";
+//        if(sort.contains("asc")){
+//            sortStd = "asc";
+//        }
+//        else if(sort.contains("desc")){
+//            sortStd = "desc";
+//        }
 
         System.out.println(pageable.getPageNumber());
         Page<BoardDto> boardList = boardService.paging(pageable, keyword, searchCategory);
+        List<BoardDto> noticeBoardList = boardService.noticeList();
+        System.out.println("공지글 : " + noticeBoardList);
         int currentPage = boardList.getNumber()+1;  // 파라미터로 받은 현재페이지
 
         // 총 Page 개수 20개이고 페이지 선택을 3개씩 보여준다면
@@ -150,6 +160,10 @@ public class BoardController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("searchCategory", searchCategory);
+        model.addAttribute("noticeBoardList",noticeBoardList);
+
+        //model.addAttribute("sortStd", sortStd);
         return "board/boardPaging";
     }
 

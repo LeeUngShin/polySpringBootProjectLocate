@@ -29,6 +29,9 @@
                     <label for="formGroupExampleInput2" class="form-label">파일</label>
 				    <input type="file" class="form-control" id="formGroupExampleInput" style="width:920px" name="boardFile">
                 </div>
+                <div class="mb-3">
+                    <input type=checkbox name=notice value="Y"> 공지글
+                </div>
 				<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 				<button type=submit" class="btn btn-outline-secondary" id="writeButton">
 					<i class="bi bi-pencil"></i>

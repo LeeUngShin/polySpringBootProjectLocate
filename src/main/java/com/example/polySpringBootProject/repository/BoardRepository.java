@@ -11,6 +11,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
@@ -24,9 +26,9 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     Page<BoardEntity> findByMemberId(Pageable pageable, String id);
 
+    List<BoardEntity> findByNoticeOrderByNumDesc(String notice);
 
     // 게시글 조회 올리기
-
 //    @Modifying  // update, delete 등 수정관련에 붙힘
 //    @Query(value = "update BoardEntity b set b.boardHits=b.boardHits+1 where b.id=:id")  // 엔티티 기준
 //    //@Query(value = "update BoardEntity b set b.boardHits=b.boardHits+1 where b.id=:id", nativeQuery = true)  // db쿼리 기준
