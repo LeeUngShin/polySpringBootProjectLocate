@@ -21,7 +21,7 @@
 				로그아웃
 			</button>
 			</form>
-			<form action="/member/delete/${member.id}" metho="GET" id=delete-form>
+			<form action="/member/delete" metho="GET" id=delete-form>
 			 <button type="submit" class="btn btn-main">
 				<i class="bi bi-person-fill"></i>
 			회원탈퇴

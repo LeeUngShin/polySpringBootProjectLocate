@@ -32,41 +32,54 @@
 				    </tr>
 				  </thead>
 				  <tbody class="table-group-divider">
-				    <c:forEach var="board" items="${noticeBoardList}">
+                    <c:forEach var="board" items="${noticeBoardList}">
                         <tr>
                             <th scope="row">${board.num}</th>
                             <td><i class="bi bi-bell"></i>
-                                <a href="/board/detail/${board.num}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
+                                <a href="/board/detail/${board.num}?page=${currentPage}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
                             <td>${board.writer}</td>
                             <td>${board.regTime}</td>
                         </tr>
-                  	</c:forEach>
-					<c:forEach var="board" items="${boardList.content}">
-                        <tr>
-                          <th scope="row">${board.num}</th>
-                          <td><a href="/board/detail/${board.num}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
-                          <td>${board.writer}</td>
-                          <td>${board.regTime}</td>
-                        </tr>
-					</c:forEach>
+                    </c:forEach>
+                    <c:if test="${empty keyword}">
+                        <c:forEach var="board" items="${boardList.content}">
+                            <tr>
+                              <th scope="row">${board.num}</th>
+                              <td><a href="/board/detail/${board.num}?page=${currentPage}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
+                              <td>${board.writer}</td>
+                              <td>${board.regTime}</td>
+                            </tr>
+                        </c:forEach>
+                    </c:if>
+                    <c:if test="${not empty keyword}">
+                        <c:forEach var="board" items="${searchBoardList.content}">
+                             <tr>
+                                <th scope="row">${board.num}</th>
+                                <td><a href="/board/detail/${board.num}?page=${currentPage}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
+                                <td>${board.writer}</td>
+                                <td>${board.regTime}</td>
+                             </tr>
+                        </c:forEach>
+                    </c:if>
 				  </tbody>
 				</table>
 				
 				<div id="pageNum">
 					<div style="flex-grow: 1;padding-left: 150px;">
-					    <a href="/board/page?page=1&searchCategory=${searchCategory}&keyword=${keyword}">처음</a>
+					    <c:if test="${empty keyword}">
+					    <a href="/board/page?page=1">처음</a>
                         <c:choose>
                            <c:when test="${boardList.isFirst()}">  <!--첫페이지이면 전페이지가 없음-->
                             이전
                            </c:when>
                             <c:otherwise>
-                                <a href="/board/page?page=${currentPage-1}&searchCategory=${searchCategory}&keyword=${keyword}">이전</a>
+                                <a href="/board/page?page=${currentPage-1}">이전</a>
                             </c:otherwise>
                         </c:choose>
                         <c:forEach begin="${startPage}" end="${endPage}" var="count">
                             <c:choose>
                                 <c:when test = "${count != currentPage}">
-                                    <a href="/board/page?page=${count}&searchCategory=${searchCategory}&keyword=${keyword}">${count}</a>
+                                    <a href="/board/page?page=${count}">${count}</a>
                                 </c:when>
                                 <c:otherwise>
                                     ${count}
@@ -78,10 +91,42 @@
                                 다음
                             </c:when>
                             <c:otherwise>
-                                <a href="/board/page?page=${currentPage+1}&searchCategory=${searchCategory}&keyword=${keyword}">다음</a>
+                                <a href="/board/page?page=${currentPage+1}">다음</a>
                             </c:otherwise>
                         </c:choose>
-                        <a href="/board/page?page=${boardList.totalPages}&searchCategory=${searchCategory}&keyword=${keyword}">마지막</a>
+                        <a href="/board/page?page=${boardList.totalPages}">마지막</a>
+                        </c:if>
+
+               		    <c:if test="${not empty keyword}">
+               			    <a href="/board/search?page=1&category=${category}&keyword=${keyword}">s처음</a>
+                                <c:choose>
+                                    <c:when test="${searchBoardList.isFirst()}">  <!--첫페이지이면 전페이지가 없음-->
+                                        s이전
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="/board/search?page=${currentPage-1}&category=${category}&keyword=${keyword}">s이전</a>
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:forEach begin="${startPage}" end="${endPage}" var="count">
+                                    <c:choose>
+                                        <c:when test = "${count != currentPage}">
+                                            <a href="/board/search?page=${count}&category=${category}&keyword=${keyword}">${count}</a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            ${count}
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                                <c:choose>
+                                    <c:when test="${searchBoardList.isLast()}">
+                                        s다음
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="/board/search?page=${currentPage+1}&category=${category}&keyword=${keyword}">s다음</a>
+                                    </c:otherwise>
+                                </c:choose>
+                                   <a href="/board/search?page=${searchBoardList.totalPages}&category=${category}&keyword=${keyword}">s마지막</a>
+                           </c:if>
                     </div>
 	
 					<form action="/board/write">
@@ -94,9 +139,9 @@
 					</form>
 				</div>
 				<div id = "searchInput">
-					<form action="/board/page">
+					<form action="/board/search">
 						<input type="hidden" name="page" value="1">
-						<select name="searchCategory">
+						<select name="category">
 						    <option value="title">제목</option>
 						    <option value="content">내용</option>
 						    <option value="writer">작성자</option>

@@ -22,9 +22,11 @@ import java.util.List;
 public class BoardController {
 
     BoardService boardService;
+    Utils utils;
 
-    public BoardController(BoardService boardService){
+    public BoardController(BoardService boardService, Utils utils){
         this.boardService = boardService;
+        this.utils = utils;
     }
 
 //	@RequestMapping(value="/list", method=RequestMethod.GET)
@@ -34,8 +36,12 @@ public class BoardController {
 
 
     @RequestMapping(value="/write", method=RequestMethod.GET)
-    public String boardWrite(HttpServletRequest request) {
-
+    public String boardWrite(HttpServletRequest request ,Model model,
+                HttpSession session) {
+        String id = (String) session.getAttribute("loginId");  // 세션에 저장된 현재 로그인한 회원 아이디
+        if(id==null || id=="") {
+            return utils.showMessageAlert("로그인이 필요합니다.", "/member/login", model);
+        }
         return "board/boardWrite";
     }
 
@@ -56,26 +62,35 @@ public class BoardController {
 
     @RequestMapping(value="/detail/{boardNum}", method=RequestMethod.GET)
     public String boardDetail(HttpServletRequest request,
-                              @PathVariable("boardNum") Long boardNum) {
-        /*
-            해당 게시글의 조회수를 하나 올리고 게시글 데이터를 가져와서 detail.jsp 출력
-         */
+                              @PathVariable("boardNum") Long boardNum,
+                              @RequestParam(value = "page", defaultValue = "1", required = false) Integer currentPage) {
+
         log.info("로그1");
         BoardDto boardDto = boardService.boardDetail(boardNum);
         log.info("로그2");
+        log.info("디테일 : "+currentPage);
 
         request.setAttribute("boardDto", boardDto);
-        //request.setAttribute("currentPage", currentPage);
+        request.setAttribute("currentPage", currentPage);
 
         return "board/boardDetail";
     }
     @RequestMapping(value="/delete/{boardNum}", method=RequestMethod.POST)
     public String boardDelete(HttpServletRequest request,
                               @PathVariable("boardNum") Long boardNum) {
-
-        boardService.delete(boardNum);
-
-        return "redirect:/board/list";
+        String confirmDataStr = request.getParameter("confirmData");
+        boolean confirmData = Boolean.parseBoolean(confirmDataStr);
+        String currentPageStr = request.getParameter("currentPage");
+        int currentPage = Integer.parseInt(currentPageStr);
+        System.out.println("삭제할까? " + confirmData);
+        System.out.println("삭제할 게시글번호 : " + boardNum);
+        if(confirmData){
+            boardService.delete(boardNum);
+            return "redirect:/board/page";
+        }
+        else{
+            return "redirect:/board/detail/" + boardNum + "/" + currentPage;
+        }
 
     }
 
@@ -123,17 +138,13 @@ public class BoardController {
 
 
     /**
-     * 페이징 처리 - (page=1)에서 page는 파라미터이름과 동일(?page=1)
+     * @PageableDefault 사용시 url?page=1 형식으로 받아야지 pageable 객체 사용 가능
      * @param pageable
      * @param model
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.GET)
-    public String paging(@PageableDefault(page = 1)Pageable pageable,
-                         @RequestParam(value = "keyword", required = false) String keyword,
-                         @RequestParam(value="searchCategory", required = false) String searchCategory,
-                         //@RequestParam(value="sort", required = false) String sort,
-                         Model model){
+    public String paging(@PageableDefault(page = 1)Pageable pageable, Model model) {
 //        String sortStd="";
 //        if(sort.contains("asc")){
 //            sortStd = "asc";
@@ -141,12 +152,15 @@ public class BoardController {
 //        else if(sort.contains("desc")){
 //            sortStd = "desc";
 //        }
+        System.out.println("현재페이지지지 : " + pageable.getPageNumber());
 
-        System.out.println(pageable.getPageNumber());
-        Page<BoardDto> boardList = boardService.paging(pageable, keyword, searchCategory);
+
+        //int pageNum = pageable.getPageNumber();
+        Page<BoardDto> boardList = boardService.paging(pageable);
         List<BoardDto> noticeBoardList = boardService.noticeList();
         System.out.println("공지글 : " + noticeBoardList);
         int currentPage = boardList.getNumber()+1;  // 파라미터로 받은 현재페이지
+        System.out.println("현재페이지 : " + currentPage);
 
         // 총 Page 개수 20개이고 페이지 선택을 3개씩 보여준다면
         // 3페이지를 보고 있으면 1 2 3 -> startPage = 1, endPage = 3
@@ -159,20 +173,31 @@ public class BoardController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("currentPage", currentPage);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("searchCategory", searchCategory);
         model.addAttribute("noticeBoardList",noticeBoardList);
 
         //model.addAttribute("sortStd", sortStd);
         return "board/boardPaging";
     }
 
-//    @RequestMapping(value="/search", method=RequestMethod.GET)
-//    public String searchList(HttpServletRequest request,
-//                             @PageableDefault(page = 1)Pageable pageable,
-//                             @RequestParam(value = "keyword", required = false)
-//                             Model model) {
-//
-//        return "board/boardPaging";
-//    }
+    @RequestMapping(value="/search", method=RequestMethod.GET)
+    public String searchList(HttpServletRequest request,
+                             @PageableDefault(page = 1)Pageable pageable,
+                             @RequestParam(value = "category") String category,
+                             @RequestParam(value = "keyword") String keyword, Model model) {
+
+        Page<BoardDto> searchBoardList = boardService.searchList(pageable, category, keyword);
+        List<BoardDto> noticeBoardList = boardService.noticeList();
+        int currentPage = searchBoardList.getNumber()+1;
+        int blockLimit = 3;  // 선택 페이지 개수 3개
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
+        int endPage = ((startPage + blockLimit - 1) < searchBoardList.getTotalPages()) ? startPage + blockLimit - 1 : searchBoardList.getTotalPages();  // 3 6 9 12 ~~
+        request.setAttribute("searchBoardList", searchBoardList);
+        request.setAttribute("keyword", keyword);
+        request.setAttribute("category", category);
+        request.setAttribute("currentPage", currentPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("noticeBoardList",noticeBoardList);
+        return "board/boardPaging";
+    }
 }

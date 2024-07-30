@@ -30,6 +30,8 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    private final Utils utils;
+
 /*	public MemberController(MemberService memberService){  // 생성자 자동 주입
 		this.memberService = memberService;
 	}*/
@@ -77,7 +79,7 @@ public class MemberController {
 
         if(joinSuccess) {
             System.out.println("회원가입 성공");
-            return "redirect:/home";
+            return utils.showMessageAlert("회원가입 성공", "/member/login", model);
         }
         else {
             System.out.println("회원가입 실패");

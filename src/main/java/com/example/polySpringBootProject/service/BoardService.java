@@ -169,35 +169,17 @@ public class BoardService {
 //        return boardRepository.findAll(pageable);
 //    }
 
-    public Page<BoardDto> paging(Pageable pageable, String keyword, String searchCategory){
+    public Page<BoardDto> paging(Pageable pageable){
         int page = pageable.getPageNumber()-1;  // 0페이지부터 시작하기 때문에 1페이지를 보려면 0페이지를 불러와야함
         int pageLimit = 7;  // 한 페이지에 보여줄 게시글 갯수
         //Page<BoardEntity> boardEntities=  boardRepository.findAll(PageRequest.of(page,pageLimit, Sort.by(Sort.Direction.DESC, "num")));
         Page<BoardEntity> boardEntities = null;
         // PageRequest : Pageable의 구현체
-        if(keyword =="" || keyword==null) {
-            //if(sort.equals("numAsc")){
-            //    boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "num")));
-            //}else if(sort.equals("numDesc")) {
-                boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
-            //} else {
-           // }
-        }else {
-            if(searchCategory.equals("title")) {
-                boardEntities = boardRepository.findByTitleContaining(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), keyword);
-            }
-            else if(searchCategory.equals("content")){
-                boardEntities = boardRepository.findByContentContaining(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), keyword);
-            }
-            else if(searchCategory.equals("writer")) {
-                boardEntities = boardRepository.findBySearchId(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), keyword);
-            }
-        }
+        boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
 
         
         System.out.println("boardEntities.getContent() = " + boardEntities.getContent()); // 요청 페이지에 해당하는 글
         System.out.println("boardEntities.getTotalElements() = " + boardEntities.getTotalElements()); // 전체 글갯수
-        System.out.println("키워드 = " + keyword);
         System.out.println("boardEntities.getNumber() = " + boardEntities.getNumber()); // DB로 요청한 페이지 번호
         System.out.println("boardEntities.getTotalPages() = " + boardEntities.getTotalPages()); // 전체 페이지 갯수
         System.out.println("boardEntities.getSize() = " + boardEntities.getSize()); // 한 페이지에 보여지는 글 갯수
@@ -226,21 +208,36 @@ public class BoardService {
             boardDto.setContent(boardEntity.getContent());
             boardDto.setRegTime(boardEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             boardDto.setNotice(boardEntity.getNotice());
+            boardDto.setWriter(boardEntity.getMember().getId());
             noticeBoardDtos.add(boardDto);
         }
 
         return noticeBoardDtos;
     }
 
-//    public Page<BoardEntity> searchList(int page, String keyword){
-//
-//
-//        List<Sort.Order> sorts = new ArrayList<>();
-//        sorts.add(Sort.Order.desc("regDate")); // 첫 번째 정렬 조건: 등록일자 내림차순
-//        Pageable pageable = PageRequest.of(page, 3, Sort.by(sorts));
-//
-//        return boardRepository.findByTitleContaining(pageable, keyword);
-//    }
+    public Page<BoardDto> searchList(Pageable pageable, String category, String keyword){
+
+        int page = pageable.getPageNumber()-1;
+        int pageLimit = 7;  // 한 페이지에 보여줄 게시글 갯수
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createdTime")); // 첫 번째 정렬 조건: 등록일자 내림차순
+        pageable = PageRequest.of(page, pageLimit, Sort.by(sorts));
+
+        Page<BoardEntity> boardEntities = null;
+        if(category.equals("title")){
+            boardEntities = boardRepository.findByTitleContaining(pageable,keyword);
+        } else if (category.equals("content")) {
+            boardEntities = boardRepository.findByContentContaining(pageable, keyword);
+        } else if (category.equals("writer")){
+            boardEntities = boardRepository.findByWriterContaining(pageable, keyword);
+        }
+
+        Page<BoardDto> boardDtos = boardEntities.map
+                (board -> new BoardDto(board.getNum(), board.getTitle(), board.getContent(),
+                        board.getCreatedTime(), board.getMember().getId(), board.getNotice()));
+
+        return boardDtos;
+    }
 
 //    @Transactional  // db가 바뀌는 경우 중간에 문제 발생 시 롤백
 //    public  void updateHits(Long id){

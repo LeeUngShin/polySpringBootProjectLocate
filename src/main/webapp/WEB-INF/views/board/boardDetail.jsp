@@ -7,6 +7,7 @@
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 		<link rel="stylesheet" href = "/css/project01.css">
+
 	</head>
 	<body>
 		<div id="container">
@@ -40,9 +41,10 @@
 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end boardButton">
                     <form action="/board/page" method="GET">
-                        <input type=hidden name="boardId" value=${boardDto.num}>
+                        <input type="hidden" name="page" value="${currentPage}">
                         <button type="submit" class="btn btn-outline-secondary" id="writeFormButton">
                             <i class="bi bi-pencil"></i>
+                            ${currentPage}
                             목록으로
                         </button>
                     </form>
@@ -57,13 +59,13 @@
 							글수정
 						</button>
 					</form>
-					<form action="/board/delete/${boardDto.num}" method="POST">
-						<input type=hidden name="boardId" value=${boardDto.num}>
-						<button type="submit" class="btn btn-outline-secondary" id="writeFormButton">
-							<i class="bi bi-pencil"></i>
-							글삭제
-						</button>
-					</form>
+					<form action="/board/delete/${boardDto.num}" method="POST", id="deleteButtonForm">
+					    <input type="hidden" name="currentPage" value="${currentPage}">
+                        <button type="button" class="btn btn-outline-secondary" id="delete" onclick="javascript:deleteBoard()">
+                            <i class="bi bi-pencil"></i>
+                            글삭제
+                        </button>
+                    </form>
 				</div>
 				</c:if>
 			</div>
@@ -71,6 +73,16 @@
 
 			<%@include file = "../footer.jsp" %>
 		</div>
-		  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+		    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+            <script>
+                function deleteBoard(){
+                    var confirmData = confirm("정말 삭제하시겠습니까?");
+                    var deleteButtonForm = document.getElementById("deleteButtonForm");
+                    deleteButtonForm.innerHTML +=
+                        "<input type='hidden' name='confirmData' value='" + confirmData +
+                        "'>"
+                    deleteButtonForm.submit();
+                }
+            </script>
 	</body>
 </html>

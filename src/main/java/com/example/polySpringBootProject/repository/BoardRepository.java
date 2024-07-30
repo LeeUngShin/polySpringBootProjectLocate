@@ -20,9 +20,10 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     Page<BoardEntity> findByTitleContaining(Pageable pageable, String keyword);
     Page<BoardEntity> findByContentContaining(Pageable pageable, String keyword);
-
     @Query("select b from BoardEntity b where b.member.id = :id")
-    Page<BoardEntity> findBySearchId(Pageable pageable, @Param("id") String id);
+    Page<BoardEntity> findByWriterContaining(Pageable pageable, @Param("id") String keyword);
+//    @Query("select b from BoardEntity b where b.member.id = :id")
+//    Page<BoardEntity> findBySearchId(Pageable pageable, @Param("id") String id);
 
     Page<BoardEntity> findByMemberId(Pageable pageable, String id);
 

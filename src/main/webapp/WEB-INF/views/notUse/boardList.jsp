@@ -26,7 +26,10 @@
 					<c:forEach var="board" items="${paging.content}">
 				    <tr>
 				      <th scope="row">${board.num}</th>
-				      <td><a href="/board/detail/${board.num}/${currentPage}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
+				      <td><a href="/board/detail/${board.num}?current=1" id="board_detail_view" class="boardTitle">
+				            ${board.title}
+				          </a>
+				      </td>
 				      <td>${board.member.id}</td>
 					  <td>${board.regDate}</td>
 				    </tr>
@@ -71,6 +74,7 @@
 					<form action="/board/write">
 						<div class="d-grid gap-2 d-md-flex justify-content-md-end boardButton">
 							<button type=submit" class="btn btn-outline-secondary" id="writeFormButton">
+							<i class="bi bi-pencil"></i>
 							<i class="bi bi-pencil"></i>
 							글쓰기
 							</button>
