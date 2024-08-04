@@ -38,6 +38,8 @@ public class JoinDto {
 
     private String email2;
 
+    private String approval;
+
     public static JoinDto entityToDto(MemberEntity member) {
 
         JoinDto joinForm = new JoinDto();
@@ -46,6 +48,7 @@ public class JoinDto {
         joinForm.setName(member.getName());
         joinForm.setAddr(member.getAddr());
         joinForm.setEmail(member.getEmail());
+        joinForm.setApproval(member.getApproval());
         return joinForm;
     }
 }

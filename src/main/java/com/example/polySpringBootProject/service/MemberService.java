@@ -52,6 +52,7 @@ public class MemberService {
                 .addrDetail(joinDto.getAddrDetail())
                 .email(email)
                 .role(RoleType.ROLE_USER)
+                .approval("N")
                 .build();
 
         if (memberRepository.save(member) != null) {
@@ -61,7 +62,7 @@ public class MemberService {
 
     }
 
-    public boolean login(String id, String pw, HttpSession session) {
+    public String login(String id, String pw, HttpSession session) {
 
         long cnt = memberRepository.countById(id);
 
@@ -71,17 +72,20 @@ public class MemberService {
             if (user.isPresent()) { // 입력한 id 조회결과 있음
                 MemberEntity member = user.get();
                 boolean login = passwordEncoder.matches(pw, member.getPw()); // 입력한 pw와 암호화된 pw 일치 여부
-                if (login) {
+                if (login && member.getApproval().equals("Y")) {
                     session.setAttribute("loginId", member.getId());
                     session.setMaxInactiveInterval(600);
                     JoinDto joinForm = JoinDto.entityToDto(member);
-                    return true;
+                    return "success";
+                }
+                else{
+                    return "notApproval";
                 }
             } else {
-                return false;
+                return "fail";
             }
         }
-        return false;
+        return "fail";
     }
 
 //	public JoinForm login(String id, String pw, HttpSession session) {

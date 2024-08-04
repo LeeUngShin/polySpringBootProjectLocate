@@ -49,6 +49,9 @@ public class MemberEntity extends BaseEntity{
     @Column
     private String email;
 
+    private String approval;
+
+
 //    @CreationTimestamp
 //    //@Temporal(TemporalType.TIMESTAMP)
 //    LocalDateTime reg_date;

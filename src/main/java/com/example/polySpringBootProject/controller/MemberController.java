@@ -103,11 +103,12 @@ public class MemberController {
     public String loginProcess(HttpServletRequest request,
                                HttpServletResponse response,
                                HttpSession session,
-                               @RequestParam(name = "idMemory", defaultValue = "false") boolean idMemory) {
+                               @RequestParam(name = "idMemory", defaultValue = "false") boolean idMemory,
+                               Model model) {
 
         String id =request.getParameter("id");
         String pw =request.getParameter("pw");
-        boolean loginSuccess = memberService.login(id, pw, session);
+        String loginStr = memberService.login(id, pw, session);
 
         Cookie rememberCookie = new Cookie("REMEMBER", request.getParameter("id"));
         rememberCookie.setPath("/");
@@ -121,13 +122,17 @@ public class MemberController {
         }
         response.addCookie(rememberCookie); // 쿠키추가
 
-        if(loginSuccess) {
+        if(loginStr.equals("success")) {
             log.info("로그인 했더니 현재 세션 데이터" + session.getAttribute("loginId"));
-
+            utils.showMessageAlert("회원 인승 미완료", "/member/login", model);
             return "redirect:/home";
         }
-        else {
-            System.out.println("로그인 실패");
+        else if(loginStr.equals("notApproval")){
+            System.out.println("승인안됨");
+            return "";
+        }
+        else{
+            utils.showMessageAlert("아이디나 비밀번호가 맞지 않습니다.", "/member/login", model);
             return "redirect:/member/login";
         }
     }
