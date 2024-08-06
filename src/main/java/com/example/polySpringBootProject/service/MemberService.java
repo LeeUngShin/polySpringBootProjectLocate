@@ -35,10 +35,13 @@ public class MemberService {
 
         boolean duplicatedId = memberRepository.existsById(joinDto.getId());
         System.out.println("중복아이디 존재 " + duplicatedId);
-        if(duplicatedId==true){
-
+        if(duplicatedId==true){ // 중복 아이디 존재하면
+            // field 매개변수는 커맨드 객체의 매개변수와 동일해야 함
             bindingResult.rejectValue("id", "duplicatedId", "중복된 아이디입니다.");
             return false;
+        }else if (!joinDto.getPw().equals(joinDto.getPwCheck())){
+            bindingResult.rejectValue("pwCheck", "pwInCorrect", "비밀번호가 불일치합니다.");
+            return  false;
         }
 
         MemberEntity member = MemberEntity.builder()
@@ -61,29 +64,20 @@ public class MemberService {
     }
 
     public String login(String id, String pw, HttpSession session) {
-        System.out.println("여기1");
         long cnt = memberRepository.countById(id);
-        System.out.println("여기2");
         Optional<MemberEntity> user = memberRepository.findById(id);
-        System.out.println("여기3");
         if (cnt == 1) {
-            System.out.println("여기4");
             if (user.isPresent()) { // 입력한 id 조회결과 있음
-                System.out.println("여기5");
                 MemberEntity member = user.get();
-                System.out.println("m : " + member);
-                //boolean login = passwordEncoder.matches(pw, member.getPw()); // 입력한 pw와 암호화된 pw 일치 여부
-                boolean login = pw.equals(member.getPw());
-                System.out.println("login : " + login);
-                System.out.println("approval : " + member.getApproval());
+                System.out.println("로그인한 회원정보 : " + member);
+                boolean login = passwordEncoder.matches(pw, member.getPw()); // 입력한 pw와 암호화된 pw 일치 여부
                 if (login && member.getApproval().equals("Y")) {
                     session.setAttribute("loginId", member.getId());
-                    session.setMaxInactiveInterval(600);
-                    JoinDto joinForm = JoinDto.entityToDto(member);
+                    // session.setMaxInactiveInterval(600);
+                    // JoinDto joinForm = JoinDto.entityToDto(member);
                     return "success";
                 }
-                else{
-                    System.out.println("여기6");
+                else if(login && member.getApproval().equals("N")){
                     return "notApproval";
                 }
             } else {
@@ -184,9 +178,9 @@ public class MemberService {
     }
 
     @Transactional
-    public boolean modify(JoinDto joinForm) {
+    public boolean modify(JoinDto modifyForm) {
 
-        Optional<MemberEntity> member = memberRepository.findById(joinForm.getId());
+        Optional<MemberEntity> member = memberRepository.findById(modifyForm.getId());
         if(!member.isPresent()) {
             return false;
         }
@@ -194,23 +188,22 @@ public class MemberService {
         MemberEntity mem = member.get();
         System.out.println("멤버 : " + mem);
 
-        String encodePw = mem.getPw();
+        String encodePw = passwordEncoder.encode(modifyForm.getPw());
 
-        if (joinForm.getPw() == null || joinForm.getPw().equals("")) { // 비번 미입력 시 원래비번 유지
+
+        /*if(joinForm.getPw() == null || joinForm.getPw().equals("")) { // 비번 미입력 시 원래비번 유지
             joinForm.setPw(encodePw);  // 암호화된 기존 비밀번호
         } else {
             encodePw = passwordEncoder.encode(joinForm.getPw());  // 새로운 아이디 암호화
-        }
+        }*/
 
-        mem.setPost(encodePw);
-        mem.setAddr(joinForm.getAddr());
-        mem.setAddrDetail(joinForm.getAddrDetail());
-        mem.setEmail(joinForm.getEmail());
-        mem.setName(joinForm.getName());
-        mem.setPost(joinForm.getPost());
+        mem.setPw(encodePw);
+        mem.setAddr(modifyForm.getAddr());
+        mem.setAddrDetail(modifyForm.getAddrDetail());
+        mem.setEmail(modifyForm.getEmail());
+        mem.setName(modifyForm.getName());
+        mem.setPost(modifyForm.getPost());
 
-
-        // 컬렉션을 그대로 두고 엔티티를 저장
         try {
             memberRepository.save(mem); // 엔티티를 직접 저장
             return true;
@@ -255,7 +248,7 @@ public class MemberService {
             memberRepository.save(member);
             return pw;
         } else {
-            return "해당하는 아이디가 없습니다";
+            return "비밀번호 찾기 실패";
         }
 
     }

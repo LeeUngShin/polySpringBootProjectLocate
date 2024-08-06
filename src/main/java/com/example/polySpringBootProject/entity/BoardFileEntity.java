@@ -24,6 +24,9 @@ public class BoardFileEntity {
     @Column
     private String storedFileName;
 
+    @Column
+    private String uploadPath;
+
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)  // EAGER는 자식을 사용하지 않아도 다 가져옴 LAZY는 필요할 때만 가져옴
     @JoinColumn(name = "board_id")  // 외래키 이름

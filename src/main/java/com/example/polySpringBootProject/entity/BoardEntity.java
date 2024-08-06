@@ -26,13 +26,18 @@ public class BoardEntity extends BaseEntity {
     private String title;
 
     @Lob  // 일반 속성
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column
+
     private String notice;
 
     @Column
     private String secret;
+
+    @Column
+    private String del;
 
     @Column  // 파일첨부 여부(1 : 파일첨부O, 0 : 파일첨부x)
     private int fileAttached;
@@ -52,5 +57,4 @@ public class BoardEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BoardFileEntity> boardFileEntities = new ArrayList<>();
-
 }

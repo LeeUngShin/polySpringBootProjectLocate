@@ -24,13 +24,14 @@ public class BoardDto {
     private String writer;  // 게시물을 쓴 회원의 아이디
     private String notice="N";
     private String secret="N";
+    private String delete="N";
 
     private MultipartFile boardFile;  // 파일을 담는 용도
     private String originalFileName;  // 원본 파일 이름
     private String storedFileName;  // 서버 저장용 파일 이름
     private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
 
-    public BoardDto(Long num, String title, String content, LocalDateTime regTime, String writer, String notice, String secret) {
+    public BoardDto(Long num, String title, String content, LocalDateTime regTime, String writer, String notice, String secret, String delete) {
         this.num = num;
         this.title = title;
         this.content = content;
@@ -38,6 +39,7 @@ public class BoardDto {
         this.writer = writer;
         this.notice = notice;
         this.secret = secret;
+        this.delete = delete;
     }
 
     public static BoardDto entityToDto(BoardEntity board) {

@@ -8,14 +8,18 @@
 		<link rel="stylesheet" href = "/css/project01.css">
 	</head>
 	<body>
-    <div id="ung">aa</div>
+	    <div class="middleLogo">
+            <a href="/home">
+                <img src="../img/logo.PNG">
+            </a>
+        </div>
 		<form action="/member/join" method="post" id="registerForm">
 		  <div id="registerform">
 		    <div class="mb-3">
 		      <label for="exampleInputId1" class="form-label">아이디</label>
-		      <input type="text" class="form-control" id="exampleInputId1"name="id" required>
-		      <c:if test="${not empty errorMsg.id}">
-              	<span class="error">${errorMsg.id}</span><br>
+		      <input type="text" class="form-control" id="exampleInputId1"name="id" value="${joinDto.id}" required>
+		      <c:if test="${not empty errorMsg['id']}">
+              	<span class="error">${errorMsg['id']}</span><br>
               </c:if>
 		    </div>
 		    <div class="mb-3">
@@ -26,8 +30,8 @@
                  <label for="exampleInputPassword2" class="form-label">비밀번호</label>
                  <input type="password" class="form-control" id="exampleInputPassword2" name ="pwCheck" required>
             </div>
-            <c:if test="${not empty errorMsg.pwCheck}">
-                <span class="error">${errorMsg.pwCheck}</span><br>
+            <c:if test="${not empty errorMsg['pwCheck']}">
+                <span class="error">${errorMsg['pwCheck']}</span><br>
             </c:if>
 		    <div class="mb-3">
 		      <label for="exampleInputName1" class="form-label">이름</label>
@@ -43,7 +47,7 @@
 			</div>
 			<div class="mb-3">
 				<input type="text" class="form-control" id="sample6_detailAddress" name="addrDetail"" placeholder="상세주소" style="width:304px; display:inline-block" required>
-				<input type="text" class="form-control" id="sample6_extraAddress" placeholder="참고항목"style="width:90px; display:inline-block">
+				<input type="hidden" class="form-control" id="sample6_extraAddress" placeholder="참고항목"style="width:90px; display:inline-block">
 			</div>
 	           <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">이메일</label>

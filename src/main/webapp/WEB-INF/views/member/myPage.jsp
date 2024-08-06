@@ -8,7 +8,11 @@
 		<link rel="stylesheet" href = "/css/project01.css">
 	</head>
 	<body>
-
+		<div class="middleLogo">
+            <a href="/home">
+                <img src="../img/logo.PNG">
+            </a>
+        </div>
 		<form action="/member/modify" method="POST" id="registerForm">
 			<div id="registerform">
 			  <div class="mb-3">
@@ -33,7 +37,7 @@
             			</div>
             			<div class="mb-3">
             				<input type="text" class="form-control" id="sample6_detailAddress" name="addrDetail" placeholder="상세주소" style="width:304px; display:inline-block"  value="${member.addrDetail}" required>
-            				<input type="text" class="form-control" id="sample6_extraAddress" placeholder="참고항목"style="width:90px; display:inline-block">
+            				<input type="hidden" class="form-control" id="sample6_extraAddress" placeholder="참고항목"style="width:90px; display:inline-block">
             			</div>
             			</div>
 

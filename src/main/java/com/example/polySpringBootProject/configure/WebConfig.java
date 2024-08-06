@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     // 뷰에서 resourcePath를 경로로 써도 savePath로 매핑됨
     private String resourcePath = "/upload/**";  // view 에서 접근할 경로
-    private String savePath = "file:///C:/springboot_img/";  // 실제 파일 저장
+    private String savePath = "file:///C:/imgUploadF/";  // 실제 파일 저장
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){

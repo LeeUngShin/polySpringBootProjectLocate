@@ -61,10 +61,6 @@ public class MemberController {
 
         boolean joinSuccess = memberService.join(joinDto, bindingResult);
 
-        if(!joinDto.getPw().equals(joinDto.getPwCheck())){
-            bindingResult.rejectValue("pwCheck", "pwInCorrect", "비밀번호가 불일치합니다.");
-        }
-
         if(bindingResult.hasErrors()){
             List<FieldError> errorList = bindingResult.getFieldErrors();
             log.info("에러리스트 : " + errorList);
@@ -83,7 +79,6 @@ public class MemberController {
         }
         else {
             System.out.println("회원가입 실패");
-            request.setAttribute("inputId", joinDto.getId());
             return "member/join";
         }
     }
@@ -95,7 +90,6 @@ public class MemberController {
      */
     @RequestMapping(value="/login", method=RequestMethod.GET)
     public String loginView(HttpServletRequest request) {
-        //System.out.println("회원가입 후 여기로 옴");
         return "member/login";
     }
 
@@ -168,21 +162,18 @@ public class MemberController {
      * @return
      */
     @RequestMapping(value="/delete", method=RequestMethod.POST)
-    public String deleteProcess(HttpServletRequest request, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String deleteProcess(HttpServletRequest request, HttpSession session, Model model) {
         String pw = request.getParameter("pw");
-        String id = request.getParameter("id");
+        String id = (String) session.getAttribute("loginId");
         System.out.println("탈퇴하려는 id, pw : " + id + "   , " + pw);
         if(memberService.delete(id, pw, session)) {
             System.out.println("회원탈퇴 성공");
-            return "redirect:/home";
+            return utils.showMessageAlert("회원탈퇴 성공", "/home", model);
         }
         else {
             System.out.println("회원탈퇴 실패");
             request.setAttribute("id", id);
-            //redirectAttributes.addFlashAttribute("dataToSend", id);
-            //return "member/delete";
-            return "redirect:/member/delete" + "?id=" + id;
-            //return "rediret:/member/delete";
+            return utils.showMessageAlert("비밀번호가 맞지 않습니다.", "/member/delete", model);
         }
     }
 
@@ -202,9 +193,9 @@ public class MemberController {
     }
 
     @RequestMapping(value="/modify", method=RequestMethod.POST)
-    public String modifyProcess(HttpServletRequest request, @ModelAttribute JoinDto joinForm) {
+    public String modifyProcess(HttpServletRequest request, @ModelAttribute JoinDto modifyForm) {
 
-        boolean modify = memberService.modify(joinForm);
+        boolean modify = memberService.modify(modifyForm);
 
         if(modify) {
             //return "redirect:/home";
@@ -212,8 +203,8 @@ public class MemberController {
         }
 
         return "member/modify";
-    }
 
+}
     /**
      * 아이디 찾기 화면 출력
      * @return
@@ -230,9 +221,10 @@ public class MemberController {
         String email = request.getParameter("email");
 
         String id = memberService.searchId(name, email);
-        model.addAttribute("searchId", id);
-
-        return "member/searchId";
+        if(id.equals("아이디 찾기 실패")){
+            return utils.showMessageAlert("해당하는 아이디가 없습니다.", "/member/searchId", model);
+        }
+            return utils.showMessageAlert("찾은 아이디 : " + id, "/member/login", model);
     }
 
     @RequestMapping(value="/searchPw", method=RequestMethod.GET)
@@ -246,9 +238,12 @@ public class MemberController {
         String id = request.getParameter("id");
 
         String pw = memberService.searchPw(id);
-        model.addAttribute("searchPw", pw);
+        
+        if(pw.equals("비밀번호 찾기 실패")){
+            return utils.showMessageAlert("해당하는 비밀번호가 없습니다.", "/member/searchPw", model);
+        }
 
-        return "member/searchPw";
+        return utils.showMessageAlert("임시발급 비밀번호 : " + pw + " (비밀번호를 변경해주세요)", "/member/login", model);
     }
 
     @RequestMapping(value="/list", method = RequestMethod.GET)

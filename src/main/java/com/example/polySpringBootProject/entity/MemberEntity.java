@@ -51,7 +51,6 @@ public class MemberEntity extends BaseEntity{
 
     private String approval;
 
-
 //    @CreationTimestamp
 //    //@Temporal(TemporalType.TIMESTAMP)
 //    LocalDateTime reg_date;

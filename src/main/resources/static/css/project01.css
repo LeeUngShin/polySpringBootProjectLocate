@@ -6,6 +6,12 @@ body{
   color: black;
 }
 
+.middleLogo{
+    display : flex;
+    justify-content : center;
+    padding-top : 30px;
+}
+
 
 #logoimg{
   margin-top: 5px;
@@ -106,7 +112,7 @@ display: flex;
 #loginform{
   width: 400px;
   margin:  0 auto;
-  padding-top: 100px;
+  padding-top: 50px;
 }
 
 /*---------------------------------*/
@@ -114,7 +120,7 @@ display: flex;
 #registerform{
   width: 400px;
   margin:  0 auto;
-  padding-top: 50px;
+  /*padding-top: 50px;*/
 }
 
 .input-group{

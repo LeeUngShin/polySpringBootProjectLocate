@@ -47,7 +47,8 @@ public class BoardController {
 
     @RequestMapping(value="/write", method=RequestMethod.POST)
     public String processBoardWrite(HttpServletRequest request, HttpSession session,
-                                    @ModelAttribute BoardDto boardDto) throws IOException {
+                                    @ModelAttribute BoardDto boardDto,
+                                    Model model) throws IOException {
 
 //	    String title = request.getParameter("title");
 //	    String content = request.getParameter("content");
@@ -55,9 +56,18 @@ public class BoardController {
         if(id==null || id=="") {
             return "member/login";
         }
-
-        Long num = boardService.write(boardDto, id);
-        return "redirect:/board/detail/"+ num;
+        Long num=-999L;
+        try {
+            num = boardService.write(boardDto, id);
+            if(num==-1L){
+                System.out.println("게시글 작성 실패, -1반환");
+                return utils.showMessageAlert("글 작성 실패", "/board/write", model);
+            }
+        }catch (Exception e){
+            System.out.println("게시글 작성 실패");
+            e.printStackTrace();
+        }
+        return utils.showMessageAlert("글 작성 성공", "/board/detail/" + num, model);
     }
 
     @RequestMapping(value="/detail/{boardNum}", method=RequestMethod.GET)
@@ -67,29 +77,28 @@ public class BoardController {
                               Model model,
                               HttpSession session ) {
 
-        log.info("로그1");
         BoardDto boardDto = boardService.boardDetail(boardNum);
-        log.info("로그2");
-        log.info("디테일 : "+currentPage);
-        System.out.println("상세게시글" + boardDto);
-        System.out.println("참거짓1 : " + boardDto.getSecret().equals("Y"));
-        System.out.println("참거짓2 : " + !boardDto.getWriter().equals(session.getAttribute("loginId")));
+        String contentEnter = boardDto.getContent().replace("\n", "<br>");
+        System.out.println("상세로 볼 dto : " + boardDto );
         if((boardDto.getSecret().equals("Y") && !boardDto.getWriter().equals(session.getAttribute("loginId")))
-            || (session.getAttribute("loginId")==null || session.getAttribute("loginId")=="")){
+            || boardDto.getSecret().equals("Y") && (session.getAttribute("loginId")==null || session.getAttribute("loginId")=="")){
             return utils.showMessageAlert("접근불가", "/board/page", model);
         }else if(boardDto.getSecret().equals("Y") && boardDto.getWriter().equals(session.getAttribute("loginId"))){
+            request.setAttribute("boardDto", boardDto);
+            request.setAttribute("contentEnter", contentEnter);
+            request.setAttribute("currentPage", currentPage);
             return "board/boardDetail";
-
         }
 
         request.setAttribute("boardDto", boardDto);
+        request.setAttribute("contentEnter", contentEnter);
         request.setAttribute("currentPage", currentPage);
 
         return "board/boardDetail";
     }
     @RequestMapping(value="/delete/{boardNum}", method=RequestMethod.POST)
     public String boardDelete(HttpServletRequest request,
-                              @PathVariable("boardNum") Long boardNum) {
+                              @PathVariable("boardNum") Long boardNum, Model model) {
         String confirmDataStr = request.getParameter("confirmData");
         boolean confirmData = Boolean.parseBoolean(confirmDataStr);
         String currentPageStr = request.getParameter("currentPage");
@@ -97,32 +106,50 @@ public class BoardController {
         System.out.println("삭제할까? " + confirmData);
         System.out.println("삭제할 게시글번호 : " + boardNum);
         if(confirmData){
-            boardService.delete(boardNum);
-            return "redirect:/board/page";
+            try {
+                boardService.delete(boardNum);
+                return  utils.showMessageAlert("게시글 삭제 성공", "/board/page?page=" + currentPage, model);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
         else{
-            return "redirect:/board/detail/" + boardNum + "/" + currentPage;
+            return "redirect:/board/detail/" + boardNum + "?page=" + currentPage;
         }
-
+        return "redirect:/board/detail/" + boardNum + "?page=" + currentPage;
     }
 
     @RequestMapping(value="/modify/{boardNum}", method=RequestMethod.GET)
     public String boardModify(HttpServletRequest request, @PathVariable("boardNum") Long boardNum) {
         System.out.println("수정할 게시글번호 : " + boardNum);
         BoardDto boardDto = boardService.getBoardDto(boardNum);
+        String contentEnter = boardDto.getContent().replace("\n", "<br>");
         request.setAttribute("boardDto", boardDto);
+        request.setAttribute("contentEnter", contentEnter);
 
         return "board/boardModify";
     }
 
     @RequestMapping(value="/modify", method=RequestMethod.POST)
-    public String boardModifyProccess(HttpServletRequest request, BoardDto boardDto) {
+    public String boardModifyProccess(HttpServletRequest request,
+                                      @ModelAttribute BoardDto boardDto,
+                                      Model model) throws IOException{
 //		String num = request.getParameter("boardNum");
 //		Long lBoardNum = Long.parseLong(num);
         log.info("수정 타이틀" +boardDto.getTitle() );
         log.info("수정 내용" +boardDto.getContent() );
-        boardService.modify(boardDto);
-        return "redirect:/board/detail/" + boardDto.getNum();
+        String boardNumStr = request.getParameter("num");
+        Long boardNum = Long.parseLong(boardNumStr);
+        try {
+            boolean modify = boardService.modify(boardDto, boardNum);
+            if(!modify){
+                return utils.showMessageAlert("게시글 수정실패", "/board/modify/"+boardNum, model);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return utils.showMessageAlert("게시글 수정성공", "/board/detail/"+boardNum, model);
     }
 
 //    @RequestMapping(value="/page", method= RequestMethod.GET)
@@ -161,13 +188,10 @@ public class BoardController {
 //        else if(sort.contains("desc")){
 //            sortStd = "desc";
 //        }
-        System.out.println("현재페이지지지 : " + pageable.getPageNumber());
+        System.out.println("현재페이지 : " + pageable.getPageNumber());
 
-
-        //int pageNum = pageable.getPageNumber();
         Page<BoardDto> boardList = boardService.paging(pageable);
         List<BoardDto> noticeBoardList = boardService.noticeList();
-        System.out.println("공지글 : " + noticeBoardList);
         int currentPage = boardList.getNumber()+1;  // 파라미터로 받은 현재페이지
         System.out.println("현재페이지 : " + currentPage);
 

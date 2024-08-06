@@ -37,6 +37,9 @@ public class BoardService {
     @Autowired
     private BoardFileRepository boardFileRepository;
 
+    @Autowired
+    private FileUploadService fileUploadService;
+
     public Long write(BoardDto boardDto, String id) throws IOException {
 
         Optional<MemberEntity> member = memberRepository.findById(id);
@@ -53,10 +56,12 @@ public class BoardService {
                     .fileAttached(0)  // 파일 없음 표시
                     .notice(boardDto.getNotice())
                     .secret(boardDto.getSecret())
+                    .del(boardDto.getDelete())
                     .build();
             BoardEntity savedBoard = boardRepository.save(board);
-            Long savedId = savedBoard.getNum();
-            return savedId;
+            if(savedBoard==null) return -1L;
+            Long savedBoardNum = savedBoard.getNum();
+            return savedBoardNum;
 
         }else{  // 파일첨부 할 경우
             /*
@@ -68,6 +73,7 @@ public class BoardService {
                 6. tbl_board에 해당 데이터 save 처리
                 7. board_file_table에 해당 데이터 save 처리
             */
+            /*
             boolean upload =false;
             MultipartFile boardFile = boardDto.getBoardFile();  // 1
             String originalFileName =  boardFile.getOriginalFilename();  // 2
@@ -80,26 +86,33 @@ public class BoardService {
             File saveFile = new File(saveDir + "/" + storedFileName);  // 4
             boardFile.transferTo(saveFile);  // 5
             upload = true;
-            System.out.println("업로드 여부 : " + upload);
+            */
 
-            BoardEntity board = BoardEntity.builder()
-                    .title(boardDto.getTitle())
-                    .content(boardDto.getContent())
-                    .notice(boardDto.getNotice())
-                    .secret(boardDto.getSecret())
-                    .member(m)
-                    .fileAttached(1)
-                    .build();
-            BoardEntity savedBoard = boardRepository.save(board);
-            Long savedId = savedBoard.getNum();
-            BoardEntity boardEntity = boardRepository.findById(savedId).get();
-            BoardFileEntity boardFileEntity = BoardFileEntity.builder()
-                    .originalFileName(originalFileName)
-                    .storedFileName(storedFileName)
-                    .boardEntity(boardEntity)
-                    .build();
-            boardFileRepository.save(boardFileEntity);
-            return savedId;
+            boolean upload = fileUploadService.upload(boardDto.getBoardFile());
+            if(upload){
+                BoardEntity board = BoardEntity.builder()
+                        .title(boardDto.getTitle())
+                        .content(boardDto.getContent())
+                        .notice(boardDto.getNotice())
+                        .secret(boardDto.getSecret())
+                        .del(boardDto.getDelete())
+                        .member(m)
+                        .fileAttached(1)
+                        .build();
+                BoardEntity savedBoard = boardRepository.save(board);
+                Long savedBoardNum = savedBoard.getNum();
+                BoardFileEntity boardFileEntity = BoardFileEntity.builder()
+                        .originalFileName(fileUploadService.getOriginalFileName())
+                        .storedFileName(fileUploadService.getStoredFileNameWithExtension())
+                        .uploadPath(fileUploadService.getUploadPath())
+                        .boardEntity(savedBoard)
+                        .build();
+                boardFileRepository.save(boardFileEntity);
+                return savedBoardNum;
+            }
+            else {
+                return -1L;
+            }
         }
     }
 
@@ -108,16 +121,15 @@ public class BoardService {
 
         Optional<BoardEntity> board = boardRepository.findById(num);
 
-        if(!board.isPresent()) return null;
+        if(board.isEmpty()) return null;
 
         BoardEntity b = board.get();
-        System.out.println("시크릿시크릿 : " + b.getSecret());
 
         BoardDto boardDto = BoardDto.entityToDto(b);
         return boardDto;
     }
 
-
+    @Transactional
     public void delete(Long num) {
 
         boardRepository.deleteById(num);
@@ -130,27 +142,62 @@ public class BoardService {
         Optional<BoardEntity> board = boardRepository.findById(num);
         if(board.isPresent()) {
             BoardEntity b = board.get();
-            System.out.println("수정할 보드 : " + b);
             return BoardDto.entityToDto(b);
         }
         return null;
     }
 
-    public boolean modify(BoardDto boardDto) {
+    @Transactional
+    public boolean modify(BoardDto boardDto, Long boardNum) {
 
-        Optional<BoardEntity> savedBoard = boardRepository.findById(boardDto.getNum());
+        Optional<BoardEntity> savedBoard = boardRepository.findById(boardNum);
         if(!savedBoard.isPresent()) {
             return false;
         }
         BoardEntity b = savedBoard.get();
 
-        BoardEntity board = BoardEntity.builder()
-                .num(boardDto.getNum())
-                .title(boardDto.getTitle())
-                .content(boardDto.getContent())
-                .member(b.getMember())
-                .build();
-        boardRepository.save(board);
+        if(boardDto.getBoardFile().isEmpty()){
+            if(b.getFileAttached()==1){
+                Optional<BoardFileEntity> boardFileEntity= boardFileRepository.findByBoardNum(boardNum);
+                if(boardFileEntity.isPresent()) {
+                    BoardFileEntity boardFileEntity1 = boardFileEntity.get();
+                    boardFileRepository.deleteById(boardFileEntity1.getNum());
+                }
+            }
+            b.setTitle(boardDto.getTitle());
+            b.setContent(boardDto.getContent());
+            b.setNotice(boardDto.getNotice());
+            b.setSecret(boardDto.getSecret());
+            b.setFileAttached(0);
+
+            boardRepository.save(b);
+        }
+        else{
+            if(b.getFileAttached()==1){
+                Optional<BoardFileEntity> boardFileEntity= boardFileRepository.findByBoardNum(boardNum);
+                if(boardFileEntity.isPresent()) {
+                    BoardFileEntity boardFileEntity1 = boardFileEntity.get();
+                    boardFileRepository.deleteById(boardFileEntity1.getNum());
+                }
+            }
+            boolean upload = fileUploadService.upload(boardDto.getBoardFile());
+            if(upload){
+                b.setTitle(boardDto.getTitle());
+                b.setContent(boardDto.getContent());
+                b.setNotice(boardDto.getNotice());
+                b.setSecret(boardDto.getSecret());
+                b.setFileAttached(1);
+                BoardEntity saveBoard = boardRepository.save(b);
+                Long savedBoardNum = saveBoard.getNum();
+                BoardFileEntity boardFileEntity = BoardFileEntity.builder()
+                        .originalFileName(fileUploadService.getOriginalFileName())
+                        .storedFileName(fileUploadService.getStoredFileNameWithExtension())
+                        .uploadPath(fileUploadService.getUploadPath())
+                        .boardEntity(saveBoard)
+                        .build();
+                boardFileRepository.save(boardFileEntity);
+            }
+        }
         return true;
     }
 
@@ -198,7 +245,7 @@ public class BoardService {
         Page<BoardDto> boardDtos = boardEntities.map
                 (board -> new BoardDto(board.getNum(), board.getTitle(), board.getContent(),
                         board.getCreatedTime(), board.getMember().getId(), board.getNotice()
-                , board.getSecret()));
+                , board.getSecret(), board.getDel()));
         return boardDtos;
     }
 
@@ -206,16 +253,9 @@ public class BoardService {
         List<BoardEntity> boardEntities = boardRepository.findByNoticeOrderByNumDesc("Y");
         List<BoardDto> noticeBoardDtos= new ArrayList<>();
         for(BoardEntity boardEntity : boardEntities){
-            BoardDto boardDto = new BoardDto();
-            boardDto.setNum(boardEntity.getNum());
-            boardDto.setTitle(boardEntity.getTitle());
-            boardDto.setContent(boardEntity.getContent());
-            boardDto.setRegTime(boardEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            boardDto.setNotice(boardEntity.getNotice());
-            boardDto.setWriter(boardEntity.getMember().getId());
+            BoardDto boardDto = BoardDto.entityToDto(boardEntity);
             noticeBoardDtos.add(boardDto);
         }
-
         return noticeBoardDtos;
     }
 
@@ -239,7 +279,7 @@ public class BoardService {
         Page<BoardDto> boardDtos = boardEntities.map
                 (board -> new BoardDto(board.getNum(), board.getTitle(), board.getContent(),
                         board.getCreatedTime(), board.getMember().getId(), board.getNotice()
-                , board.getSecret()));
+                , board.getSecret(), board.getDel()));
 
         return boardDtos;
     }
