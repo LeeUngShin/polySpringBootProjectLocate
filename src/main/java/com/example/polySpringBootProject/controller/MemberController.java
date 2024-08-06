@@ -95,7 +95,7 @@ public class MemberController {
      */
     @RequestMapping(value="/login", method=RequestMethod.GET)
     public String loginView(HttpServletRequest request) {
-        System.out.println("회원가입 후 여기로 옴");
+        //System.out.println("회원가입 후 여기로 옴");
         return "member/login";
     }
 
@@ -124,16 +124,14 @@ public class MemberController {
 
         if(loginStr.equals("success")) {
             log.info("로그인 했더니 현재 세션 데이터" + session.getAttribute("loginId"));
-            utils.showMessageAlert("회원 인승 미완료", "/member/login", model);
             return "redirect:/home";
         }
         else if(loginStr.equals("notApproval")){
             System.out.println("승인안됨");
-            return "";
+            return utils.showMessageAlert("회원 인승 미완료", "/member/login", model);
         }
         else{
-            utils.showMessageAlert("아이디나 비밀번호가 맞지 않습니다.", "/member/login", model);
-            return "redirect:/member/login";
+            return utils.showMessageAlert("아이디나 비밀번호가 맞지 않습니다.", "/member/login", model);
         }
     }
 
@@ -198,6 +196,7 @@ public class MemberController {
         String id = (String) session.getAttribute("loginId");  // 로그인한 아이디
         JoinDto joinForm = memberService.modifyForm(id);
         request.setAttribute("member", joinForm);
+        System.out.println(joinForm);
 
         return "member/myPage";
     }
@@ -209,7 +208,7 @@ public class MemberController {
 
         if(modify) {
             //return "redirect:/home";
-            return "redirect:/member/detail/" + joinForm.getId();
+            return "redirect:/home";
         }
 
         return "member/modify";

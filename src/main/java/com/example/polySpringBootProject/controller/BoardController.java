@@ -63,12 +63,24 @@ public class BoardController {
     @RequestMapping(value="/detail/{boardNum}", method=RequestMethod.GET)
     public String boardDetail(HttpServletRequest request,
                               @PathVariable("boardNum") Long boardNum,
-                              @RequestParam(value = "page", defaultValue = "1", required = false) Integer currentPage) {
+                              @RequestParam(value = "page", defaultValue = "1", required = false) Integer currentPage,
+                              Model model,
+                              HttpSession session ) {
 
         log.info("로그1");
         BoardDto boardDto = boardService.boardDetail(boardNum);
         log.info("로그2");
         log.info("디테일 : "+currentPage);
+        System.out.println("상세게시글" + boardDto);
+        System.out.println("참거짓1 : " + boardDto.getSecret().equals("Y"));
+        System.out.println("참거짓2 : " + !boardDto.getWriter().equals(session.getAttribute("loginId")));
+        if((boardDto.getSecret().equals("Y") && !boardDto.getWriter().equals(session.getAttribute("loginId")))
+            || (session.getAttribute("loginId")==null || session.getAttribute("loginId")=="")){
+            return utils.showMessageAlert("접근불가", "/board/page", model);
+        }else if(boardDto.getSecret().equals("Y") && boardDto.getWriter().equals(session.getAttribute("loginId"))){
+            return "board/boardDetail";
+
+        }
 
         request.setAttribute("boardDto", boardDto);
         request.setAttribute("currentPage", currentPage);
@@ -95,12 +107,9 @@ public class BoardController {
     }
 
     @RequestMapping(value="/modify/{boardNum}", method=RequestMethod.GET)
-    public String boardModify(HttpServletRequest request, @PathVariable Long boardNum) {
-
-        String num = request.getParameter("boardId");
-        Long lBoardnum = Long.parseLong(num);
-
-        BoardDto boardDto = boardService.getBoardDto(lBoardnum);
+    public String boardModify(HttpServletRequest request, @PathVariable("boardNum") Long boardNum) {
+        System.out.println("수정할 게시글번호 : " + boardNum);
+        BoardDto boardDto = boardService.getBoardDto(boardNum);
         request.setAttribute("boardDto", boardDto);
 
         return "board/boardModify";

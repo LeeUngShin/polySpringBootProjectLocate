@@ -36,8 +36,6 @@ public class JoinDto {
     @NotBlank(message = "이메일을 입력하세요")
     private String email;
 
-    private String email2;
-
     private String approval;
 
     public static JoinDto entityToDto(MemberEntity member) {
@@ -47,6 +45,8 @@ public class JoinDto {
         joinForm.setPw(member.getPw());
         joinForm.setName(member.getName());
         joinForm.setAddr(member.getAddr());
+        joinForm.setAddrDetail(member.getAddrDetail());
+        joinForm.setPost(member.getPost());
         joinForm.setEmail(member.getEmail());
         joinForm.setApproval(member.getApproval());
         return joinForm;

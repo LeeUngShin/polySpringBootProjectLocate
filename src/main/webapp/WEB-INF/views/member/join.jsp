@@ -47,7 +47,10 @@
 			</div>
 	           <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">이메일</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1" name="email" required>
                </div>
+
+             <!--
             <div style="display: flex;">
                <div class="mb-3" style="flex-basis: 300px; flex-grow: 1;">
                   <input type="text" class="form-control" id="exampleInputEmail1" name="email" required>
@@ -63,6 +66,7 @@
                  </select>
                </div>
             </div>
+            -->
 		    <button type="submit" class="btn btn-primary">회원가입</button>
 		</div>
 		</form>

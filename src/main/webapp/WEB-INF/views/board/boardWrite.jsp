@@ -31,6 +31,7 @@
                 </div>
                 <div class="mb-3">
                     <input type=checkbox name=notice value="Y"> 공지글
+                    <input type=checkbox name=secret value="Y"> 비밀글
                 </div>
 				<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 				<button type=submit" class="btn btn-outline-secondary" id="writeButton">

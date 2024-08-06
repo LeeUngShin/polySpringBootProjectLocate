@@ -53,12 +53,13 @@
 				<c:if test="${sessionScope.loginId == boardDto.writer}">
 				<div class="d-grid gap-2 d-md-flex justify-content-md-end boardButton">
 					<form action="/board/modify/${boardDto.num}">
-					<input type=hidden name="boardId" value=${boardDto.num}>
+
 						<button type=submit" class="btn btn-outline-secondary" id="writeFormButton">
 							<i class="bi bi-pencil"></i>
 							글수정
 						</button>
 					</form>
+					${boardDto.num}
 					<form action="/board/delete/${boardDto.num}" method="POST", id="deleteButtonForm">
 					    <input type="hidden" name="currentPage" value="${currentPage}">
                         <button type="button" class="btn btn-outline-secondary" id="delete" onclick="javascript:deleteBoard()">

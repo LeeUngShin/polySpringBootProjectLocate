@@ -22,20 +22,22 @@ public class BoardDto {
     private String regTime;
     private String modTime;
     private String writer;  // 게시물을 쓴 회원의 아이디
-    private String notice = "N";
+    private String notice="N";
+    private String secret="N";
 
     private MultipartFile boardFile;  // 파일을 담는 용도
     private String originalFileName;  // 원본 파일 이름
     private String storedFileName;  // 서버 저장용 파일 이름
     private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
 
-    public BoardDto(Long num, String title, String content, LocalDateTime regTime, String writer, String notice) {
+    public BoardDto(Long num, String title, String content, LocalDateTime regTime, String writer, String notice, String secret) {
         this.num = num;
         this.title = title;
         this.content = content;
         this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.writer = writer;
         this.notice = notice;
+        this.secret = secret;
     }
 
     public static BoardDto entityToDto(BoardEntity board) {
@@ -46,11 +48,13 @@ public class BoardDto {
         boardDto.setTitle(board.getTitle());
         boardDto.setContent(board.getContent());
         boardDto.setWriter(board.getMember().getId());
+        boardDto.setNotice(board.getNotice());
+        boardDto.setSecret(board.getSecret());
         boardDto.setRegTime(board.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         if(board.getFileAttached()==0){  // 첨부파일 없음
-            boardDto.setFileAttached(board.getFileAttached());
+            boardDto.setFileAttached(board.getFileAttached()); // 0
         }else{  // 파일이 있는 경우
-            boardDto.setFileAttached(board.getFileAttached());
+            boardDto.setFileAttached(board.getFileAttached());  // 1
 
             // originalFileName, storedFileName은 BoardFileEntity에 있음
             // 매개변수로 받은 건 BoardEntity

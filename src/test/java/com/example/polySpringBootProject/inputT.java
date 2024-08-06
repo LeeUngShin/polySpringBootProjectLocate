@@ -25,9 +25,10 @@ public class inputT {
                 .name("이름02")
                 .addrDetail("상세주소")
                 .post("우편번호")
-                .pw("12345")
+                .pw("A12345")
                 .role(RoleType.ROLE_USER)
                 .email("user02@test.org")
+                .approval("N")
                 .build();
 
         memberRepository.save(member);
@@ -39,7 +40,7 @@ public class inputT {
         MemberEntity m1 = memberRepository.findById("user01").get();
         MemberEntity m2 = memberRepository.findById("user02").get();
 
-        for (int i = 1; i < 37; i++) {
+        for (int i = 38; i < 79; i++) {
             BoardEntity board = BoardEntity.builder()
                     .title("제목" + i)
                     .content("내용" + i)

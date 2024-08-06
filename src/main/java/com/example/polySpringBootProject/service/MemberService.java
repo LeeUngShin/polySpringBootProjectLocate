@@ -2,6 +2,7 @@ package com.example.polySpringBootProject.service;
 
 import com.example.polySpringBootProject.RoleType;
 import com.example.polySpringBootProject.dto.JoinDto;
+import com.example.polySpringBootProject.entity.BoardEntity;
 import com.example.polySpringBootProject.entity.MemberEntity;
 import com.example.polySpringBootProject.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
@@ -39,10 +41,6 @@ public class MemberService {
             return false;
         }
 
-        String email = joinDto.getEmail() + joinDto.getEmail2();
-        System.out.println(joinDto.getEmail());
-        System.out.println(joinDto.getEmail2());
-        System.out.println("이메일 조합 후 : " + email );
         MemberEntity member = MemberEntity.builder()
                 .id(joinDto.getId())
                 .pw(encodePw)
@@ -50,7 +48,7 @@ public class MemberService {
                 .post(joinDto.getPost())
                 .addr(joinDto.getAddr())
                 .addrDetail(joinDto.getAddrDetail())
-                .email(email)
+                .email(joinDto.getEmail())
                 .role(RoleType.ROLE_USER)
                 .approval("N")
                 .build();
@@ -63,15 +61,21 @@ public class MemberService {
     }
 
     public String login(String id, String pw, HttpSession session) {
-
+        System.out.println("여기1");
         long cnt = memberRepository.countById(id);
-
+        System.out.println("여기2");
         Optional<MemberEntity> user = memberRepository.findById(id);
-
+        System.out.println("여기3");
         if (cnt == 1) {
+            System.out.println("여기4");
             if (user.isPresent()) { // 입력한 id 조회결과 있음
+                System.out.println("여기5");
                 MemberEntity member = user.get();
-                boolean login = passwordEncoder.matches(pw, member.getPw()); // 입력한 pw와 암호화된 pw 일치 여부
+                System.out.println("m : " + member);
+                //boolean login = passwordEncoder.matches(pw, member.getPw()); // 입력한 pw와 암호화된 pw 일치 여부
+                boolean login = pw.equals(member.getPw());
+                System.out.println("login : " + login);
+                System.out.println("approval : " + member.getApproval());
                 if (login && member.getApproval().equals("Y")) {
                     session.setAttribute("loginId", member.getId());
                     session.setMaxInactiveInterval(600);
@@ -79,6 +83,7 @@ public class MemberService {
                     return "success";
                 }
                 else{
+                    System.out.println("여기6");
                     return "notApproval";
                 }
             } else {
@@ -178,6 +183,7 @@ public class MemberService {
 
     }
 
+    @Transactional
     public boolean modify(JoinDto joinForm) {
 
         Optional<MemberEntity> member = memberRepository.findById(joinForm.getId());
@@ -186,25 +192,32 @@ public class MemberService {
         }
 
         MemberEntity mem = member.get();
-
+        System.out.println("멤버 : " + mem);
 
         String encodePw = mem.getPw();
 
-        if (joinForm.getPw() == null) { // 비번 미입력 시 원래비번 유지
+        if (joinForm.getPw() == null || joinForm.getPw().equals("")) { // 비번 미입력 시 원래비번 유지
             joinForm.setPw(encodePw);  // 암호화된 기존 비밀번호
         } else {
             encodePw = passwordEncoder.encode(joinForm.getPw());  // 새로운 아이디 암호화
         }
 
-        MemberEntity mem2 = MemberEntity.builder().num(mem.getNum()).id(joinForm.getId()).pw(encodePw)
-                .name(joinForm.getName()).addr(joinForm.getAddr()).email(joinForm.getEmail())
-                .build();
+        mem.setPost(encodePw);
+        mem.setAddr(joinForm.getAddr());
+        mem.setAddrDetail(joinForm.getAddrDetail());
+        mem.setEmail(joinForm.getEmail());
+        mem.setName(joinForm.getName());
+        mem.setPost(joinForm.getPost());
 
-        if (memberRepository.save(mem2) != null) {
+
+        // 컬렉션을 그대로 두고 엔티티를 저장
+        try {
+            memberRepository.save(mem); // 엔티티를 직접 저장
             return true;
+        } catch (Exception e) {
+            e.printStackTrace(); // 에러 로깅
+            return false;
         }
-
-        return false;
     }
 
     public String searchId(String name, String email) {

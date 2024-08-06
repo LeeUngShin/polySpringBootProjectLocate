@@ -52,11 +52,11 @@ public class BoardService {
                     .member(m)
                     .fileAttached(0)  // 파일 없음 표시
                     .notice(boardDto.getNotice())
+                    .secret(boardDto.getSecret())
                     .build();
             BoardEntity savedBoard = boardRepository.save(board);
             Long savedId = savedBoard.getNum();
             return savedId;
-
 
         }else{  // 파일첨부 할 경우
             /*
@@ -86,6 +86,7 @@ public class BoardService {
                     .title(boardDto.getTitle())
                     .content(boardDto.getContent())
                     .notice(boardDto.getNotice())
+                    .secret(boardDto.getSecret())
                     .member(m)
                     .fileAttached(1)
                     .build();
@@ -110,6 +111,7 @@ public class BoardService {
         if(!board.isPresent()) return null;
 
         BoardEntity b = board.get();
+        System.out.println("시크릿시크릿 : " + b.getSecret());
 
         BoardDto boardDto = BoardDto.entityToDto(b);
         return boardDto;
@@ -122,12 +124,13 @@ public class BoardService {
 
     }
 
-    @Transactional
+
     public BoardDto getBoardDto(Long num) {
 
         Optional<BoardEntity> board = boardRepository.findById(num);
         if(board.isPresent()) {
             BoardEntity b = board.get();
+            System.out.println("수정할 보드 : " + b);
             return BoardDto.entityToDto(b);
         }
         return null;
@@ -194,7 +197,8 @@ public class BoardService {
         // 위의 내용을 담을 수 있는 매개변수 생성자 BoardDto에 만들기
         Page<BoardDto> boardDtos = boardEntities.map
                 (board -> new BoardDto(board.getNum(), board.getTitle(), board.getContent(),
-                        board.getCreatedTime(), board.getMember().getId(), board.getNotice()));
+                        board.getCreatedTime(), board.getMember().getId(), board.getNotice()
+                , board.getSecret()));
         return boardDtos;
     }
 
@@ -234,7 +238,8 @@ public class BoardService {
 
         Page<BoardDto> boardDtos = boardEntities.map
                 (board -> new BoardDto(board.getNum(), board.getTitle(), board.getContent(),
-                        board.getCreatedTime(), board.getMember().getId(), board.getNotice()));
+                        board.getCreatedTime(), board.getMember().getId(), board.getNotice()
+                , board.getSecret()));
 
         return boardDtos;
     }

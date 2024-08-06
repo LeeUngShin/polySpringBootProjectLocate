@@ -45,7 +45,14 @@
                         <c:forEach var="board" items="${boardList.content}">
                             <tr>
                               <th scope="row">${board.num}</th>
-                              <td><a href="/board/detail/${board.num}?page=${currentPage}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
+                              <c:choose>
+                                  <c:when test="${board.secret=='Y'}">
+                                    <td><a href="/board/detail/${board.num}?page=${currentPage}" id="board_detail_view" class="boardTitle"><i class="bi bi-key"></i> 비밀글입니다.</a></td>
+                                  </c:when>
+                                  <c:otherwise>
+                                    <td><a href="/board/detail/${board.num}?page=${currentPage}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
+                                  </c:otherwise>
+                              </c:choose>
                               <td>${board.writer}</td>
                               <td>${board.regTime}</td>
                             </tr>
