@@ -202,11 +202,14 @@ public class BoardController {
         int blockLimit = 3;  // 선택 페이지 개수 3개
         int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
         int endPage = ((startPage + blockLimit - 1) < boardList.getTotalPages()) ? startPage + blockLimit - 1 : boardList.getTotalPages();  // 3 6 9 12 ~~
+        boolean isLast = (startPage + blockLimit-1) >= boardList.getTotalPages();
         model.addAttribute("boardList", boardList);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("noticeBoardList",noticeBoardList);
+        model.addAttribute("blockLimit", blockLimit);
+        model.addAttribute("isLast", isLast);
 
         //model.addAttribute("sortStd", sortStd);
         return "board/boardPaging";

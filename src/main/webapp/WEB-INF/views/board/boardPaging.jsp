@@ -24,8 +24,8 @@
                 </thead>
                 <tbody class="table-group-divider">
                     <c:forEach var="board" items="${noticeBoardList}">
-                        <tr>
-                            <th scope="row">${board.num}</th>
+                                                  <tr>
+                                                      <th scope="row">${board.num}</th>
                             <td><i class="bi bi-bell"></i>
                                 <a href="/board/detail/${board.num}?page=${currentPage}" id="board_detail_view" class="boardTitle">${board.title}</a></td>
                             <td>${board.writer}</td>
@@ -67,11 +67,11 @@
                     <c:if test="${empty keyword}">
                         <a href="/board/page?page=1">처음</a>
                     <c:choose>
-                       <c:when test="${boardList.isFirst()}">  <!--첫페이지이면 전페이지가 없음-->
+                       <c:when test="${currentPage<=blockLimit}">  <!--첫페이지이면 전페이지가 없음-->
                           이전
                        </c:when>
                         <c:otherwise>
-                            <a href="/board/page?page=${currentPage-1}">이전</a>
+                            <a href="/board/page?page=${startPage-1}">이전</a>
                         </c:otherwise>
                     </c:choose>
                     <c:forEach begin="${startPage}" end="${endPage}" var="count">
@@ -85,11 +85,11 @@
                         </c:choose>
                     </c:forEach>
                     <c:choose>
-                        <c:when test="${boardList.isLast()}">
+                        <c:when test="${isLast}">
                             다음
                         </c:when>
                         <c:otherwise>
-                            <a href="/board/page?page=${currentPage+1}">다음</a>
+                            <a href="/board/page?page=${endPage+1}">다음</a>
                         </c:otherwise>
                     </c:choose>
                     <a href="/board/page?page=${boardList.totalPages}">마지막</a>

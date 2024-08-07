@@ -40,6 +40,7 @@ public class BoardService {
     @Autowired
     private FileUploadService fileUploadService;
 
+    @Transactional
     public Long write(BoardDto boardDto, String id) throws IOException {
 
         Optional<MemberEntity> member = memberRepository.findById(id);
@@ -130,10 +131,17 @@ public class BoardService {
     }
 
     @Transactional
-    public void delete(Long num) {
+    public boolean delete(Long num) {
 
-        boardRepository.deleteById(num);
-
+        Optional<BoardEntity> boardEntity = boardRepository.findById(num);
+        if(boardEntity.isEmpty()){
+            return false;
+        }else {
+            BoardEntity board = boardEntity.get();
+            board.setDel("N");
+            boardRepository.save(board);
+            return false;
+        }
     }
 
 
@@ -227,7 +235,7 @@ public class BoardService {
         // PageRequest : Pageable의 구현체
         boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
 
-        
+
         System.out.println("boardEntities.getContent() = " + boardEntities.getContent()); // 요청 페이지에 해당하는 글
         System.out.println("boardEntities.getTotalElements() = " + boardEntities.getTotalElements()); // 전체 글갯수
         System.out.println("boardEntities.getNumber() = " + boardEntities.getNumber()); // DB로 요청한 페이지 번호

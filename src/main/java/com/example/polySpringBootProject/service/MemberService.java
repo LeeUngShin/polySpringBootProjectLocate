@@ -1,14 +1,20 @@
 package com.example.polySpringBootProject.service;
 
 import com.example.polySpringBootProject.RoleType;
+import com.example.polySpringBootProject.dto.BoardDto;
 import com.example.polySpringBootProject.dto.JoinDto;
 import com.example.polySpringBootProject.entity.BoardEntity;
 import com.example.polySpringBootProject.entity.MemberEntity;
+import com.example.polySpringBootProject.repository.BoardRepository;
 import com.example.polySpringBootProject.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +34,9 @@ public class MemberService {
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private final BoardRepository boardRepository;
 
     public boolean join(JoinDto joinDto, BindingResult bindingResult) {
 
@@ -250,8 +259,41 @@ public class MemberService {
         } else {
             return "비밀번호 찾기 실패";
         }
-
     }
+
+    public Page<BoardDto> myBoardList(Pageable pageable, String myId){
+
+        int page = pageable.getPageNumber()-1;
+        int pageLimit = 7;
+
+        Page<BoardEntity> myboardEntities = boardRepository.findByMemberId(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), myId);
+        Page<BoardDto> myboardDtos = myboardEntities.map
+                (myboard -> new BoardDto(myboard.getNum(), myboard.getTitle(), myboard.getContent(),
+                        myboard.getCreatedTime(), myboard.getMember().getId(), myboard.getNotice(),
+                        myboard.getSecret(), myboard.getDel()));
+        return myboardDtos;
+    }
+
+    public Page<BoardDto> myBoardSearch(Pageable pageable, String myId, String category, String keyword){
+        int page = pageable.getPageNumber()-1;
+        int pageLimit = 3;
+
+        Page<BoardEntity> myBoardSearchEntities = null;
+        if(category.equals("title")){
+            myBoardSearchEntities = boardRepository.findByMemberIdAndTitleContaining(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")),myId, keyword);
+        }else if(category.equals("content")){
+            myBoardSearchEntities = boardRepository.findByMemberIdAndTitleContaining(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")),myId, keyword);
+        }else{
+            return null;
+        }
+
+        Page<BoardDto> myBoardSearchList = myBoardSearchEntities.map
+                (myboard -> new BoardDto(myboard.getNum(), myboard.getTitle(), myboard.getContent(),
+                        myboard.getCreatedTime(), myboard.getMember().getId(), myboard.getNotice(),
+                        myboard.getSecret(), myboard.getDel()));
+        return myBoardSearchList;
+    }
+
 
     public boolean existsId(String id) {
         Optional<MemberEntity> member = memberRepository.findById(id);

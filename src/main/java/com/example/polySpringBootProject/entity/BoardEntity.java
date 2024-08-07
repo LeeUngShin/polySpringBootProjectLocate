@@ -30,7 +30,6 @@ public class BoardEntity extends BaseEntity {
     private String content;
 
     @Column
-
     private String notice;
 
     @Column

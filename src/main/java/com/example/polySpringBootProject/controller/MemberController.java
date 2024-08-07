@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.controller;
 
+import com.example.polySpringBootProject.dto.BoardDto;
 import com.example.polySpringBootProject.dto.JoinDto;
 import com.example.polySpringBootProject.service.MemberService;
 import jakarta.servlet.http.Cookie;
@@ -8,6 +9,9 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.List;
@@ -245,6 +250,56 @@ public class MemberController {
 
         return utils.showMessageAlert("임시발급 비밀번호 : " + pw + " (비밀번호를 변경해주세요)", "/member/login", model);
     }
+
+    @RequestMapping(value = "/myBoard", method=RequestMethod.GET)
+    public String myBoard(HttpServletRequest servletRequest, HttpSession session,
+                          @PageableDefault(page=1) Pageable pageable,
+                          Model model){
+
+        String myId = (String) session.getAttribute("loginId");
+        if(myId.equals("") || myId==null){
+            return utils.showMessageAlert("회원만 접근가능합니다.", "board/page", model);
+        }
+        Page<BoardDto> myBoardList = memberService.myBoardList(pageable, myId);
+        int currentPage = myBoardList.getNumber() + 1;
+        System.out.println("내 게시글 현재페이지 : " + currentPage);
+        int blockLimit = 3;  // 선택 페이지 개수 3개
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
+        int endPage = ((startPage + blockLimit - 1) < myBoardList.getTotalPages()) ? startPage + blockLimit - 1 : myBoardList.getTotalPages();  // 3 6 9 12 ~~
+        boolean isLast = (startPage + blockLimit-1) >= myBoardList.getTotalPages();
+
+        model.addAttribute("myBoardList", myBoardList);
+        model.addAttribute("startPage",startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("isLast", isLast);
+
+        return "board/myBoardList";
+    }
+
+    @RequestMapping(value = "/myBoardSearch", method = RequestMethod.GET)
+    public String myBoardSearch(HttpServletRequest request, @PageableDefault(page =1) Pageable pageable,
+                                HttpSession session,
+                                @RequestParam("category") String category,
+                                @RequestParam("keyword") String keyword,
+                                Model model){
+        String myId = (String) session.getAttribute("loginId");
+        Page<BoardDto> myBoardSearchList = memberService.myBoardSearch(pageable, myId, category, keyword);
+
+        int currentPage = myBoardSearchList.getNumber() + 1;
+        System.out.println("내 게시글 현재페이지 : " + currentPage);
+        int blockLimit = 3;  // 선택 페이지 개수 3개
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
+        int endPage = ((startPage + blockLimit - 1) < myBoardSearchList.getTotalPages()) ? startPage + blockLimit - 1 : myBoardSearchList.getTotalPages();  // 3 6 9 12 ~~
+        model.addAttribute("myBoardSearchList", myBoardSearchList);
+        model.addAttribute("startPage",startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("category", category);
+        model.addAttribute("keyword", keyword);
+        return "board/myBoardList";
+    }
+
 
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public String searchPw(HttpServletRequest request){

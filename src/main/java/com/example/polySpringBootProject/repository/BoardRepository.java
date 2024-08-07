@@ -17,6 +17,9 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     Page<BoardEntity> findAll(Pageable pageable);
+    
+    // BoardEntity의 member 변수(MemberEntity에 있는)의 id변수를 사용해 DB 검색
+    Page<BoardEntity> findByMemberId(Pageable pageable, String Id);
 
     Page<BoardEntity> findByTitleContaining(Pageable pageable, String keyword);
     Page<BoardEntity> findByContentContaining(Pageable pageable, String keyword);
@@ -25,10 +28,10 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 //    @Query("select b from BoardEntity b where b.member.id = :id")
 //    Page<BoardEntity> findBySearchId(Pageable pageable, @Param("id") String id);
 
-    Page<BoardEntity> findByMemberId(Pageable pageable, String id);
-
     List<BoardEntity> findByNoticeOrderByNumDesc(String notice);
 
+    Page<BoardEntity> findByMemberIdAndTitleContaining(Pageable pageable, String id, String keyword);
+    Page<BoardEntity> findByMemberIdAndContentContaining(Pageable pageable, String id, String keyword);
     // 게시글 조회 올리기
 //    @Modifying  // update, delete 등 수정관련에 붙힘
 //    @Query(value = "update BoardEntity b set b.boardHits=b.boardHits+1 where b.id=:id")  // 엔티티 기준
