@@ -17,6 +17,8 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     Page<BoardEntity> findAll(Pageable pageable);
+
+    Page<BoardEntity> findByDel(Pageable pageable, String del);
     
     // BoardEntity의 member 변수(MemberEntity에 있는)의 id변수를 사용해 DB 검색
     Page<BoardEntity> findByMemberId(Pageable pageable, String Id);

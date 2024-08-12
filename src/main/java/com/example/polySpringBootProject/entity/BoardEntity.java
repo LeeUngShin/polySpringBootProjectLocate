@@ -22,7 +22,7 @@ public class BoardEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
     private Long num;
 
-    @Column(length = 200, nullable=false)  // 일반 속성
+    @Column(length = 200, nullable = false)  // 일반 속성
     private String title;
 
     @Lob  // 일반 속성
@@ -51,9 +51,12 @@ public class BoardEntity extends BaseEntity {
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)  // 다 대 일 (다 : 주인, 자식, 일 : 주인X, 부모)
-    @JoinColumn(name="member_id")  // 연관관계 주인임을 나타냄 , name = 외래키 이름
+    @JoinColumn(name = "member_id")  // 연관관계 주인임을 나타냄 , name = 외래키 이름
     private MemberEntity member;
 
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BoardFileEntity> boardFileEntities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CommentEntity> commentEntityList = new ArrayList<>();
 }

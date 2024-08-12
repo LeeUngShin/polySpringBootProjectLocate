@@ -2,6 +2,10 @@ body{
   margin: 0;
 }
 
+#itemSearch{
+    margin-top : 20px;
+}
+
 .nav_item{
   color: black;
 }
@@ -24,7 +28,7 @@ body{
 }
 
 #header{
-  flex-basis: 80px;
+  flex-basis: 110px;
   background-color: white;
   display: flex;
   justify-content: space-between;
@@ -32,14 +36,15 @@ body{
   margin : 0px 30px;
 }
 
-
 #main_section{
   background-color: chartreuse;
-
- 
 }
 .section{
 	flex-grow: 1;
+}
+
+.carousel-inner{
+    height:600px;
 }
 
 #footer{
@@ -85,10 +90,6 @@ display: flex;
   --bs-nav-link-color: #f4f5f6;
 }
 
-.navbar{
-	margin-bottom: 30px;
-}
-
 .navbar-collapse{
   text-align: center;
   font-size: 20px;
@@ -97,12 +98,33 @@ display: flex;
 .navbar-nav {
   margin: 0 auto;
 }
+
+
+.itemBucket{
+    text-decoration: none;
+    width: 120px;
+    margin-right: 25px;
+    color: black;
+}
+
 .nav-item{
   padding: 10px;
 }
 
+.bi-justify {
+    font-size: 30px;
+    color: black;
+    padding-left : 20px;
+}
+
 .bi{
   padding-bottom: 3px;
+}
+
+.categoryNav{
+    position : relative;
+    overflow: visible;
+    z-index : 100;
 }
 
 
@@ -144,11 +166,6 @@ display: flex;
 }
 
 
-.boardButton{
-	margin:0 auto;
-	margin-right: 100px;
-}
-
 #pageNum{
 	text-align: center;
 	display: flex;
@@ -158,10 +175,10 @@ display: flex;
 	font-weight: bold;
 }
 
-.searchInput{
+#searchInput{
 	text-align: center;
 }
-
+itemBucket
 
 /*게시글 쓰기 양식*/
 #boardWriteForm{
@@ -172,7 +189,6 @@ display: flex;
 
 /*게시글 상세 양식*/
 #boardDetail{
-	
 	border-top:  black;
 	margin: 0 auto;
 	margin-bottom: 30px;
@@ -180,11 +196,53 @@ display: flex;
 
 #boardContent{
 	text-align: left;
+	min-height : 400px;
 }
 
-#searchInput{
+.boardButton{
+    margin-right : 100px;
+}
+
+#comment{
+    margin-left : 90px;
+    font-size: 20px;
+}
+
+#commentDiv{
+    display:flex;
+    margin-left : 100px;
+    margin-right: 100px;
+    justify-content: space-between;
+}
+#commentInput{
+    width: calc(100vw - 350px);
+}
+
+#commentDiv{
     text-align : center;
 }
+#commentTable{
+    width: calc(100vw - 200px);
+    border-collapse: separate;
+    border-spacing : 10px;
+}
+
+.commentRight{
+    text-align : center;
+}
+
+.commentButton{
+    width : 3%;
+}
+
+.commentDate{
+    width : 15%;
+}
+
+.commentContent{
+    width : 60%;
+}
+
 
 /*회원승인 처리 버튼*/
 .Userapply{
@@ -208,3 +266,4 @@ display: flex;
 .card{
   margin : 10px;
 }
+

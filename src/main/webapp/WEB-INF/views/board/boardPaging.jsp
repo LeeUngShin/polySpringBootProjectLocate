@@ -129,7 +129,7 @@
 
                 <form action="/board/write">
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end boardButton">
-                        <button type=submit" class="btn btn-outline-secondary" id="writeFormButton">
+                        <button type="submit" class="btn btn-outline-secondary" id="writeFormButton">
                         <i class="bi bi-pencil"></i>
                         글쓰기
                         </button>
@@ -143,6 +143,7 @@
                         <option value="title">제목</option>
                         <option value="content">내용</option>
                         <option value="writer">작성자</option>
+                    </select>
                     <input type="text" name="keyword">
                     <input type="submit" value="검색">
                 </form>

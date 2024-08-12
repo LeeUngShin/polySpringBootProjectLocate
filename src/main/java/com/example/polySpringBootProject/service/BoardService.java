@@ -138,7 +138,7 @@ public class BoardService {
             return false;
         }else {
             BoardEntity board = boardEntity.get();
-            board.setDel("N");
+            board.setDel("Y");
             boardRepository.save(board);
             return false;
         }
@@ -233,7 +233,7 @@ public class BoardService {
         //Page<BoardEntity> boardEntities=  boardRepository.findAll(PageRequest.of(page,pageLimit, Sort.by(Sort.Direction.DESC, "num")));
         Page<BoardEntity> boardEntities = null;
         // PageRequest : Pageable의 구현체
-        boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
+        boardEntities = boardRepository.findByDel(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N");
 
 
         System.out.println("boardEntities.getContent() = " + boardEntities.getContent()); // 요청 페이지에 해당하는 글
