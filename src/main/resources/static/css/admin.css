@@ -17,12 +17,18 @@ header{
   display: flex;
   width: 100vw;
   flex-grow: 1;
+  min-height : 100vh;
 }
 
-#sideBar{
+#article01{
   min-height:100%;
-  width: 300px;
   background-color: slategray;
+  width: 300px;
+}
+
+#article02{
+  flex-grow : 1;
+  min-height: 100%;
 }
 
 .p-2{
@@ -39,15 +45,27 @@ header{
 }
 
 #mainArticle{
-  min-height: 100%;
-  background-color: green;
-}
-
-#article02{
-  flex-grow : 1;
-  min-height: 100%;
+  min-height : 100%;
+  background-color: #b9c1b9;
 }
 
 #adminNav{
   height: 89px;
+}
+
+.table{
+    text-align : center;
+    vertical-align: middle;
+}
+
+tr{
+vertical-align : middle;
+}
+
+#notApprovalMemberTableDiv{
+  padding : 50px;
+}
+
+#memberApprovalPagingDiv{
+    text-align : center;
 }

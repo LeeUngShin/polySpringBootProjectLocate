@@ -25,9 +25,12 @@
           <table class="table table-striped table-hover">
             <thead>
               <tr>
-                <th scope="col">회원번호</th>
-                <th scope="col">회원 아이디</th>
-                <th scope="col">회원승인</th>
+                <th scope="col" style="width : 10%">회원번호</th>
+                <th scope="col" style="width : 15%">회원 아이디</th>
+                <th scope="col">회원 주소</th>
+                <th scope="col" style="width : 15%">회원 이메일</th>
+                <th scope="col">회원 가입일</th>
+                <th scope="col" style="width : 10%">회원<br>승인여부</th>
               </tr>
             </thead>
           <c:forEach items="${notApprovalMember.content}" var="member">
@@ -35,11 +38,10 @@
               <tr>
                 <th scope="row">${member.num}</th>
                 <td>${member.id}</td>
-                <td>
-                  <form action="/admin/memberApprovalComplete?id=${member.id}" method="post">
-                    <button type="submit" class="btn btn-secondary">가입승인</button>
-                  </form>
-                </td>
+                <td>${member.post}<br>${member.addr}<br>${member.addrDetail}</td>
+                <td>${member.email}</td>
+                <td>${member.regTime}</td>
+                <td>${member.approval}</td>
               </tr>
             </tbody>
           </c:forEach>
@@ -52,7 +54,7 @@
                     처음
                  </c:when>
                  <c:otherwise>
-                   <a href="/admin/memberApproval?page=1">처음</a>
+                   <a href="/admin/memberList?page=1">처음</a>
                  </c:otherwise>
             </c:choose>
             <c:choose>
@@ -60,7 +62,7 @@
                     이전
                  </c:when>
                  <c:otherwise>
-                   <a href="/admin/memberApproval?page=${startPage-1}">이전</a>
+                   <a href="/admin/memberList?page=${startPage-1}">이전</a>
                  </c:otherwise>
             </c:choose>
             <c:forEach begin="${startPage}" end="${endPage}" var="count">
@@ -69,7 +71,7 @@
                   ${currentPage}
                 </c:when>
                 <c:otherwise>
-                  <a href="/admin/memberApproval?page=${count}">${count}</a>
+                  <a href="/admin/memberList?page=${count}">${count}</a>
                 </c:otherwise>
               </c:choose>
             </c:forEach>
@@ -78,7 +80,7 @@
                   다음
                </c:when>
                <c:otherwise>
-                 <a href="/admin/memberApproval?page=${endPage+1}">다음</a>
+                 <a href="/admin/memberList?page=${endPage+1}">다음</a>
                </c:otherwise>
             </c:choose>
             <c:choose>
@@ -86,7 +88,7 @@
                   마지막
                </c:when>
                <c:otherwise>
-                 <a href="/admin/memberApproval?page=${totalLastPage}">마지막</a>
+                 <a href="/admin/memberList?page=${totalLastPage}">마지막</a>
                </c:otherwise>
             </c:choose>
           </div>

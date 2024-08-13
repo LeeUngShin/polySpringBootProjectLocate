@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<article>
+<article id="article01">
   <div id="sideBar" class="d-flex flex-column mb-3">
     <div class="p-2">
         관리자메뉴

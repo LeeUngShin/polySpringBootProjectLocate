@@ -1,13 +1,17 @@
 package com.example.polySpringBootProject.service;
 
-import com.example.polySpringBootProject.dto.JoinDto;
+import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.entity.MemberEntity;
 import com.example.polySpringBootProject.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
-import org.hibernate.mapping.Join;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AdminService {
@@ -28,9 +32,33 @@ public class AdminService {
         }
     }
 
-    public Page<JoinDto> getNotApprovalMember(){
+    public Page<MemberDto> getNotApprovalMember(Pageable pageable){
+        
+        int currentPage = pageable.getPageNumber() - 1;
+        int pageLimit = 10;  // 한페이지에 보여줄 회원 수
+        Page<MemberEntity> memberEntityPage = memberRepository.findByApproval(PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N");
+        Page<MemberDto> memberDtoPage = memberEntityPage.map
+                (member -> new MemberDto(member.getNum(), member.getId()));
+        return memberDtoPage;
+    }
 
-        Page<MemberEntity>
+    public boolean memberApproval(String id){
+        Optional<MemberEntity> memberEntity = memberRepository.findById(id);
+        if(memberEntity.isEmpty()){
+            return false;
+        }
+        MemberEntity member = memberEntity.get();
+        member.setApproval("Y");
+        memberRepository.save(member);
+        return true;
+    }
 
+    public Page<MemberDto> getMemberList(Pageable pageable) {
+        int currentPage = pageable.getPageNumber() - 1;
+        int pageLimit = 10;  // 한페이지에 보여줄 회원 수
+        Page<MemberEntity> memberEntityPage = memberRepository.findAll(PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
+        Page<MemberDto> memberDtoPage = memberEntityPage.map
+                (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime()));
+        return memberDtoPage;
     }
 }

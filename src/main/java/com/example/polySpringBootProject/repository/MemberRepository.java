@@ -30,6 +30,8 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
     Page<MemberEntity> findByApproval(Pageable pageable, String approval);
 
+    Page<MemberEntity> findAll(Pageable pageable);
+
     boolean existsById(String id);
 
 

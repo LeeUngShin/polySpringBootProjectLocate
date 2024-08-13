@@ -11,10 +11,10 @@
   <title>Document</title>
 </head>
 <body onload=checkAdmin()>
-  <%@include file = "../adminHeader.jsp" %>
+  <%@include file = "./adminHeader.jsp" %>
 
   <section id="adminSection">
-    <%@include file = "../adminSidebar.jsp" %>
+    <%@include file = "./adminSidebar.jsp" %>
 
     <article id="article02">
       <div id="mainArticle">
@@ -28,7 +28,7 @@
         var role = "${role}";
         if(role != "ROLE_ADMIN"){
             alert("관리자 권한만 접근 가능합니다.");
-            window.location.href = "http://localhost:8080/home"; // 권한이 없으면 리다이렉트
+            window.location.href = "127.0.0.1:8080/home"; // 권한이 없으면 리다이렉트
         }
     }
   </script>

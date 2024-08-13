@@ -4,6 +4,10 @@ import com.example.polySpringBootProject.entity.MemberEntity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.lang.reflect.Member;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @ToString  // ToString 메서드 사용가능
 @Getter  // Getter 메서드 사용가능
 @Builder  // 빌드패턴(클래스) 자동 생성 - 빌더 클래스는 setter 메서드 제공(체이닝 방식)
@@ -11,7 +15,9 @@ import lombok.*;
 @Setter
 @AllArgsConstructor  // 모든 변수를 매개변수로 받는 생성자 자동생성
 @NoArgsConstructor  // 매개변수가 없는 생성자 자동생성
-public class JoinDto {
+public class MemberDto {
+
+    private Long num;
 
     @NotBlank(message = "아이디를 입력하세요")
     private String id;
@@ -38,9 +44,27 @@ public class JoinDto {
 
     private String approval;
 
-    public static JoinDto entityToDto(MemberEntity member) {
+    private String regTime;
 
-        JoinDto joinForm = new JoinDto();
+    public MemberDto(Long num, String id){
+        this.num = num;
+        this.id = id;
+    }
+
+    public MemberDto(Long num, String id, String post, String addr, String addrDetail, String email, String approval, LocalDateTime regTime){
+        this.num = num;
+        this.id = id;
+        this.post = post;
+        this.addr = addr;
+        this.addrDetail = addrDetail;
+        this.email = email;
+        this.approval = approval;
+        this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public static MemberDto entityToDto(MemberEntity member) {
+
+        MemberDto joinForm = new MemberDto();
         joinForm.setId(member.getId());
         joinForm.setPw(member.getPw());
         joinForm.setName(member.getName());

@@ -2,7 +2,7 @@ package com.example.polySpringBootProject.service;
 
 import com.example.polySpringBootProject.RoleType;
 import com.example.polySpringBootProject.dto.BoardDto;
-import com.example.polySpringBootProject.dto.JoinDto;
+import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.entity.BoardEntity;
 import com.example.polySpringBootProject.entity.MemberEntity;
 import com.example.polySpringBootProject.repository.BoardRepository;
@@ -38,7 +38,7 @@ public class MemberService {
     @Autowired
     private final BoardRepository boardRepository;
 
-    public boolean join(JoinDto joinDto, BindingResult bindingResult) {
+    public boolean join(MemberDto joinDto, BindingResult bindingResult) {
 
         String encodePw = passwordEncoder.encode(joinDto.getPw());
 
@@ -181,11 +181,11 @@ public class MemberService {
         return null;
     }
 
-    public JoinDto modifyForm(String id) {
+    public MemberDto modifyForm(String id) {
         Optional<MemberEntity> member = memberRepository.findById(id);
         if(member.isPresent()) {
             MemberEntity mem = member.get();
-            JoinDto joinForm = JoinDto.entityToDto(mem);
+            MemberDto joinForm = MemberDto.entityToDto(mem);
             return joinForm;
         }else {
             return null;
@@ -194,7 +194,7 @@ public class MemberService {
     }
 
     @Transactional
-    public boolean modify(JoinDto modifyForm) {
+    public boolean modify(MemberDto modifyForm) {
 
         Optional<MemberEntity> member = memberRepository.findById(modifyForm.getId());
         if(!member.isPresent()) {
@@ -312,23 +312,23 @@ public class MemberService {
     }
 
 
-    public List<JoinDto> findAll(){
+    public List<MemberDto> findAll(){
         List<MemberEntity> memberEntityList = memberRepository.findAll();
-        List<JoinDto> memberList = new ArrayList<>();
+        List<MemberDto> memberList = new ArrayList<>();
 
         for(MemberEntity member : memberEntityList) {
-            JoinDto joinForm = JoinDto.entityToDto(member);
+            MemberDto joinForm = MemberDto.entityToDto(member);
             memberList.add(joinForm);
         }
         return memberList;
     }
 
-    public JoinDto findById(String id) {
+    public MemberDto findById(String id) {
 
         Optional<MemberEntity> member = memberRepository.findById(id);
         if(member.isPresent()) {
             MemberEntity mem = member.get();
-            JoinDto joinForm = JoinDto.entityToDto(mem);
+            MemberDto joinForm = MemberDto.entityToDto(mem);
             return joinForm;
         }
         else {

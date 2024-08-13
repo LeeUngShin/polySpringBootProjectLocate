@@ -17,18 +17,7 @@
     <%@include file = "../adminSidebar.jsp" %>
     <article id="article02">
       <div>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark" id="adminNav">
-          <div class="container-fluid">
-            <a class="navbar-brand">회원관리메뉴</a>
-
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-              <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="/admin/memberApproval">회원승인</a>
-                <a class="nav-link" href="#">회원삭제</a>
-              </div>
-            </div>
-          </div>
-        </nav>
+    <%@include file="./memberNav.jsp" %>
       </div>
       <div id="mainArticle">
       </div>

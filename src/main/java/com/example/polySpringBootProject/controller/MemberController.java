@@ -1,7 +1,7 @@
 package com.example.polySpringBootProject.controller;
 
 import com.example.polySpringBootProject.dto.BoardDto;
-import com.example.polySpringBootProject.dto.JoinDto;
+import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,12 +17,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +57,7 @@ public class MemberController {
      */
     @RequestMapping(value="/join", method=RequestMethod.POST)
     public String joinProcess(HttpServletRequest request,
-                              @Valid @ModelAttribute JoinDto joinDto,
+                              @Valid @ModelAttribute MemberDto joinDto,
                               BindingResult bindingResult,
                               Model model) {  // joinDto의 변수명과 회원가입 템플릿의 name값은 동일해야 함
 
@@ -202,7 +199,7 @@ public class MemberController {
     public String loginView(HttpServletRequest request, HttpSession session) {
 
         String id = (String) session.getAttribute("loginId");  // 로그인한 아이디
-        JoinDto joinForm = memberService.modifyForm(id);
+        MemberDto joinForm = memberService.modifyForm(id);
         request.setAttribute("member", joinForm);
         System.out.println(joinForm);
 
@@ -210,7 +207,7 @@ public class MemberController {
     }
 
     @RequestMapping(value="/modify", method=RequestMethod.POST)
-    public String modifyProcess(HttpServletRequest request, @ModelAttribute JoinDto modifyForm) {
+    public String modifyProcess(HttpServletRequest request, @ModelAttribute MemberDto modifyForm) {
 
         boolean modify = memberService.modify(modifyForm);
 
@@ -316,7 +313,7 @@ public class MemberController {
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public String searchPw(HttpServletRequest request){
 
-        List<JoinDto> list = memberService.findAll();
+        List<MemberDto> list = memberService.findAll();
         request.setAttribute("memberList", list);
         System.out.println("aa : "+ list);
         return "member/list";
@@ -325,7 +322,7 @@ public class MemberController {
     @RequestMapping(value="/detail/{currentId}", method= RequestMethod.GET)
     public String detail(HttpServletRequest request, @PathVariable("currentId") String id) {
 
-        JoinDto joinForm = memberService.findById(id);
+        MemberDto joinForm = memberService.findById(id);
 
         if(joinForm != null) {
 
