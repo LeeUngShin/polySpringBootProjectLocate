@@ -1,6 +1,8 @@
 package com.example.polySpringBootProject.repository;
 
 import com.example.polySpringBootProject.entity.MemberEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +27,8 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
     Optional<MemberEntity> findByName(String name);
     Optional<MemberEntity> findByNameAndEmail(String name, String email);
+
+    Page<MemberEntity> findByApproval(Pageable pageable, String approval);
 
     boolean existsById(String id);
 

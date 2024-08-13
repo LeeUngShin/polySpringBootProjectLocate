@@ -98,6 +98,15 @@ public class MemberController {
         return "member/login";
     }
 
+    /**
+     * 로그인 처리
+     * @param request
+     * @param response
+     * @param session
+     * @param idMemory
+     * @param model
+     * @return
+     */
     @RequestMapping(value="/login", method = RequestMethod.POST)
     public String loginProcess(HttpServletRequest request,
                                HttpServletResponse response,
@@ -121,7 +130,10 @@ public class MemberController {
         }
         response.addCookie(rememberCookie); // 쿠키추가
 
-        if(loginStr.equals("success")) {
+        if(loginStr.equals("admin")){
+            return "redirect:/admin/home";
+        }
+        else if(loginStr.equals("success")) {
             log.info("로그인 했더니 현재 세션 데이터" + session.getAttribute("loginId"));
             return "redirect:/home";
         }

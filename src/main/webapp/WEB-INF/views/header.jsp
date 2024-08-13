@@ -24,6 +24,7 @@
     <div id="loginRegister">
         ${loginId}님 환영합니다.!<br>
         ${sessionScope.loginId}님!!<br>
+        ${sessionScope.role}<br>
     <form action="/member/logout" method="POST" id=logout-form>
         <button type="submit" class="btn btn-main">
             <i class="bi bi-person-fill"></i>
@@ -41,7 +42,7 @@
 
     <% } else { %>
     <div id="loginRegister">
-        <a class=sign_button href="/member/login"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+        <a class="sign_button" href="/member/login"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
             </svg></i>로그인</a>
         <a class="sign_button" href="/member/join"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">

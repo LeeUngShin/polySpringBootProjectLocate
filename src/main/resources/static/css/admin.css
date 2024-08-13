@@ -1,0 +1,53 @@
+body{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+header{
+  height: 120px;
+  width: 100vw;
+  background-color: rgb(46,53,60);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding : 20px 50px;  /*상하  좌우*/
+}
+
+#adminSection{
+  display: flex;
+  width: 100vw;
+  flex-grow: 1;
+}
+
+#sideBar{
+  min-height:100%;
+  width: 300px;
+  background-color: slategray;
+}
+
+.p-2{
+  text-align: center;
+  font-size: 25px;
+  margin : 10px;
+}
+
+#adminLogoutButton{
+  color : white;
+  border : solid white 2px;
+  padding : 15px;
+  border-radius: 20px;
+}
+
+#mainArticle{
+  min-height: 100%;
+  background-color: green;
+}
+
+#article02{
+  flex-grow : 1;
+  min-height: 100%;
+}
+
+#adminNav{
+  height: 89px;
+}

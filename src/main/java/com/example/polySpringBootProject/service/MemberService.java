@@ -80,8 +80,15 @@ public class MemberService {
                 MemberEntity member = user.get();
                 System.out.println("로그인한 회원정보 : " + member);
                 boolean login = passwordEncoder.matches(pw, member.getPw()); // 입력한 pw와 암호화된 pw 일치 여부
-                if (login && member.getApproval().equals("Y")) {
+                System.out.println("로그인한 회원 롤 : " + member.getRole().toString());
+                if(login&&member.getRole().toString().equals("ROLE_ADMIN")){
                     session.setAttribute("loginId", member.getId());
+                    session.setAttribute("role", member.getRole().toString());
+                    return "admin";
+                }
+                else if (login && member.getApproval().equals("Y")) {
+                    session.setAttribute("loginId", member.getId());
+                    session.setAttribute("role", member.getRole().toString());
                     // session.setMaxInactiveInterval(600);
                     // JoinDto joinForm = JoinDto.entityToDto(member);
                     return "success";

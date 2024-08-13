@@ -6,6 +6,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @Configuration
 public class PasswordEncoding {
@@ -16,7 +18,6 @@ public class PasswordEncoding {
                 .formLogin(login -> login.disable());//기본 로그인 페이지 없애기
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
