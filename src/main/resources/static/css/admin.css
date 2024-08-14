@@ -69,3 +69,48 @@ vertical-align : middle;
 #memberApprovalPagingDiv{
     text-align : center;
 }
+
+ul{
+    list-style-type: none;
+    padding : 0px;
+    text-align : left;
+}
+
+
+#memberMenu, #boardMenu, #goodsMenu{
+    display : none;
+    font-size : 20px;
+    margin-left : 35px;
+}
+
+#memberMenu.memberLowMenu{
+    display : block;
+}
+
+#boardMenu.boardLowMenu{
+    display : block;
+}
+
+#goodsMenu.goodsLowMenu{
+    display : block;
+}
+
+li{
+    margin : 5px;
+}
+
+.sideBar{
+    margin-left : 40px;
+}
+
+#goodsRegisterDiv{
+    width: 500px;
+    margin: 0 auto;
+    padding-top: 30px;
+}
+
+textarea{
+    width: 500px;
+    height: 100px;
+    resize: none;
+}

@@ -24,7 +24,33 @@ public class FileUploadService {
         originalFileName = file.getOriginalFilename();
         fileExtension =
                 originalFileName.substring(originalFileName.lastIndexOf("."), originalFileName.length());
-        saveDir = "C:/imgUploadF";
+        saveDir = "C:/imgUploadF/board";
+        File saveDirectory = new File(saveDir);
+        if (!saveDirectory.exists()) {
+            saveDirectory.mkdirs();
+        }
+        UUID uuid = UUID.randomUUID();
+        storedFileName = uuid.toString().replaceAll("-", "");
+        uploadPath = saveDir + "/" + storedFileName + fileExtension;
+        storedFileNameWithExtension = storedFileName + fileExtension;
+        File saveFile = new File(uploadPath);
+        try {
+            file.transferTo(saveFile);
+            result = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return result;
+    }
+
+    public boolean GoodsImageUpload(MultipartFile file) {
+        boolean result = false;
+
+        originalFileName = file.getOriginalFilename();
+        fileExtension =
+                originalFileName.substring(originalFileName.lastIndexOf("."), originalFileName.length());
+        saveDir = "C:/imgUploadF/goods";
         File saveDirectory = new File(saveDir);
         if (!saveDirectory.exists()) {
             saveDirectory.mkdirs();

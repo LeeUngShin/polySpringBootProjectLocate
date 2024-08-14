@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.controller;
 
+import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.rmi.server.ExportException;
 import java.util.List;
@@ -55,10 +54,10 @@ public class adminController {
         return utils.showMessageAlert("관리자 계정이 로그아웃되었습니다.", "/home", model);
     }
 
-    @GetMapping("/memberManage")
-    public String memberManage(){
-        return "/admin/member/memberManage";
-    }
+//    @GetMapping("/memberManage")
+//    public String memberManage(){
+//        return "/admin/member/memberManage";
+//    }
 
     @GetMapping("/memberApproval")
     public String memberApproval(@PageableDefault(page=1) Pageable pageable,
@@ -145,6 +144,45 @@ public class adminController {
         }catch (Exception e){
             e.printStackTrace();
             return utils.showMessageAlert("회원목록 조회에 실패했습니다.", "/admin/memberManage", model);
+        }
+    }
+
+
+    @GetMapping("/goodsRegisterForm")
+    public String goodsRegisterForm(){
+
+        return "admin/goods/goodsRegister";
+    }
+
+    @PostMapping("/goodsRegister")
+    public String goodsRegister(@ModelAttribute GoodsDto goodsDto, Model model){
+
+        try {
+            String goodsRegister = adminService.goodsRegister(goodsDto);
+            System.out.println("반환받은 문자열 : " + goodsRegister);
+            if (goodsRegister.equals("success")) {
+                return utils.showMessageAlert("상품 등록에 성공했습니다.", "/admin/goodsRegisterForm", model);
+            }
+            else if(goodsRegister.equals("notFoundCategory")){
+                return utils.showMessageAlert("카테고리를 찾는데 실패했습니다.", "/admin/goodsRegisterForm", model);
+            }
+            else if(goodsRegister.equals("imageUploadFail")){
+                return utils.showMessageAlert("이미지업로드에 실패했습니다.", "/admin/goodsRegisterForm", model);
+            }
+            else if(goodsRegister.equals("duplicateName")){
+                return utils.showMessageAlert("상품명은 중복될 수 없습니다..", "/admin/goodsRegisterForm", model);
+            }
+            else if(goodsRegister.equals("DBFail")){
+                return utils.showMessageAlert("DB관련 오류때문에 실패했습니다.", "/admin/goodsRegisterForm", model);
+            }
+            else{
+                return utils.showMessageAlert("상품등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("컨트롤러에서 예외발생");
+            return utils.showMessageAlert("컨트롤러 예외로 상품 등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
         }
     }
 }

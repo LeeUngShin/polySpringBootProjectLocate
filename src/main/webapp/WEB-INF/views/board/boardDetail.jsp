@@ -30,14 +30,14 @@
                     <tr>
                         <th>내용</th>
                         <td colspan="6">
-                            <div><img src="/upload/${boardDto.storedFileName}" alt=""></div>
+                            <div><img src="/upload/board/${boardDto.storedFileName}" alt=""></div>
                             <div id="boardContent">${contentEnter}</div>
                         </td>
                     </tr>
                     <!--
                     <tr>
                         <th>이미지</th>
-                        <td colspan="6"><img src="/upload/${boardDto.storedFileName}" alt=""></td>
+                        <td colspan="6"><img src="/upload/board/${boardDto.storedFileName}" alt=""></td>
                     </tr>
                     -->
                 </table>

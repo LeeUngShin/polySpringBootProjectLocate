@@ -181,10 +181,9 @@ display: flex;
 itemBucket
 
 /*게시글 쓰기 양식*/
-#boardWriteForm{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+#boardWriteDiv {
+    width : 1000px;
+    margin : 0 auto;
 }
 
 /*게시글 상세 양식*/
