@@ -26,7 +26,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/board/page?page=1">자유게시판</a>
+                    <a class="nav-link" href="/board/board?board=plain&page=1">자유게시판</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -43,7 +43,7 @@
                         고객센터
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">공지사항</a></li>
+                        <li><a class="dropdown-item" href="board?board=notice&page=1">공지사항</a></li>
                         <li><a class="dropdown-item" href="#">자주묻는 질문</a></li>
                         <li><a class="dropdown-item" href="#">1대1 문의</a></li>
                     </ul>

@@ -13,6 +13,13 @@ header{
   padding : 20px 50px;  /*상하  좌우*/
 }
 
+/*헤더 버튼*/
+#adminButton{
+    display : flex;
+    width : 350px;
+    justify-content : space-around;
+}
+
 #adminSection{
   display: flex;
   width: 100vw;
@@ -62,11 +69,11 @@ tr{
 vertical-align : middle;
 }
 
-#notApprovalMemberTableDiv{
+#adminListDiv{
   padding : 50px;
 }
 
-#memberApprovalPagingDiv{
+#adminPagingNum{
     text-align : center;
 }
 
@@ -111,6 +118,13 @@ li{
 
 textarea{
     width: 500px;
-    height: 100px;
+    height: 200px;
     resize: none;
+}
+
+/*공지글 작성폼*/
+#noticeBoardRegisterDiv{
+    width: 800px;
+    margin: 0 auto;
+    padding-top: 30px;
 }

@@ -17,41 +17,39 @@
   <section id="adminSection">
     <%@include file = "../adminSidebar.jsp" %>
     <article id="article02">
+
+
       <div id="mainArticle">
-        <%@include file="./memberNav.jsp" %>
+        <%@include file="./boardNav.jsp" %>
         <div id="adminListDiv">
-        <c:if test="${not empty notApprovalMember}">
           <table class="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th scope="col">회원번호</th>
-                <th scope="col">회원 아이디</th>
-                <th scope="col">회원승인</th>
-              </tr>
+            <thead class="table-dark">
+                 <tr>
+                     <th scope="col" width=200px>글번호</th>
+                     <th scope="col" width=500px>제목</th>
+                     <th scope="col" width=200px>작성자</th>
+                     <th scope="col" width=200px>작성일자</th>
+                 </tr>
             </thead>
-          <c:forEach items="${notApprovalMember.content}" var="member">
+          <c:forEach items="${boardDtoPage.content}" var="board">
             <tbody>
               <tr>
-                <th scope="row">${member.num}</th>
-                <td>${member.id}</td>
-                <td>
-                  <form action="/admin/memberApprovalComplete?id=${member.id}" method="post">
-                    <button type="submit" class="btn btn-secondary">가입승인</button>
-                  </form>
-                </td>
+                <th scope="row">${board.num}</th>
+                <td>${board.title}</td>
+                <td>${board.writer}</td>
+                <td>${board.regTime}</td>
               </tr>
             </tbody>
           </c:forEach>
-        </c:if>
         </div>
           </table>
           <div id="adminPagingNum">
             <c:choose>
-                 <c:when test="${notApprovalMember.isFirst()}">
+                 <c:when test="${boardDtoPage.isFirst()}">
                     처음
                  </c:when>
                  <c:otherwise>
-                   <a href="/admin/memberApproval?page=1">처음</a>
+                   <a href="/admin/boardList?page=1">처음</a>
                  </c:otherwise>
             </c:choose>
             <c:choose>
@@ -59,7 +57,7 @@
                     이전
                  </c:when>
                  <c:otherwise>
-                   <a href="/admin/memberApproval?page=${startPage-1}">이전</a>
+                   <a href="/admin/boardList?page=${startPage-1}">이전</a>
                  </c:otherwise>
             </c:choose>
             <c:forEach begin="${startPage}" end="${endPage}" var="count">
@@ -68,7 +66,7 @@
                   ${currentPage}
                 </c:when>
                 <c:otherwise>
-                  <a href="/admin/memberApproval?page=${count}">${count}</a>
+                  <a href="/admin/boardList?page=${count}">${count}</a>
                 </c:otherwise>
               </c:choose>
             </c:forEach>
@@ -77,15 +75,15 @@
                   다음
                </c:when>
                <c:otherwise>
-                 <a href="/admin/memberApproval?page=${endPage+1}">다음</a>
+                 <a href="/admin/boardList?page=${endPage+1}">다음</a>
                </c:otherwise>
             </c:choose>
             <c:choose>
-               <c:when test="${notApprovalMember.isLast()}">
+               <c:when test="${boardDtoPage.isLast()}">
                   마지막
                </c:when>
                <c:otherwise>
-                 <a href="/admin/memberApproval?page=${totalLastPage}">마지막</a>
+                 <a href="/admin/boardList?page=${totalLastPage}">마지막</a>
                </c:otherwise>
             </c:choose>
           </div>

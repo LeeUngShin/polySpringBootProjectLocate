@@ -1,15 +1,11 @@
 package com.example.polySpringBootProject.service;
 
+import com.example.polySpringBootProject.dto.BoardDto;
+import com.example.polySpringBootProject.dto.BoardResponse;
 import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.dto.MemberDto;
-import com.example.polySpringBootProject.entity.GoodsCategoryEntity;
-import com.example.polySpringBootProject.entity.GoodsEntity;
-import com.example.polySpringBootProject.entity.GoodsImageEntity;
-import com.example.polySpringBootProject.entity.MemberEntity;
-import com.example.polySpringBootProject.repository.GoodsCategoryRepository;
-import com.example.polySpringBootProject.repository.GoodsImageRepository;
-import com.example.polySpringBootProject.repository.GoodsRepository;
-import com.example.polySpringBootProject.repository.MemberRepository;
+import com.example.polySpringBootProject.entity.*;
+import com.example.polySpringBootProject.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -18,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -26,17 +23,17 @@ import java.util.Optional;
 public class AdminService {
 
     @Autowired
+    BoardRepository boardRepository;
+    @Autowired
+    BoardFileRepository boardFileRepository;
+    @Autowired
     MemberRepository memberRepository;
-
     @Autowired
     GoodsRepository goodsRepository;
-
     @Autowired
     GoodsCategoryRepository goodsCategoryRepository;
-
     @Autowired
     GoodsImageRepository goodsImageRepository;
-
     @Autowired
     FileUploadService fileUploadService;
 
@@ -62,7 +59,7 @@ public class AdminService {
                 (member -> new MemberDto(member.getNum(), member.getId()));
         return memberDtoPage;
     }
-
+    @Transactional
     public boolean memberApproval(String id){
         Optional<MemberEntity> memberEntity = memberRepository.findById(id);
         if(memberEntity.isEmpty()){
@@ -83,7 +80,7 @@ public class AdminService {
         return memberDtoPage;
     }
 
-
+    @Transactional
     public String goodsRegister(GoodsDto goodsDto){
 
         Optional<GoodsCategoryEntity> goodsCategoryEntity = goodsCategoryRepository.findByCategoryName(goodsDto.getGoodsCategory());
@@ -134,4 +131,91 @@ public class AdminService {
             return "fail";
         }
     }
-};
+
+    @Transactional
+    public BoardResponse noticeBoardWrite(BoardDto boardDto, String adminId){
+
+        Optional<MemberEntity> adminOptional = memberRepository.findById(adminId);
+        System.out.println("어드민 정보 : " + adminOptional);
+        if(adminOptional.isEmpty()) return null;
+        MemberEntity adminMember = adminOptional.get();
+
+        if(boardDto.getBoardFile().isEmpty()){
+            BoardEntity board = BoardEntity.builder()
+                    .title(boardDto.getTitle())
+                    .content(boardDto.getContent())
+                    .fileAttached(0)
+                    .notice("Y")
+                    .noticeTop(boardDto.getNoticeTop())
+                    .secret(boardDto.getSecret())
+                    .del(boardDto.getDelete())
+                    .member(adminMember)
+                    .build();
+            try {
+                Long noticeBoardNum = boardRepository.save(board).getNum();
+                BoardResponse boardResponse = new BoardResponse(true, noticeBoardNum, "게시글작성 성공");
+                return boardResponse;
+            }catch (DataAccessException e) {
+                e.printStackTrace();
+                BoardResponse boardResponse = new BoardResponse(false, -1L, "DB 관련 게시글작성 실패");
+                return boardResponse;
+            }catch (Exception e){
+                e.printStackTrace();
+                System.out.println("공지글 작성 실패");
+                BoardResponse boardResponse = new BoardResponse(false, -1L, "게시글작성 실패");
+                return boardResponse;
+            }
+        }else{
+            boolean upload = fileUploadService.upload(boardDto.getBoardFile());
+            if(upload){
+                BoardEntity board = BoardEntity.builder()
+                        .title(boardDto.getTitle())
+                        .content(boardDto.getContent())
+                        .fileAttached(1)
+                        .notice("Y")
+                        .noticeTop(boardDto.getNoticeTop())
+                        .secret(boardDto.getSecret())
+                        .del(boardDto.getDelete())
+                        .member(adminMember)
+                        .build();
+                try {
+                    BoardEntity savedBoard = boardRepository.save(board);
+                    Long noticeBoardNum = savedBoard.getNum();
+                    BoardFileEntity boardFileEntity = BoardFileEntity.builder()
+                            .originalFileName(fileUploadService.getOriginalFileName())
+                            .storedFileName(fileUploadService.getStoredFileName())
+                            .uploadPath(fileUploadService.getUploadPath())
+                            .storedFileNameWithExtension(fileUploadService.getStoredFileNameWithExtension())
+                            .boardEntity(savedBoard)
+                            .build();
+                    boardFileRepository.save(boardFileEntity);
+                    BoardResponse boardResponse = new BoardResponse(true, noticeBoardNum, "게시글작성 성공");
+                    return boardResponse;
+                }catch (DataAccessException e) {
+                    e.printStackTrace();
+                    BoardResponse boardResponse = new BoardResponse(false, -1L, "DB 관련 게시글작성 실패");
+                    return boardResponse;
+                }catch (Exception e){
+                    e.printStackTrace();
+                    BoardResponse boardResponse = new BoardResponse(false, -1L, "게시글작성 실패");
+                    return boardResponse;
+                }
+            }
+        }
+        BoardResponse boardResponse = new BoardResponse(false, -1L, "게시글작성 실패");
+        return boardResponse;
+    }
+
+    public Page<BoardDto> boardList(Pageable pageable){
+
+        int page = pageable.getPageNumber()-1;
+        int pageLimit = 7;
+
+        Page<BoardEntity>boardEntityPage = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
+        Page<BoardDto> boardDtos = boardEntityPage.map
+                (board -> new BoardDto(board.getNum(), board.getTitle(), board.getContent(),
+                        board.getCreatedTime(), board.getMember().getId(), board.getNotice()
+                        , board.getSecret(), board.getDel()));
+        return boardDtos;
+    }
+}

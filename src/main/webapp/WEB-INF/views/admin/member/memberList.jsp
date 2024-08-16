@@ -21,7 +21,7 @@
 
       <div id="mainArticle">
         <%@include file="./memberNav.jsp" %>
-        <div id="notApprovalMemberTableDiv">
+        <div id="adminListDiv">
         <c:if test="${not empty notApprovalMember}">
           <table class="table table-striped table-hover">
             <thead>
@@ -49,7 +49,7 @@
         </c:if>
         </div>
           </table>
-          <div id="memberApprovalPagingDiv">
+          <div id="adminPagingNum">
             <c:choose>
                  <c:when test="${notApprovalMember.isFirst()}">
                     처음

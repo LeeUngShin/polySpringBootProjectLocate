@@ -323,7 +323,7 @@ public class MemberService {
         return memberList;
     }
 
-    public MemberDto findById(String id) {
+    public MemberDto getMemberInfo(String id) {
 
         Optional<MemberEntity> member = memberRepository.findById(id);
         if(member.isPresent()) {

@@ -26,6 +26,8 @@ public class GoodsDto {
 
     private String goodsExplanation;
 
+    private int sellCnt;
+
     private String goodsCategory;
 
     private String regTime;

@@ -44,6 +44,8 @@ public class MemberDto {
 
     private String approval;
 
+    private String roleType;
+
     private String regTime;
 
     public MemberDto(Long num, String id){
@@ -64,15 +66,16 @@ public class MemberDto {
 
     public static MemberDto entityToDto(MemberEntity member) {
 
-        MemberDto joinForm = new MemberDto();
-        joinForm.setId(member.getId());
-        joinForm.setPw(member.getPw());
-        joinForm.setName(member.getName());
-        joinForm.setAddr(member.getAddr());
-        joinForm.setAddrDetail(member.getAddrDetail());
-        joinForm.setPost(member.getPost());
-        joinForm.setEmail(member.getEmail());
-        joinForm.setApproval(member.getApproval());
-        return joinForm;
+        MemberDto memberDto = new MemberDto();
+        memberDto.setId(member.getId());
+        memberDto.setPw(member.getPw());
+        memberDto.setName(member.getName());
+        memberDto.setAddr(member.getAddr());
+        memberDto.setAddrDetail(member.getAddrDetail());
+        memberDto.setPost(member.getPost());
+        memberDto.setEmail(member.getEmail());
+        memberDto.setApproval(member.getApproval());
+        memberDto.setRoleType(member.getRole().toString());
+        return memberDto;
     }
 }

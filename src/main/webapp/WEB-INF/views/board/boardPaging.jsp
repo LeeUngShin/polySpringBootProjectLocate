@@ -65,19 +65,19 @@
             <div id="pageNum">
                 <div style="flex-grow: 1;padding-left: 150px;">
                     <c:if test="${empty keyword}">
-                        <a href="/board/page?page=1">처음</a>
+                        <a href="/board/board?board=${boardType}&age=1">처음</a>
                     <c:choose>
                        <c:when test="${currentPage<=blockLimit}">  <!--첫페이지이면 전페이지가 없음-->
                           이전
                        </c:when>
                         <c:otherwise>
-                            <a href="/board/page?page=${startPage-1}">이전</a>
+                            <a href="/board/board?board=${boardType}&page=${startPage-1}">이전</a>
                         </c:otherwise>
                     </c:choose>
                     <c:forEach begin="${startPage}" end="${endPage}" var="count">
                         <c:choose>
                             <c:when test = "${count != currentPage}">
-                                <a href="/board/page?page=${count}">${count}</a>
+                                <a href="/board/board?board=${boardType}&page=${count}">${count}</a>
                             </c:when>
                             <c:otherwise>
                                 ${count}
@@ -89,10 +89,10 @@
                             다음
                         </c:when>
                         <c:otherwise>
-                            <a href="/board/page?page=${endPage+1}">다음</a>
+                            <a href="/board/board?board=${boardType}&page=${endPage+1}">다음</a>
                         </c:otherwise>
                     </c:choose>
-                    <a href="/board/page?page=${boardList.totalPages}">마지막</a>
+                    <a href="/board/board?board=${boardType}&page=${boardList.totalPages}">마지막</a>
                     </c:if>
 
                     <c:if test="${not empty keyword}">
@@ -127,17 +127,27 @@
                        </c:if>
                 </div>
 
-                <form action="/board/write">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end boardButton">
-                        <button type="submit" class="btn btn-outline-secondary" id="writeFormButton">
-                        <i class="bi bi-pencil"></i>
-                        글쓰기
-                        </button>
-                    </div>
-                </form>
+                <c:if test="${not empty boardType and (boardType=='plain' || (boardType=='notice' && loginDto.roleType=='ROLE_ADMIN'))}">
+                    <form action="/board/write">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end boardButton">
+                            <button type="submit" class="btn btn-outline-secondary" id="writeFormButton">
+                            <i class="bi bi-pencil"></i>
+                            글쓰기
+                            </button>
+                        </div>
+                    </form>
+                </c:if>
             </div>
             <div id = "searchInput">
                 <form action="/board/search">
+                    <c:if test="${boardType=='plain'}">
+                        <input type="hidden" name="board" value="plain">
+                        보드타입 플레인
+                    </c:if>
+                    <c:if test="${boardType=='notice'}">
+                        <input type="hidden" name="board" value="notice">
+                        보드타입 노티스
+                    </c:if>
                     <input type="hidden" name="page" value="1">
                     <select name="category">
                         <option value="title">제목</option>

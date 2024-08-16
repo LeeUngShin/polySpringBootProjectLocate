@@ -25,6 +25,7 @@ public class BoardDto {
     private String notice="N";
     private String secret="N";
     private String delete="N";
+    private String noticeTop = "N";
 
     private MultipartFile boardFile;  // 파일을 담는 용도
     private String originalFileName;  // 원본 파일 이름

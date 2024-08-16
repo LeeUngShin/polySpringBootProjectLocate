@@ -1,8 +1,10 @@
 package com.example.polySpringBootProject.controller;
 
 import com.example.polySpringBootProject.dto.BoardDto;
+import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.entity.BoardEntity;
 import com.example.polySpringBootProject.service.BoardService;
+import com.example.polySpringBootProject.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +26,12 @@ public class BoardController {
     BoardService boardService;
     Utils utils;
 
-    public BoardController(BoardService boardService, Utils utils){
+    MemberService memberService;
+
+    public BoardController(BoardService boardService, Utils utils, MemberService memberService){
         this.boardService = boardService;
         this.utils = utils;
+        this.memberService = memberService;
     }
 
 //	@RequestMapping(value="/list", method=RequestMethod.GET)
@@ -87,6 +92,7 @@ public class BoardController {
             request.setAttribute("boardDto", boardDto);
             request.setAttribute("contentEnter", contentEnter);
             request.setAttribute("currentPage", currentPage);
+            request.setAttribute("notcieYN", boardDto.getNotice());
             return "board/boardDetail";
         }
 
@@ -179,8 +185,10 @@ public class BoardController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/page", method = RequestMethod.GET)
-    public String paging(@PageableDefault(page = 1)Pageable pageable, Model model) {
+    @RequestMapping(value = "/board", method = RequestMethod.GET)
+    public String paging(@PageableDefault(page = 1)Pageable pageable,
+                         HttpServletRequest request, HttpSession session,
+                         Model model) {
 //        String sortStd="";
 //        if(sort.contains("asc")){
 //            sortStd = "asc";
@@ -188,9 +196,13 @@ public class BoardController {
 //        else if(sort.contains("desc")){
 //            sortStd = "desc";
 //        }
+
+        MemberDto loginMemberDto = memberService.getMemberInfo((String)session.getAttribute("loginId"));
         System.out.println("현재페이지 : " + pageable.getPageNumber());
 
-        Page<BoardDto> boardList = boardService.paging(pageable);
+        String boardType = request.getParameter("board");  // 게시판 종류
+
+        Page<BoardDto> boardList = boardService.paging(pageable, boardType);
         List<BoardDto> noticeBoardList = boardService.noticeList();
         int currentPage = boardList.getNumber()+1;  // 파라미터로 받은 현재페이지
         System.out.println("현재페이지 : " + currentPage);
@@ -210,6 +222,10 @@ public class BoardController {
         model.addAttribute("noticeBoardList",noticeBoardList);
         model.addAttribute("blockLimit", blockLimit);
         model.addAttribute("isLast", isLast);
+        model.addAttribute("loginDto", loginMemberDto);
+        model.addAttribute("boardType", boardType);
+        System.out.println("보드타입 : " + boardType);
+        System.out.println("로그인 회원 : " + loginMemberDto);
 
         //model.addAttribute("sortStd", sortStd);
         return "board/boardPaging";
@@ -219,9 +235,13 @@ public class BoardController {
     public String searchList(HttpServletRequest request,
                              @PageableDefault(page = 1)Pageable pageable,
                              @RequestParam(value = "category") String category,
-                             @RequestParam(value = "keyword") String keyword, Model model) {
+                             @RequestParam(value = "keyword") String keyword, Model model,
+                             @RequestParam(value="board") String boardType,
+                             HttpSession session) {
 
-        Page<BoardDto> searchBoardList = boardService.searchList(pageable, category, keyword);
+        MemberDto loginMemberDto = memberService.getMemberInfo((String)session.getAttribute("loginId"));
+
+        Page<BoardDto> searchBoardList = boardService.searchList(pageable, category, keyword, boardType);
         List<BoardDto> noticeBoardList = boardService.noticeList();
         int currentPage = searchBoardList.getNumber()+1;
         int blockLimit = 3;  // 선택 페이지 개수 3개
@@ -234,6 +254,8 @@ public class BoardController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("noticeBoardList",noticeBoardList);
+        model.addAttribute("loginDto", loginMemberDto);
+        model.addAttribute("boardType", boardType);
         return "board/boardPaging";
     }
 }

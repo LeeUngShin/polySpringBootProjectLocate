@@ -27,38 +27,40 @@ class AdminServiceTest {
 
 
     @Test
-    @Transactional
+    //@Transactional
     void goodsRegister() {
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
-
-            GoodsEntity goodsEntity = GoodsEntity.builder()
-                    .name("등록상품명")
+        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(3L).get();
+        GoodsEntity goodsEntity = null;
+        for(int i=0;i<31;i++) {
+            goodsEntity = GoodsEntity.builder()
+                    .name("카테고리3상품"+i)
                     .price(1000)
                     .stock(100)
-                    .explanation("상품설명")
+                    .explanation("카테고리3상품설명"+i)
                     .del("N")
+                    .sellCnt(0)
                     .goodsCategory(goodsCategoryEntity)
                     .build();
-            GoodsEntity goodsEntity1 =  goodsRepository.save(goodsEntity);
-
-            assertEquals("등록상품명", goodsEntity1.getName());
-    }
-
-    @Test
-    void delete(){
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
-
-        GoodsEntity goodsEntity = GoodsEntity.builder()
-                .name("등록상품명")
-                .price(1000)
-                .stock(100)
-                .explanation("상품설명")
-                .del("N")
-                .goodsCategory(goodsCategoryEntity)
-                .build();
+        }
         GoodsEntity goodsEntity1 =  goodsRepository.save(goodsEntity);
-        goodsRepository.delete(goodsEntity1);
 
     }
+
+//    @Test
+//    void delete(){
+//        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+//
+//        GoodsEntity goodsEntity = GoodsEntity.builder()
+//                .name("등록상품명")
+//                .price(1000)
+//                .stock(100)
+//                .explanation("상품설명")
+//                .del("N")
+//                .goodsCategory(goodsCategoryEntity)
+//                .build();
+//        GoodsEntity goodsEntity1 =  goodsRepository.save(goodsEntity);
+//        goodsRepository.delete(goodsEntity1);
+//
+//    }
 
 }

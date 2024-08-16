@@ -34,8 +34,13 @@
     <form action="/member/delete" metho="GET" id=delete-form>
         <button type="submit" class="btn btn-main">
         <i class="bi bi-person-fill"></i>
-    회원탈퇴
-    </button>
+            회원탈퇴
+        </button>
+     </form>
+    <form action="/admin/home" method="GET" id=delete-form>
+        <button type="submit" class="btn btn-main">
+            관리자페이지로 이동
+        </button>
     </form>
 
     </div>

@@ -56,6 +56,7 @@ public class BoardService {
                     .member(m)
                     .fileAttached(0)  // 파일 없음 표시
                     .notice(boardDto.getNotice())
+                    .noticeTop(boardDto.getNoticeTop())
                     .secret(boardDto.getSecret())
                     .del(boardDto.getDelete())
                     .build();
@@ -98,6 +99,7 @@ public class BoardService {
                         .secret(boardDto.getSecret())
                         .del(boardDto.getDelete())
                         .member(m)
+                        .noticeTop(boardDto.getNoticeTop())
                         .fileAttached(1)
                         .build();
                 BoardEntity savedBoard = boardRepository.save(board);
@@ -106,6 +108,7 @@ public class BoardService {
                         .originalFileName(fileUploadService.getOriginalFileName())
                         .storedFileName(fileUploadService.getStoredFileNameWithExtension())
                         .uploadPath(fileUploadService.getUploadPath())
+                        .storedFileNameWithExtension(fileUploadService.getStoredFileNameWithExtension())
                         .boardEntity(savedBoard)
                         .build();
                 boardFileRepository.save(boardFileEntity);
@@ -227,13 +230,18 @@ public class BoardService {
 //        return boardRepository.findAll(pageable);
 //    }
 
-    public Page<BoardDto> paging(Pageable pageable){
+    public Page<BoardDto> paging(Pageable pageable, String boardSpecies){
         int page = pageable.getPageNumber()-1;  // 0페이지부터 시작하기 때문에 1페이지를 보려면 0페이지를 불러와야함
         int pageLimit = 7;  // 한 페이지에 보여줄 게시글 갯수
         //Page<BoardEntity> boardEntities=  boardRepository.findAll(PageRequest.of(page,pageLimit, Sort.by(Sort.Direction.DESC, "num")));
         Page<BoardEntity> boardEntities = null;
         // PageRequest : Pageable의 구현체
-        boardEntities = boardRepository.findByDel(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N");
+        if(boardSpecies.equals("plain")) {
+            boardEntities = boardRepository.findByDelAndNotice(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N", "N");
+        }
+        else if(boardSpecies.equals("notice")){
+            boardEntities = boardRepository.findByDelAndNotice(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N", "Y");
+        }
 
 
         System.out.println("boardEntities.getContent() = " + boardEntities.getContent()); // 요청 페이지에 해당하는 글
@@ -258,7 +266,7 @@ public class BoardService {
     }
 
     public List<BoardDto> noticeList(){
-        List<BoardEntity> boardEntities = boardRepository.findByNoticeOrderByNumDesc("Y");
+        List<BoardEntity> boardEntities = boardRepository.findByDelAndNoticeAndNoticeTopOrderByNumDesc("N","Y","Y");
         List<BoardDto> noticeBoardDtos= new ArrayList<>();
         for(BoardEntity boardEntity : boardEntities){
             BoardDto boardDto = BoardDto.entityToDto(boardEntity);
@@ -267,7 +275,7 @@ public class BoardService {
         return noticeBoardDtos;
     }
 
-    public Page<BoardDto> searchList(Pageable pageable, String category, String keyword){
+    public Page<BoardDto> searchList(Pageable pageable, String category, String keyword, String boardType){
 
         int page = pageable.getPageNumber()-1;
         int pageLimit = 7;  // 한 페이지에 보여줄 게시글 갯수
@@ -276,12 +284,23 @@ public class BoardService {
         pageable = PageRequest.of(page, pageLimit, Sort.by(sorts));
 
         Page<BoardEntity> boardEntities = null;
-        if(category.equals("title")){
-            boardEntities = boardRepository.findByTitleContaining(pageable,keyword);
-        } else if (category.equals("content")) {
-            boardEntities = boardRepository.findByContentContaining(pageable, keyword);
-        } else if (category.equals("writer")){
-            boardEntities = boardRepository.findByWriterContaining(pageable, keyword);
+        if(boardType.equals("plain")) {
+            if (category.equals("title")) {
+                boardEntities = boardRepository.findByDelAndNoticeAndTitleContaining(pageable, "N", "N", keyword);
+            } else if (category.equals("content")) {
+                boardEntities = boardRepository.findByDelAndNoticeAndContentContaining(pageable, "N", "N", keyword);
+            } else if (category.equals("writer")) {
+                boardEntities = boardRepository.findByDelAndNoticeAndWriterContaining(pageable, "N", "N", keyword);
+            }
+        }
+        else if(boardType.equals("notice")){
+            if (category.equals("title")) {
+                boardEntities = boardRepository.findByDelAndNoticeAndTitleContaining(pageable, "N", "Y", keyword);
+            } else if (category.equals("content")) {
+                boardEntities = boardRepository.findByDelAndNoticeAndContentContaining(pageable, "N", "Y", keyword);
+            } else if (category.equals("writer")) {
+                boardEntities = boardRepository.findByDelAndNoticeAndWriterContaining(pageable, keyword, "N", "Y");
+            }
         }
 
         Page<BoardDto> boardDtos = boardEntities.map

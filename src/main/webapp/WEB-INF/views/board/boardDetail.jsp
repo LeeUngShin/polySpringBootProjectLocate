@@ -42,7 +42,8 @@
                     -->
                 </table>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end boardButton">
-                        <form action="/board/page" method="GET">
+                        <form action="/board/board" method="GET">
+                            <input type="hidden" name="board" value="plain">
                             <input type="hidden" name="page" value="${currentPage}">
                             <button type="submit" class="btn btn-outline-secondary" id="writeFormButton">
                                 <i class="bi bi-pencil"></i>

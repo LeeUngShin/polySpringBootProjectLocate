@@ -4,6 +4,7 @@ body{
 
 #itemSearch{
     margin-top : 20px;
+    padding-left : 230px;
 }
 
 .nav_item{
@@ -164,7 +165,6 @@ display: flex;
   text-decoration: none;
   color: black;
 }
-
 
 #pageNum{
 	text-align: center;

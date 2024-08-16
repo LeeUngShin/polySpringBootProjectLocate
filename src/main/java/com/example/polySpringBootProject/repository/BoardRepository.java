@@ -18,19 +18,19 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     Page<BoardEntity> findAll(Pageable pageable);
 
-    Page<BoardEntity> findByDel(Pageable pageable, String del);
+    Page<BoardEntity> findByDelAndNotice(Pageable pageable, String del, String notice);
     
     // BoardEntity의 member 변수(MemberEntity에 있는)의 id변수를 사용해 DB 검색
     Page<BoardEntity> findByMemberId(Pageable pageable, String Id);
 
-    Page<BoardEntity> findByTitleContaining(Pageable pageable, String keyword);
-    Page<BoardEntity> findByContentContaining(Pageable pageable, String keyword);
-    @Query("select b from BoardEntity b where b.member.id = :id")
-    Page<BoardEntity> findByWriterContaining(Pageable pageable, @Param("id") String keyword);
+    Page<BoardEntity> findByDelAndNoticeAndTitleContaining(Pageable pageable, String del, String notice, String keyword);
+    Page<BoardEntity> findByDelAndNoticeAndContentContaining(Pageable pageable, String del, String notice, String keyword);
+    @Query("select b from BoardEntity b where b.member.id = :id and b.del = :del and b.notice= notice")
+    Page<BoardEntity> findByDelAndNoticeAndWriterContaining(Pageable pageable, @Param("id") String keyword, @Param("del")String del, @Param("del")String notice);
 //    @Query("select b from BoardEntity b where b.member.id = :id")
 //    Page<BoardEntity> findBySearchId(Pageable pageable, @Param("id") String id);
 
-    List<BoardEntity> findByNoticeOrderByNumDesc(String notice);
+    List<BoardEntity> findByDelAndNoticeAndNoticeTopOrderByNumDesc(String del, String notice, String noticeTop);
 
     Page<BoardEntity> findByMemberIdAndTitleContaining(Pageable pageable, String id, String keyword);
     Page<BoardEntity> findByMemberIdAndContentContaining(Pageable pageable, String id, String keyword);
@@ -40,4 +40,5 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 //    //@Query(value = "update BoardEntity b set b.boardHits=b.boardHits+1 where b.id=:id", nativeQuery = true)  // db쿼리 기준
 //    void updateHits(@Param("id") Long id);  // 매개변수의 Long id는 위 쿼리의 :id 자리에 대입됨
 
+    Page<BoardEntity> findByNoticeAndNoticeTop(Pageable pageable, String notice, String noticeYN);
 }

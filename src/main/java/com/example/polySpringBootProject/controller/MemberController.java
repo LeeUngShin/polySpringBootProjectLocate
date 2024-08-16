@@ -322,7 +322,7 @@ public class MemberController {
     @RequestMapping(value="/detail/{currentId}", method= RequestMethod.GET)
     public String detail(HttpServletRequest request, @PathVariable("currentId") String id) {
 
-        MemberDto joinForm = memberService.findById(id);
+        MemberDto joinForm = memberService.getMemberInfo(id);
 
         if(joinForm != null) {
 

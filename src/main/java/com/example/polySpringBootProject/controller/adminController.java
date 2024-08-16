@@ -1,15 +1,20 @@
 package com.example.polySpringBootProject.controller;
 
+import com.example.polySpringBootProject.dto.BoardDto;
+import com.example.polySpringBootProject.dto.BoardResponse;
 import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.service.AdminService;
+import com.example.polySpringBootProject.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -184,5 +189,57 @@ public class adminController {
             System.out.println("컨트롤러에서 예외발생");
             return utils.showMessageAlert("컨트롤러 예외로 상품 등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
         }
+    }
+
+    @GetMapping("/noticeBoardForm")
+    public String noticeBoardForm(){
+        return "/admin/board/noticeBoardWriteForm";
+    }
+
+    @PostMapping("/noticeBoardWrite")
+    public String noticeBoardWrite(BoardDto boardDto, HttpSession session, Model model){
+        System.out.println("공지글 받은 DTO : " + boardDto);
+        String adminId = (String)session.getAttribute("loginId");
+        System.out.println("어드민 아이디 : " + adminId);
+        try {
+            BoardResponse boardResponse = adminService.noticeBoardWrite(boardDto, adminId);
+            System.out.println("공지글 내용 : " + boardResponse);
+            if(adminId == null || adminId.equals("")){
+                return utils.showMessageAlert("관리자 계정만 공지글 작성이 가능합니다.", "/admin/noticeBoardForm", model);
+            }
+            else if (boardResponse.isSuccess()) {
+                return utils.showMessageAlert("공지글 작성 완성", "/board/detail/" + boardResponse.getBoardId(), model);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return utils.showMessageAlert("공지글 작성 실패", "/admin/noticeBoardForm", model);
+    }
+
+    @GetMapping("/boardList")
+    public String boardList(@PageableDefault(page=1) Pageable pageable, Model model){
+
+        Page<BoardDto> boardDtoPage = adminService.boardList(pageable);
+
+        int totalLatPage = boardDtoPage.getTotalPages();
+        int currentPage = boardDtoPage.getNumber() + 1;
+        int blockLimit = 3;
+        int startPage = (((int) (Math.ceil((double) pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
+        int endPage = ((startPage + blockLimit - 1) < boardDtoPage.getTotalPages()) ? startPage + blockLimit - 1 : boardDtoPage.getTotalPages();  // 3 6 9 12 ~~
+        boolean lastPageSet = (startPage + blockLimit - 1) >= boardDtoPage.getTotalPages();
+
+        System.out.println("전체 마지막페이지 : " + totalLatPage);
+        System.out.println("마지막 세트인가 : " + lastPageSet);
+
+        model.addAttribute("boardDtoPage", boardDtoPage);
+        model.addAttribute("blockLimit", blockLimit);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalLastPage", totalLatPage);
+        model.addAttribute("lastPageSet", lastPageSet);
+
+        return "admin/board/boardList";
     }
 }

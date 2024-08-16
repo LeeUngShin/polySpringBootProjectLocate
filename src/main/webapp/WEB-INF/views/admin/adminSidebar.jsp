@@ -42,13 +42,13 @@
         <ul>
           <div id="boardMenu">
             <li>
-              <a href="#" class="nav-link text-white">
-                게시판메뉴1
+              <a href="/admin/noticeBoardForm" class="nav-link text-white">
+                공지글 작성
               </a>
             </li>
             <li>
-              <a href="#" class="nav-link text-white">
-                게시판메뉴2
+              <a href="/admin/boardList" class="nav-link text-white">
+                게시글조회
               </a>
             </li>
           </div>
