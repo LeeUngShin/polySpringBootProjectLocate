@@ -66,4 +66,9 @@ public class MemberEntity extends BaseEntity{
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BoardEntity> boardDatas = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<LikeEntity> likeEntityList = new ArrayList<>();
+
+
+
 }

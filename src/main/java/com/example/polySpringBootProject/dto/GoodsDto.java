@@ -30,6 +30,10 @@ public class GoodsDto {
 
     private String goodsCategory;
 
+    private String like;  // 좋아요 여부 "Y" "N"
+    
+    private String likeCnt;  // 좋아요 개수
+
     private String regTime;
 
     private MultipartFile goodsImageFile;  // 파일을 담는 용도

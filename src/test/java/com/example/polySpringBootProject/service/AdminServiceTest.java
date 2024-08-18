@@ -29,20 +29,20 @@ class AdminServiceTest {
     @Test
     //@Transactional
     void goodsRegister() {
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(3L).get();
+        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(2L).get();
         GoodsEntity goodsEntity = null;
         for(int i=0;i<31;i++) {
             goodsEntity = GoodsEntity.builder()
-                    .name("카테고리3상품"+i)
-                    .price(1000)
-                    .stock(100)
-                    .explanation("카테고리3상품설명"+i)
+                    .name("카테고리2상품"+i)
+                    .price(1000+i)
+                    .stock(100+i)
+                    .explanation("카테고리2상품설명"+i)
                     .del("N")
                     .sellCnt(0)
                     .goodsCategory(goodsCategoryEntity)
                     .build();
+            GoodsEntity goodsEntity1 =  goodsRepository.save(goodsEntity);
         }
-        GoodsEntity goodsEntity1 =  goodsRepository.save(goodsEntity);
 
     }
 

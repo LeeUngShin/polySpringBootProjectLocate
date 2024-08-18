@@ -46,6 +46,7 @@
             </article>
             <article id="article2">
                 <!-- 추가 콘텐츠가 여기에 들어갑니다 -->
+
             </article>
         </section>
         <%@ include file="./footer.jsp" %>

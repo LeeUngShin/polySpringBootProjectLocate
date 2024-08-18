@@ -37,7 +37,10 @@ public class GoodsEntity extends BaseEntity{
     private String del;  // 상품삭제 여부
 
     @Column
-    private int sellCnt;
+    private int sellCnt;  // 판매횟수
+
+    @Column
+    private int likeCnt;  // 좋아요 개수
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)  // 다 대 일 (다 : 주인, 자식, 일 : 주인X, 부모)
@@ -48,4 +51,8 @@ public class GoodsEntity extends BaseEntity{
     @OneToOne(mappedBy = "goodsEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "goodsImageNum")
     private GoodsImageEntity goodsImageEntity;
+
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<LikeEntity> likeEntityList = new ArrayList<>();
 }
+
