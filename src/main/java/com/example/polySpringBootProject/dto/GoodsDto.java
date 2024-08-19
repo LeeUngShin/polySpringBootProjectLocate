@@ -31,8 +31,8 @@ public class GoodsDto {
     private String goodsCategory;
 
     private String like;  // 좋아요 여부 "Y" "N"
-    
-    private String likeCnt;  // 좋아요 개수
+
+    private int likeCnt;  // 좋아요 개수
 
     private String regTime;
 
@@ -42,22 +42,37 @@ public class GoodsDto {
 
     private String storedGoodsImageName;  // 서버 저장용 파일 이름
 
-
-    public GoodsDto(Long num, int price, int stock, String category, LocalDateTime createTime){
+    // 테스트용 이미지X
+    public GoodsDto(Long num, String name, int price, int stock, String category, LocalDateTime createTime){
         this.num = num;
+        this.goodsName = name;
         this.price = price;
         this.stock = stock;
         this.goodsCategory = category;
         this.regTime = createTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
+    public GoodsDto(Long num, String name, int price, int stock, String category, LocalDateTime createTime, String storedGoodsImageName){
+        this.num = num;
+        this.goodsName = name;
+        this.price = price;
+        this.stock = stock;
+        this.goodsCategory = category;
+        this.regTime = createTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.storedGoodsImageName = storedGoodsImageName;
+    }
+
     public static GoodsDto entityToGoodsDto(GoodsEntity goodsEntity) {
         GoodsDto goodsDto = new GoodsDto();
         goodsDto.setNum(goodsEntity.getNum());
+        goodsDto.setGoodsName(goodsEntity.getName());
         goodsDto.setPrice(goodsEntity.getPrice());
         goodsDto.setStock(goodsEntity.getStock());
         goodsDto.setGoodsCategory(goodsEntity.getGoodsCategory().getCategoryName());
-        goodsDto.setStoredGoodsImageName(goodsEntity.getGoodsImageEntity().getStoredFileName());
+        goodsDto.setGoodsExplanation(goodsEntity.getExplanation());
+        goodsDto.setSellCnt(goodsEntity.getSellCnt());
+        goodsDto.setLikeCnt(goodsEntity.getLikeCnt());
+        goodsDto.setStoredGoodsImageName(goodsEntity.getGoodsImageEntity().getStoredFileNameWithExtension());
         return goodsDto;
     }
 }

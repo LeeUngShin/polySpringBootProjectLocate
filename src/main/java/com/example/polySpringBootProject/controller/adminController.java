@@ -168,21 +168,19 @@ public class adminController {
             if (goodsRegister.equals("success")) {
                 return utils.showMessageAlert("상품 등록에 성공했습니다.", "/admin/goodsRegisterForm", model);
             }
-            else if(goodsRegister.equals("notFoundCategory")){
-                return utils.showMessageAlert("카테고리를 찾는데 실패했습니다.", "/admin/goodsRegisterForm", model);
-            }
             else if(goodsRegister.equals("imageUploadFail")){
                 return utils.showMessageAlert("이미지업로드에 실패했습니다.", "/admin/goodsRegisterForm", model);
             }
-            else if(goodsRegister.equals("duplicateName")){
-                return utils.showMessageAlert("상품명은 중복될 수 없습니다..", "/admin/goodsRegisterForm", model);
-            }
             else if(goodsRegister.equals("DBFail")){
-                return utils.showMessageAlert("DB관련 오류때문에 실패했습니다.", "/admin/goodsRegisterForm", model);
+                return utils.showMessageAlert("DB관련 오류로 실패했습니다.", "/admin/goodsRegisterForm", model);
             }
             else{
                 return utils.showMessageAlert("상품등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
             }
+        }
+        catch (IllegalStateException e){
+            e.printStackTrace();
+            return utils.showMessageAlert("상품명은 중복될 수 없습니다..", "/admin/goodsRegisterForm", model);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -190,6 +188,10 @@ public class adminController {
             return utils.showMessageAlert("컨트롤러 예외로 상품 등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
         }
     }
+
+
+
+
 
     @GetMapping("/noticeBoardForm")
     public String noticeBoardForm(){

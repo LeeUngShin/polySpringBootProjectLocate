@@ -4,7 +4,6 @@ import com.example.polySpringBootProject.entity.MemberEntity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -48,7 +47,7 @@ public class MemberDto {
 
     private String regTime;
 
-    public MemberDto(Long num, String id){
+    public MemberDto(Long num, int price, int stock, String id, LocalDateTime createdTime){
         this.num = num;
         this.id = id;
     }

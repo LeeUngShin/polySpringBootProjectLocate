@@ -18,6 +18,8 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     Page<BoardEntity> findAll(Pageable pageable);
 
+    List<BoardEntity> findByMemberId(String Id);
+
     Page<BoardEntity> findByDelAndNotice(Pageable pageable, String del, String notice);
     
     // BoardEntity의 member 변수(MemberEntity에 있는)의 id변수를 사용해 DB 검색

@@ -2,14 +2,19 @@ package com.example.polySpringBootProject.repository;
 
 import com.example.polySpringBootProject.entity.BoardEntity;
 import com.example.polySpringBootProject.entity.GoodsEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface GoodsRepository extends JpaRepository<GoodsEntity, Long> {
+    
+    
+    int countByName(String name);  // 중복이름 확인
+    Page<GoodsEntity> findAll(Pageable pageable);  // 목록 페이징
 
-    int countByName(String name);
-    //List<BoardEntity> findTop5OrderBySellCntASC
 }

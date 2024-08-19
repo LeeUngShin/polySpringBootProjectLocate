@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ToString  // ToString 메서드 사용가능
 @Getter  // Getter 메서드 사용가능
@@ -67,8 +69,19 @@ public class MemberEntity extends BaseEntity{
     private List<BoardEntity> boardDatas = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    List<LikeEntity> likeEntityList = new ArrayList<>();
+    Set<LikeEntity> likeEntitySet = new HashSet<>();  // 중복 방지를 위해 Set 사용
 
+    public void addBoard(BoardEntity boardEntity){
+        if (boardDatas == null) {
+            boardDatas = new ArrayList<>(); // Ensure initialization if not done already
+        }
+        boardDatas.add(boardEntity);
+    }
 
-
+    public void addLike(LikeEntity likeEntity){
+        if (likeEntitySet == null) {
+            likeEntitySet = new HashSet<>(); // Ensure initialization if not done already
+        }
+        likeEntitySet.add(likeEntity);
+    }
 }

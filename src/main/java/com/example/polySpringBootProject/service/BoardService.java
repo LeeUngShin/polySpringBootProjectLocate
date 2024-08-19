@@ -60,6 +60,7 @@ public class BoardService {
                     .secret(boardDto.getSecret())
                     .del(boardDto.getDelete())
                     .build();
+            m.addBoard(board);
             BoardEntity savedBoard = boardRepository.save(board);
             if(savedBoard==null) return -1L;
             Long savedBoardNum = savedBoard.getNum();

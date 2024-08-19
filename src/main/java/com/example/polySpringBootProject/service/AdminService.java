@@ -16,7 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
+import java.lang.reflect.Member;
 import java.util.Optional;
 
 @Service
@@ -36,6 +36,8 @@ public class AdminService {
     GoodsImageRepository goodsImageRepository;
     @Autowired
     FileUploadService fileUploadService;
+    @Autowired
+    LikeRepository likeRepository;
 
     public boolean logout(HttpSession session) {
 
@@ -56,7 +58,7 @@ public class AdminService {
         int pageLimit = 10;  // 한페이지에 보여줄 회원 수
         Page<MemberEntity> memberEntityPage = memberRepository.findByApproval(PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N");
         Page<MemberDto> memberDtoPage = memberEntityPage.map
-                (member -> new MemberDto(member.getNum(), member.getId()));
+                (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime()));
         return memberDtoPage;
     }
     @Transactional
@@ -78,58 +80,6 @@ public class AdminService {
         Page<MemberDto> memberDtoPage = memberEntityPage.map
                 (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime()));
         return memberDtoPage;
-    }
-
-    @Transactional
-    public String goodsRegister(GoodsDto goodsDto){
-
-        Optional<GoodsCategoryEntity> goodsCategoryEntity = goodsCategoryRepository.findByCategoryName(goodsDto.getGoodsCategory());
-        if(goodsCategoryEntity.isEmpty()){
-            return "notFoundCategory";
-        }
-        GoodsCategoryEntity goodsCategory = goodsCategoryEntity.get();
-
-        int duplicateNameCnt = goodsRepository.countByName(goodsDto.getGoodsName());
-
-
-        try{
-            GoodsEntity goodsEntity = GoodsEntity.builder()
-                    .name(goodsDto.getGoodsName())
-                    .price(goodsDto.getPrice())
-                    .stock(goodsDto.getStock())
-                    .explanation(goodsDto.getGoodsExplanation())
-                    .del("N")
-                    .goodsCategory(goodsCategory)
-                    .build();
-            GoodsEntity savedGoodsEntity = goodsRepository.save(goodsEntity);
-
-            boolean goodsImageUpload = fileUploadService.GoodsImageUpload(goodsDto.getGoodsImageFile());
-            if(goodsImageUpload==false){
-                return "imageUploadFail";
-            }
-
-            GoodsImageEntity goodsImageEntity = GoodsImageEntity.builder()
-                    .originalFileName(fileUploadService.getOriginalFileName())
-                    .storedFileName(fileUploadService.getStoredFileName())
-                    .uploadPath(fileUploadService.getUploadPath())
-                    .storedFileNameWithExtension(fileUploadService.getStoredFileNameWithExtension())
-                    .goodsEntity(savedGoodsEntity)
-                    .build();
-
-            goodsImageRepository.save(goodsImageEntity);
-            return "success";
-        }catch (DataAccessException e){
-            System.out.println("상품등록 중 DB 관련 예외 발생");
-            e.printStackTrace();
-            if(duplicateNameCnt>=1){
-                return "duplicateName";
-            }
-            return "DBFail";
-        }catch (Exception e){
-            System.out.println("상품등록 중 DB 관련 아닌 예외 발생");
-            e.printStackTrace();
-            return "fail";
-        }
     }
 
     @Transactional
@@ -217,5 +167,183 @@ public class AdminService {
                         board.getCreatedTime(), board.getMember().getId(), board.getNotice()
                         , board.getSecret(), board.getDel()));
         return boardDtos;
+    }
+
+    @Transactional
+    public String goodsRegister(GoodsDto goodsDto){
+
+        Optional<GoodsCategoryEntity> goodsCategoryEntity = goodsCategoryRepository.findByCategoryName(goodsDto.getGoodsCategory());
+        if(goodsCategoryEntity.isEmpty()){
+            return "notFoundCategory";
+        }
+        GoodsCategoryEntity goodsCategory = goodsCategoryEntity.get();
+
+        int duplicateNameCnt = goodsRepository.countByName(goodsDto.getGoodsName());
+
+        try{
+            duplicateGoodsName(goodsDto.getGoodsName());
+
+            GoodsEntity goodsEntity = GoodsEntity.builder()
+                    .name(goodsDto.getGoodsName())
+                    .price(goodsDto.getPrice())
+                    .stock(goodsDto.getStock())
+                    .explanation(goodsDto.getGoodsExplanation())
+                    .del("N")
+                    .goodsCategory(goodsCategory)
+                    .build();
+            GoodsEntity savedGoodsEntity = goodsRepository.save(goodsEntity);
+
+            boolean goodsImageUpload = fileUploadService.GoodsImageUpload(goodsDto.getGoodsImageFile());
+            if(goodsImageUpload==false){
+                return "imageUploadFail";
+            }
+
+            GoodsImageEntity goodsImageEntity = GoodsImageEntity.builder()
+                    .originalFileName(fileUploadService.getOriginalFileName())
+                    .storedFileName(fileUploadService.getStoredFileName())
+                    .uploadPath(fileUploadService.getUploadPath())
+                    .storedFileNameWithExtension(fileUploadService.getStoredFileNameWithExtension())
+                    .goodsEntity(savedGoodsEntity)
+                    .build();
+
+            goodsImageRepository.save(goodsImageEntity);
+            return "success";
+        }catch (DataAccessException e){
+            System.out.println("상품등록 중 DB 관련 예외 발생");
+            e.printStackTrace();
+        }catch (Exception e){
+            System.out.println("상품등록 중 DB 관련 아닌 예외 발생");
+            e.printStackTrace();
+            return "fail";
+        }
+        return "fail";
+    }
+
+    // 상품 상세정보
+    public GoodsDto goodsDetail(Long num){
+        GoodsEntity goodsEntity = goodsRepository.findById(num).orElse(null);
+
+        GoodsDto goodsDto = GoodsDto.entityToGoodsDto(goodsEntity);
+        return goodsDto;
+    }
+
+    // 상품 삭제
+    @Transactional
+    public boolean goodsDelete(Long num){
+        GoodsEntity goodsEntity = goodsRepository.findById(num).orElse(null);
+        goodsEntity.setDel("Y");
+        try{
+            goodsRepository.save(goodsEntity);
+            return true;
+        }catch (DataAccessException e){
+            return false;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    // 상품 수정
+    @Transactional
+    public GoodsDto goodsModify(Long num, GoodsDto goodsDto) {
+        GoodsEntity goodsEntity = goodsRepository.findById(num).orElse(null);
+        goodsEntity.setName(goodsDto.getGoodsName());
+        goodsEntity.setPrice(goodsDto.getPrice());
+        goodsEntity.setStock(goodsDto.getStock());
+        goodsEntity.setExplanation(goodsDto.getGoodsExplanation());
+        try{
+            duplicateGoodsName(goodsDto.getGoodsName());
+            GoodsEntity modifyGoodsEntity = goodsRepository.save(goodsEntity);
+            GoodsDto modifyGoodsDto = GoodsDto.entityToGoodsDto(modifyGoodsEntity);
+            return modifyGoodsDto;
+        }catch (DataAccessException e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // 상품 목록 페이징
+    public Page<GoodsDto> goodsList(Pageable pageable){
+        int currentPage = pageable.getPageNumber() - 1;
+        int pageLimit = 10;  // 한페이지에 보여줄 회원 수
+        Page<GoodsEntity> goodsEntityPage = goodsRepository.findAll(PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
+        Page<GoodsDto> goodsDtoPage = goodsEntityPage.map
+                (goods -> new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), goods.getStock(), goods.getGoodsCategory().getCategoryName(), goods.getCreatedTime(), goods.getGoodsImageEntity().getStoredFileNameWithExtension()));
+        return goodsDtoPage;
+    }
+
+    // 상품 이름 중복 체크
+    private void duplicateGoodsName(String name) {
+        int duplicateName = goodsRepository.countByName(name);
+        if(duplicateName >= 1){
+            throw new IllegalStateException("이미 존재하는 상품입니다.");
+        }
+    }
+
+    // 상품 찜하기
+    @Transactional
+    public String likeAdd(Long memberNum, Long goodsNum){
+        Optional<MemberEntity> memberEntity = memberRepository.findById(memberNum);
+        if(memberEntity.isEmpty()) throw new IllegalArgumentException("유효하지 않은 회원번호입니다.");
+        MemberEntity member = memberEntity.get();
+
+        Optional<GoodsEntity> goodsEntity = goodsRepository.findById(goodsNum);
+        if(goodsEntity.isEmpty()) throw new IllegalArgumentException("유효하지 않은 상품번호입니다.");
+        GoodsEntity goods = goodsEntity.get();
+        boolean existsLike = likePresent(memberNum, goodsNum);
+        try {
+            if(existsLike){
+                return "alreadyLike";
+            }
+            LikeEntity likeEntity = LikeEntity.builder()
+                    .goods(goods)
+                    .member(member)
+                    .build();
+            goods.addLike(likeEntity);
+            member.addLike(likeEntity);
+            LikeEntity saveLikeEntity = likeRepository.save(likeEntity);
+            if(saveLikeEntity != null) return "likeComplete";
+        }
+        catch (Exception e){
+            return "likeFail";
+        }
+        return "likeFail";
+    }
+    
+    // 상품찜하기 삭제
+    public String likeDelete(Long memberNum, Long goodsNum, long likeNum){
+        Optional<MemberEntity> memberEntity = memberRepository.findById(memberNum);
+        if(memberEntity.isEmpty()) throw new IllegalArgumentException("유효하지 않은 회원번호입니다.");
+        MemberEntity member = memberEntity.get();
+
+        Optional<GoodsEntity> goodsEntity = goodsRepository.findById(goodsNum);
+        if(goodsEntity.isEmpty()) throw new IllegalArgumentException("유효하지 않은 상품번호입니다.");
+        GoodsEntity goods = goodsEntity.get();
+        boolean existsLike = likePresent(memberNum, goodsNum);
+        try {
+            if(!existsLike){  // 찜 안돼어 있으면
+                return "notLike";
+            }
+            likeRepository.deleteById(likeNum);
+            return "likeDeleteComplete";
+
+        }
+        catch (Exception e){
+            return "likeDeleteFail";
+        }
+    }
+
+    // 내가 찜한 상품만 모아보기
+    public Page<GoodsDto> myLikeGoods(Pageable pageable, String loginId){
+        int page = pageable.getPageNumber() - 1;
+        int pageLimit = 7;
+        Page<GoodsEntity> goodsEntityPage = likeRepository.findByMemberId(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), loginId);
+        Page<GoodsDto> goodsDtos = goodsEntityPage.map
+                (goods -> new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), goods.getStock(), goods.getGoodsCategory().getCategoryName(),
+                        goods.getCreatedTime(), goods.getGoodsImageEntity().getStoredFileNameWithExtension()));
+        return goodsDtos;
+    }
+
+    public boolean likePresent(Long memberNum, Long goodsNum){
+        return likeRepository.existsByMemberNumAndGoodsNum(memberNum, goodsNum);
     }
 }
