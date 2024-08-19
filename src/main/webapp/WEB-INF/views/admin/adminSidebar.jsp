@@ -72,7 +72,7 @@
               </a>
             </li>
             <li>
-              <a href="#" class="nav-link text-white">
+              <a href="/admin/goodsList" class="nav-link text-white">
                 상품조회
               </a>
             </li>

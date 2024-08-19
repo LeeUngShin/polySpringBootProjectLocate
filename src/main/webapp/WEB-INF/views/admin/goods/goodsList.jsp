@@ -20,44 +20,44 @@
 
 
       <div id="mainArticle">
-        <%@include file="./boardNav.jsp" %>
+        <%@include file="./goodsNav.jsp" %>
         <div id="adminListDiv">
+        <c:if test="${not empty goodsDtoPage}">
           <table class="table table-striped table-hover">
-            <thead class="table-dark">
-                 <tr>
-                     <th scope="col" width=200px>글번호</th>
-                     <th scope="col" width=500px>제목</th>
-                     <th scope="col" width=200px>작성자</th>
-                     <th scope="col" width=200px>작성일자</th>
-                     <th scope="col" width=200px>게시판타입</th>
-                     <th scope="col" width=200px>게시글 보기</th>
-                 </tr>
+            <thead>
+              <tr>
+                <th scope="col" style="width:10%">상품번호</th>
+                <th scope="col" style="width:30%">상품썸네일</th>
+                <th scope="col" style="width:15%">상품명</th>
+                <th scope="col" style="width:15%">상품가격</th>
+                <th scope="col" style="width:15%">상품수량</th>
+                <th scope="col" style="width:15%">상품카테고리</th>
+              </tr>
             </thead>
-          <c:forEach items="${boardDtoPage.content}" var="board">
+          <c:forEach items="${goodsDtoPage.content}" var="goods">
             <tbody>
               <tr>
-                <th scope="row">${board.num}</th>
-                <td>${board.title}</td>
-                <td>${board.writer}</td>
-                <td>${board.regTime}</td>
-                <td>${board.boardType}</td>
+                <th scope="row">${goods.num}</th>
                 <td>
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="boardDetail('${board.num}')">
-                     글 보기
-                  </button>
+                    <img src="/upload/goods/${goods.storedGoodsImageName}" alt="상품섬네일" style="max-width:250px; max-height:250px">
                 </td>
+                <td>${goods.goodsName}</td>
+                <td>${goods.price}</td>
+                <td>${goods.stock}</td>
+                <td>${goods.goodsCategory}</td>
               </tr>
             </tbody>
           </c:forEach>
+        </c:if>
         </div>
           </table>
           <div id="adminPagingNum">
             <c:choose>
-                 <c:when test="${boardDtoPage.isFirst()}">
+                 <c:when test="${goodsDtoPage.isFirst()}">
                     처음
                  </c:when>
                  <c:otherwise>
-                   <a href="/admin/boardList?page=1">처음</a>
+                   <a href="/admin/memberList?page=1">처음</a>
                  </c:otherwise>
             </c:choose>
             <c:choose>
@@ -65,7 +65,7 @@
                     이전
                  </c:when>
                  <c:otherwise>
-                   <a href="/admin/boardList?page=${startPage-1}">이전</a>
+                   <a href="/admin/goodsList?page=${startPage-1}">이전</a>
                  </c:otherwise>
             </c:choose>
             <c:forEach begin="${startPage}" end="${endPage}" var="count">
@@ -74,7 +74,7 @@
                   ${currentPage}
                 </c:when>
                 <c:otherwise>
-                  <a href="/admin/boardList?page=${count}">${count}</a>
+                  <a href="/admin/goodsList?page=${count}">${count}</a>
                 </c:otherwise>
               </c:choose>
             </c:forEach>
@@ -83,42 +83,21 @@
                   다음
                </c:when>
                <c:otherwise>
-                 <a href="/admin/boardList?page=${endPage+1}">다음</a>
+                 <a href="/admin/goodsList?page=${endPage+1}">다음</a>
                </c:otherwise>
             </c:choose>
             <c:choose>
-               <c:when test="${boardDtoPage.isLast()}">
+               <c:when test="${goodsDtoPage.isLast()}">
                   마지막
                </c:when>
                <c:otherwise>
-                 <a href="/admin/boardList?page=${totalLastPage}">마지막</a>
+                 <a href="/admin/goodsList?page=${totalLastPage}">마지막</a>
                </c:otherwise>
             </c:choose>
           </div>
       </div>
     </article>
   </section>
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">게시글 보기</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <table class="table table-bordered" id="boardDetail">
-
-            </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">창닫기</button>
-          <form action="/admin/deleteBoard"method="POST" id="deleteButtonForm">
-            <button type="button" class="btn btn-primary" onclick="deleteBoard(currentBoardNum)">글삭제</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

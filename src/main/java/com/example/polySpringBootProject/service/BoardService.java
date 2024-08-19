@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.service;
 
+import com.example.polySpringBootProject.BoardType;
 import com.example.polySpringBootProject.dto.BoardDto;
 import com.example.polySpringBootProject.entity.BoardEntity;
 import com.example.polySpringBootProject.entity.BoardFileEntity;
@@ -59,6 +60,7 @@ public class BoardService {
                     .noticeTop(boardDto.getNoticeTop())
                     .secret(boardDto.getSecret())
                     .del(boardDto.getDelete())
+                    .boardType(BoardType.FREE_BOARD)
                     .build();
             m.addBoard(board);
             BoardEntity savedBoard = boardRepository.save(board);
@@ -101,6 +103,7 @@ public class BoardService {
                         .del(boardDto.getDelete())
                         .member(m)
                         .noticeTop(boardDto.getNoticeTop())
+                        .boardType(BoardType.FREE_BOARD)
                         .fileAttached(1)
                         .build();
                 BoardEntity savedBoard = boardRepository.save(board);
@@ -262,7 +265,7 @@ public class BoardService {
         Page<BoardDto> boardDtos = boardEntities.map
                 (board -> new BoardDto(board.getNum(), board.getTitle(), board.getContent(),
                         board.getCreatedTime(), board.getMember().getId(), board.getNotice()
-                , board.getSecret(), board.getDel()));
+                , board.getSecret(), board.getDel(), board.getBoardType()));
         return boardDtos;
     }
 
@@ -307,7 +310,7 @@ public class BoardService {
         Page<BoardDto> boardDtos = boardEntities.map
                 (board -> new BoardDto(board.getNum(), board.getTitle(), board.getContent(),
                         board.getCreatedTime(), board.getMember().getId(), board.getNotice()
-                , board.getSecret(), board.getDel()));
+                , board.getSecret(), board.getDel(), board.getBoardType()));
 
         return boardDtos;
     }

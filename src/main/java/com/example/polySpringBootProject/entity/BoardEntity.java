@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.entity;
 
+import com.example.polySpringBootProject.BoardType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,6 +44,9 @@ public class BoardEntity extends BaseEntity {
 
     @Column  // 파일첨부 여부(1 : 파일첨부O, 0 : 파일첨부x)
     private int fileAttached;
+
+    @Enumerated(EnumType.STRING)
+    private BoardType boardType;
 
 //    @CreationTimestamp
 //    @Temporal(TemporalType.TIMESTAMP)

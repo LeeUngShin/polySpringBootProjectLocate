@@ -6,8 +6,10 @@ import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.service.AdminService;
 import com.example.polySpringBootProject.service.BoardService;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.experimental.PackagePrivate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -153,46 +155,6 @@ public class adminController {
     }
 
 
-    @GetMapping("/goodsRegisterForm")
-    public String goodsRegisterForm(){
-
-        return "admin/goods/goodsRegister";
-    }
-
-    @PostMapping("/goodsRegister")
-    public String goodsRegister(@ModelAttribute GoodsDto goodsDto, Model model){
-
-        try {
-            String goodsRegister = adminService.goodsRegister(goodsDto);
-            System.out.println("반환받은 문자열 : " + goodsRegister);
-            if (goodsRegister.equals("success")) {
-                return utils.showMessageAlert("상품 등록에 성공했습니다.", "/admin/goodsRegisterForm", model);
-            }
-            else if(goodsRegister.equals("imageUploadFail")){
-                return utils.showMessageAlert("이미지업로드에 실패했습니다.", "/admin/goodsRegisterForm", model);
-            }
-            else if(goodsRegister.equals("DBFail")){
-                return utils.showMessageAlert("DB관련 오류로 실패했습니다.", "/admin/goodsRegisterForm", model);
-            }
-            else{
-                return utils.showMessageAlert("상품등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
-            }
-        }
-        catch (IllegalStateException e){
-            e.printStackTrace();
-            return utils.showMessageAlert("상품명은 중복될 수 없습니다..", "/admin/goodsRegisterForm", model);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            System.out.println("컨트롤러에서 예외발생");
-            return utils.showMessageAlert("컨트롤러 예외로 상품 등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
-        }
-    }
-
-
-
-
-
     @GetMapping("/noticeBoardForm")
     public String noticeBoardForm(){
         return "/admin/board/noticeBoardWriteForm";
@@ -210,7 +172,7 @@ public class adminController {
                 return utils.showMessageAlert("관리자 계정만 공지글 작성이 가능합니다.", "/admin/noticeBoardForm", model);
             }
             else if (boardResponse.isSuccess()) {
-                return utils.showMessageAlert("공지글 작성 완성", "/board/detail/" + boardResponse.getBoardId(), model);
+                return utils.showMessageAlert("공지글 작성 완성", "/admin/boardList" + boardResponse.getBoardId(), model);
             }
 
         }catch (Exception e){
@@ -242,6 +204,102 @@ public class adminController {
         model.addAttribute("totalLastPage", totalLatPage);
         model.addAttribute("lastPageSet", lastPageSet);
 
-        return "admin/board/boardList";
+        return "/admin/board/boardList";
+    }
+
+    @GetMapping("/boardDetail/{boardNum}")
+    @ResponseBody
+    public String memberInfo(Model model, @PathVariable("boardNum")Long boardNum){
+
+        try{
+            BoardDto boardDto = adminService.boardDetail(boardNum);
+            String json = new Gson().toJson(boardDto);
+            System.out.println("json : " + json);
+            return json;
+        }catch (IllegalStateException e){
+            utils.showMessageAlert("유효하지 않은 게시글입니다.");
+            return "fail";
+        }
+    }
+
+    @PostMapping("/deleteBoard")
+    public String deleteBoard(@RequestParam("boardNum") Long boardNum, Model model){
+
+        try{
+
+            boolean deleteBoard = adminService.deleteBoard(boardNum);
+            if(deleteBoard) return utils.showMessageAlert("삭제가 완료되었습니다.", "/admin/boardList", model);
+        }catch (IllegalStateException e){
+            e.printStackTrace();
+            return utils.showMessageAlert("유효하지 않은 게시글입니다.", "/admin/boardList", model);
+        }catch (RuntimeException e){
+            e.printStackTrace();
+            return utils.showMessageAlert("게시글 삭제 중 오류가 발생했습니다.", "/admin/boardList", model);
+        }
+        return utils.showMessageAlert("게시글 삭제 중 오류가 발생했습니다.", "/admin/boardList", model);
+    }
+
+    @GetMapping("/goodsRegisterForm")
+    public String goodsRegisterForm(){
+
+        return "admin/goods/goodsRegister";
+    }
+
+
+    @PostMapping("/goodsRegister")
+    public String goodsRegister(@ModelAttribute GoodsDto goodsDto, Model model){
+
+        try {
+            String goodsRegister = adminService.goodsRegister(goodsDto);
+            System.out.println("반환받은 문자열 : " + goodsRegister);
+            if (goodsRegister.equals("success")) {
+                return utils.showMessageAlert("상품 등록에 성공했습니다.", "/admin/goodsRegisterForm", model);
+            }
+            else if(goodsRegister.equals("imageUploadFail")){
+                return utils.showMessageAlert("이미지업로드에 실패했습니다.", "/admin/goodsRegisterForm", model);
+            }
+            else if(goodsRegister.equals("DBFail")){
+                return utils.showMessageAlert("DB관련 오류로 실패했습니다.", "/admin/goodsRegisterForm", model);
+            }
+            else{
+                return utils.showMessageAlert("상품등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
+            }
+        }
+        catch (IllegalStateException e){
+            e.printStackTrace();
+            return utils.showMessageAlert("상품명은 중복될 수 없습니다..", "/admin/goodsRegisterForm", model);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("컨트롤러에서 예외발생");
+            return utils.showMessageAlert("컨트롤러 예외로 상품 등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
+        }
+    }
+
+    @GetMapping("/goodsList")
+    public String goodsList(@PageableDefault(page=1) Pageable pageable,
+                            Model model){
+
+        Page<GoodsDto> goodsDtoPage = adminService.goodsList(pageable);
+        int totalLatPage = goodsDtoPage.getTotalPages();
+        int currentPage = goodsDtoPage.getNumber() + 1;
+        int blockLimit = 3;
+        int startPage = (((int) (Math.ceil((double) pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
+        int endPage = ((startPage + blockLimit - 1) < goodsDtoPage.getTotalPages()) ? startPage + blockLimit - 1 : goodsDtoPage.getTotalPages();  // 3 6 9 12 ~~
+        boolean lastPageSet = (startPage + blockLimit - 1) >= goodsDtoPage.getTotalPages();
+
+        System.out.println("전체 마지막페이지 : " + totalLatPage);
+        System.out.println("마지막 세트인가 : " + lastPageSet);
+
+        model.addAttribute("goodsDtoPage", goodsDtoPage);
+        model.addAttribute("blockLimit", blockLimit);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalLastPage", totalLatPage);
+        model.addAttribute("lastPageSet", lastPageSet);
+
+        return "admin/goods/goodsList";
+
     }
 }

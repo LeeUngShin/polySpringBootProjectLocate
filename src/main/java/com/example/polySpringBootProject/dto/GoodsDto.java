@@ -52,14 +52,14 @@ public class GoodsDto {
         this.regTime = createTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    public GoodsDto(Long num, String name, int price, int stock, String category, LocalDateTime createTime, String storedGoodsImageName){
+    public GoodsDto(Long num, String name, int price, int stock, String category, LocalDateTime createTime, String storedFileName){
         this.num = num;
         this.goodsName = name;
         this.price = price;
         this.stock = stock;
         this.goodsCategory = category;
         this.regTime = createTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        this.storedGoodsImageName = storedGoodsImageName;
+        this.storedGoodsImageName = storedFileName;
     }
 
     public static GoodsDto entityToGoodsDto(GoodsEntity goodsEntity) {

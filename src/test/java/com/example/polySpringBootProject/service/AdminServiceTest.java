@@ -2,10 +2,7 @@ package com.example.polySpringBootProject.service;
 
 import com.example.polySpringBootProject.RoleType;
 import com.example.polySpringBootProject.dto.GoodsDto;
-import com.example.polySpringBootProject.entity.GoodsCategoryEntity;
-import com.example.polySpringBootProject.entity.GoodsEntity;
-import com.example.polySpringBootProject.entity.LikeEntity;
-import com.example.polySpringBootProject.entity.MemberEntity;
+import com.example.polySpringBootProject.entity.*;
 import com.example.polySpringBootProject.repository.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 class AdminServiceTest {
 
     @Autowired
@@ -41,6 +38,9 @@ class AdminServiceTest {
 
     @Autowired
     LikeRepository likeRepository;
+
+    @Autowired
+    AdminService adminService;
 
     @Test
     //@Transactional
@@ -66,6 +66,36 @@ class AdminServiceTest {
         Assertions.assertEquals("카테고리1상품", saveGoodsEntity.getName());
     }
 
+    @Test
+        //@Transactional
+    void goodsRegisters() {
+        // Given
+        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        for(int i=0;i<32;i++) {
+            GoodsEntity goodsEntity = GoodsEntity.builder()
+                    .name("카테고리1상품"+i)
+                    .price(1000)
+                    .stock(100)
+                    .explanation("카테고리1상품설명"+i)
+                    .del("N")
+                    .sellCnt(0)
+                    .likeCnt(0)
+                    .goodsCategory(goodsCategoryEntity)
+                    .build();
+
+            GoodsImageEntity goodsImageEntity = GoodsImageEntity.builder()
+                    .uploadPath("C:/imgUploadF/goods/e9b0c82b72334ad5abf8435e69a7e203.JPG")
+                            .goodsEntity(goodsEntity)
+                                    .build();
+            // when
+            goodsRepository.save(goodsEntity);
+            goodsImageRepository.save(goodsImageEntity);
+        }
+        // then
+
+       // Assertions.assertNotNull(saveGoodsEntity.getName());
+        //Assertions.assertEquals("카테고리1상품", saveGoodsEntity.getName());
+    }
     @Test
     void goodsDetail() {
         // Given
@@ -215,12 +245,13 @@ class AdminServiceTest {
         saveMember.addLike(likeEntity);
         LikeEntity savedLike = likeRepository.save(likeEntity);
 
+
         // Then
         assertNotNull(savedLike);
         assertEquals(1, saveGoods.getLikeEntitySet().size());
         assertEquals(1, saveMember.getLikeEntitySet().size());
         assertEquals("사용자01", likeEntity.getMember().getName());
-
+        assertTrue(adminService.likePresent(saveMember.getNum(), saveGoods.getNum()));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.service;
 
+import com.example.polySpringBootProject.BoardType;
 import com.example.polySpringBootProject.dto.BoardDto;
 import com.example.polySpringBootProject.dto.BoardResponse;
 import com.example.polySpringBootProject.dto.GoodsDto;
@@ -99,6 +100,7 @@ public class AdminService {
                     .noticeTop(boardDto.getNoticeTop())
                     .secret(boardDto.getSecret())
                     .del(boardDto.getDelete())
+                    .boardType(BoardType.NOTICE_BOARD)
                     .member(adminMember)
                     .build();
             try {
@@ -156,17 +158,55 @@ public class AdminService {
         return boardResponse;
     }
 
+    public MemberDto memberInfo(Long memberNum){
+        Optional<MemberEntity> memberEntity = memberRepository.findById(memberNum);
+        if(memberEntity.isEmpty()) throw new IllegalArgumentException("유효하지 않은 회원번호입니다.");
+        MemberEntity member = memberEntity.get();
+        MemberDto memberDto = MemberDto.entityToDto(member);
+        return memberDto;
+    }
+
     public Page<BoardDto> boardList(Pageable pageable){
 
         int page = pageable.getPageNumber()-1;
         int pageLimit = 7;
 
-        Page<BoardEntity>boardEntityPage = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
+        Page<BoardEntity>boardEntityPage = boardRepository.findAllByDel(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N");
         Page<BoardDto> boardDtos = boardEntityPage.map
                 (board -> new BoardDto(board.getNum(), board.getTitle(), board.getContent(),
                         board.getCreatedTime(), board.getMember().getId(), board.getNotice()
-                        , board.getSecret(), board.getDel()));
+                        , board.getSecret(), board.getDel(),board.getBoardType()));
         return boardDtos;
+    }
+    
+    public BoardDto boardDetail(Long boardNum){
+        Optional<BoardEntity> boardEntity = boardRepository.findById(boardNum);
+        if(boardEntity.isEmpty()){
+            throw new IllegalStateException("유효하지 않는 게시글입니다.");
+        }
+        BoardEntity board = boardEntity.get();
+        BoardDto boardDto = BoardDto.entityToDto(board);
+        return boardDto;
+    }
+    
+    @Transactional
+    public boolean deleteBoard(Long boardNum){
+        Optional<BoardEntity> boardEntity = boardRepository.findById(boardNum);
+        if(boardEntity.isEmpty()){
+            throw new IllegalStateException("유효하지 않는 게시글입니다.");
+        }
+        BoardEntity board = boardEntity.get();
+        board.setDel("Y");
+        try{
+            BoardEntity deleteBoard = boardRepository.save(board);
+            if(!deleteBoard.getDel().equals("Y")) {
+                throw new RuntimeException("게시글 삭제 실패");
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("게시글 삭제 중 예외발생");
+        }
     }
 
     @Transactional
@@ -342,7 +382,8 @@ public class AdminService {
                         goods.getCreatedTime(), goods.getGoodsImageEntity().getStoredFileNameWithExtension()));
         return goodsDtos;
     }
-
+    
+    // 회원번호와 상품번호로 좋아요 있는지 확인 반환값이 true이면 찜한 상태
     public boolean likePresent(Long memberNum, Long goodsNum){
         return likeRepository.existsByMemberNumAndGoodsNum(memberNum, goodsNum);
     }

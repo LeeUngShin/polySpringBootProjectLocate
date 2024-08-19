@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
-    Page<BoardEntity> findAll(Pageable pageable);
+    Page<BoardEntity> findAllByDel(Pageable pageable, String del);
 
     List<BoardEntity> findByMemberId(String Id);
 

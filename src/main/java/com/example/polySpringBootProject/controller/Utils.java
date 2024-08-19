@@ -16,4 +16,9 @@ public class Utils {
         return "jsAlert/alert";
     }
 
+    public String showMessageAlert(String message){
+
+        return "jsAlert/alert";
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.dto;
 
+import com.example.polySpringBootProject.BoardType;
 import com.example.polySpringBootProject.entity.BoardEntity;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,13 +27,14 @@ public class BoardDto {
     private String secret="N";
     private String delete="N";
     private String noticeTop = "N";
+    private String boardType;
 
     private MultipartFile boardFile;  // 파일을 담는 용도
     private String originalFileName;  // 원본 파일 이름
     private String storedFileName;  // 서버 저장용 파일 이름
     private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
 
-    public BoardDto(Long num, String title, String content, LocalDateTime regTime, String writer, String notice, String secret, String delete) {
+    public BoardDto(Long num, String title, String content, LocalDateTime regTime, String writer, String notice, String secret, String delete, BoardType boardType) {
         this.num = num;
         this.title = title;
         this.content = content;
@@ -41,6 +43,8 @@ public class BoardDto {
         this.notice = notice;
         this.secret = secret;
         this.delete = delete;
+        this.boardType =boardType.toString();
+
     }
 
     public static BoardDto entityToDto(BoardEntity board) {
@@ -54,6 +58,8 @@ public class BoardDto {
         boardDto.setNotice(board.getNotice());
         boardDto.setSecret(board.getSecret());
         boardDto.setRegTime(board.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        boardDto.setDelete(board.getDel());
+        boardDto.setBoardType(board.getBoardType().toString());
         if(board.getFileAttached()==0){  // 첨부파일 없음
             boardDto.setFileAttached(board.getFileAttached()); // 0
         }else{  // 파일이 있는 경우
@@ -67,7 +73,7 @@ public class BoardDto {
             // 단일 파일 첨부이기 때문에 리스트에는 파일객체 1개만 있어서 get(0)으로 가져오면 됨
             // get(0) -> BoardFileEntity 객체 반환
             boardDto.setOriginalFileName(board.getBoardFileEntities().get(0).getOriginalFileName());
-            boardDto.setStoredFileName(board.getBoardFileEntities().get(0).getStoredFileName());
+            boardDto.setStoredFileName(board.getBoardFileEntities().get(0).getStoredFileNameWithExtension());
         }
         return boardDto;
     }

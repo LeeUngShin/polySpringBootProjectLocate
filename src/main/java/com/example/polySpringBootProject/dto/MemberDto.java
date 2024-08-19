@@ -66,6 +66,7 @@ public class MemberDto {
     public static MemberDto entityToDto(MemberEntity member) {
 
         MemberDto memberDto = new MemberDto();
+        memberDto.setNum(member.getNum());
         memberDto.setId(member.getId());
         memberDto.setPw(member.getPw());
         memberDto.setName(member.getName());

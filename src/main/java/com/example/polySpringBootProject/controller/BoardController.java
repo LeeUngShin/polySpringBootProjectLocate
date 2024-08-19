@@ -102,9 +102,9 @@ public class BoardController {
 
         return "board/boardDetail";
     }
-    @RequestMapping(value="/delete/{boardNum}", method=RequestMethod.POST)
+    @RequestMapping(value="/delete", method=RequestMethod.POST)
     public String boardDelete(HttpServletRequest request,
-                              @PathVariable("boardNum") Long boardNum, Model model) {
+                              @RequestParam("boardNum") Long boardNum, Model model) {
         String confirmDataStr = request.getParameter("confirmData");
         boolean confirmData = Boolean.parseBoolean(confirmDataStr);
         String currentPageStr = request.getParameter("currentPage");

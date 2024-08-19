@@ -277,7 +277,7 @@ public class MemberService {
         Page<BoardDto> myboardDtos = myboardEntities.map
                 (myboard -> new BoardDto(myboard.getNum(), myboard.getTitle(), myboard.getContent(),
                         myboard.getCreatedTime(), myboard.getMember().getId(), myboard.getNotice(),
-                        myboard.getSecret(), myboard.getDel()));
+                        myboard.getSecret(), myboard.getDel(),myboard.getBoardType()));
         return myboardDtos;
     }
 
@@ -297,7 +297,7 @@ public class MemberService {
         Page<BoardDto> myBoardSearchList = myBoardSearchEntities.map
                 (myboard -> new BoardDto(myboard.getNum(), myboard.getTitle(), myboard.getContent(),
                         myboard.getCreatedTime(), myboard.getMember().getId(), myboard.getNotice(),
-                        myboard.getSecret(), myboard.getDel()));
+                        myboard.getSecret(), myboard.getDel(), myboard.getBoardType()));
         return myBoardSearchList;
     }
 
