@@ -9,7 +9,7 @@
                 <a class="nav-link active" aria-current="page" href="/admin/goodsRegisterForm">
                     상품등록
                 </a>
-                <a class="nav-link active" aria-current="page" href="#">
+                <a class="nav-link active" aria-current="page" href="/admin/goodsList">
                     상품목록조회
                 </a>
               </div>

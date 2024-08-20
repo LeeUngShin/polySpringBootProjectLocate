@@ -43,7 +43,7 @@ public class BoardDto {
         this.notice = notice;
         this.secret = secret;
         this.delete = delete;
-        this.boardType =boardType.toString();
+        this.boardType = boardType.toString();
 
     }
 
@@ -73,7 +73,9 @@ public class BoardDto {
             // 단일 파일 첨부이기 때문에 리스트에는 파일객체 1개만 있어서 get(0)으로 가져오면 됨
             // get(0) -> BoardFileEntity 객체 반환
             boardDto.setOriginalFileName(board.getBoardFileEntities().get(0).getOriginalFileName());
+            System.out.println("현재 게시글 파일의 원래 이름 : " + board.getBoardFileEntities().get(0).getOriginalFileName());
             boardDto.setStoredFileName(board.getBoardFileEntities().get(0).getStoredFileNameWithExtension());
+            System.out.println("현재 게시글 파일의 저장 이름 : " + board.getBoardFileEntities().get(0).getStoredFileNameWithExtension());
         }
         return boardDto;
     }

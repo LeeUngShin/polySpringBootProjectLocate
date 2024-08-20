@@ -54,3 +54,11 @@ function deleteBoard(boardNum){
     deleteButtonForm.submit();
     }
 }
+
+function deleteGoods(goodsNum){
+    if(confirm("정말로 삭제하시겠습니까?")){
+        var goodsDeleteButton = document.getElementById("goodsDelete");
+        goodsDeleteButton.submit();
+    }
+
+}

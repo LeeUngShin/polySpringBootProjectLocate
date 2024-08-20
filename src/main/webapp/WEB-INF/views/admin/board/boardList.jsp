@@ -42,7 +42,7 @@
                 <td>${board.regTime}</td>
                 <td>${board.boardType}</td>
                 <td>
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="boardDetail('${board.num}')">
+                  <button type="button" class="btn btn btn-light" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="boardDetail('${board.num}')">
                      글 보기
                   </button>
                 </td>

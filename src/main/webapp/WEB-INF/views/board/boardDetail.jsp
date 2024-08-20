@@ -62,7 +62,6 @@
                             <button type="button" class="btn btn-outline-secondary" id="delete" onclick="javascript:deleteBoard()">
                                 <i class="bi bi-pencil"></i>
                                 글삭제
-                                글삭제
                             </button>
                         </form>
                     </div>

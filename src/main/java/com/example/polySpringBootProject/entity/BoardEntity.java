@@ -64,6 +64,14 @@ public class BoardEntity extends BaseEntity {
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BoardFileEntity> boardFileEntities = new ArrayList<>();
 
+    public void addBoardImg(BoardFileEntity boardFileEntity){
+        if (boardFileEntities == null) {
+            boardFileEntities = new ArrayList<>(); // Ensure initialization if not done already
+        }
+        boardFileEntities.add(boardFileEntity);
+    }
+
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CommentEntity> commentEntityList = new ArrayList<>();
+
 }

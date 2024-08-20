@@ -50,11 +50,11 @@ public class GoodsEntity extends BaseEntity{
     private GoodsCategoryEntity goodsCategory;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "goodsEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "goodsImageNum")
     private GoodsImageEntity goodsImageEntity;
 
-    @OneToMany(mappedBy = "goods", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     Set<LikeEntity> likeEntitySet = new HashSet<>();  // 중복 방지를 위해 Set 사용
 
     public void addLike(LikeEntity likeEntity){

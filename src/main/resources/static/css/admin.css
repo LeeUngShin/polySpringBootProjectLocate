@@ -73,6 +73,10 @@ vertical-align : middle;
   padding : 50px;
 }
 
+#goodsDetailDiv{
+    padding : 100px;
+}
+
 #adminPagingNum{
     text-align : center;
 }
@@ -116,6 +120,11 @@ li{
     padding-top: 30px;
 }
 
+#detailGoodsButton{
+    display : flex;
+    justify-content : right;
+}
+
 textarea{
     width: 500px;
     height: 200px;
@@ -127,4 +136,9 @@ textarea{
     width: 800px;
     margin: 0 auto;
     padding-top: 30px;
+}
+
+img{
+    max-width : 700px;
+    max-height : 1000px;
 }

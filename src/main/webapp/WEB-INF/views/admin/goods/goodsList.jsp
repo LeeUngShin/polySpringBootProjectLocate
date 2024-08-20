@@ -29,9 +29,10 @@
                 <th scope="col" style="width:10%">상품번호</th>
                 <th scope="col" style="width:30%">상품썸네일</th>
                 <th scope="col" style="width:15%">상품명</th>
-                <th scope="col" style="width:15%">상품가격</th>
-                <th scope="col" style="width:15%">상품수량</th>
-                <th scope="col" style="width:15%">상품카테고리</th>
+                <th scope="col" style="width:10%">상품가격</th>
+                <th scope="col" style="width:10%">상품수량</th>
+                <th scope="col" style="width:10%">상품카테고리</th>
+                <th scope="col" style="width:15%">상품보기</th>
               </tr>
             </thead>
           <c:forEach items="${goodsDtoPage.content}" var="goods">
@@ -45,6 +46,13 @@
                 <td>${goods.price}</td>
                 <td>${goods.stock}</td>
                 <td>${goods.goodsCategory}</td>
+                <td>
+                    <form action="/admin/goodsDetail/${goods.num}">
+                        <button type="submit" class="btn btn-secondary">
+                           상품보기
+                       </button>
+                    </form>
+                </td>
               </tr>
             </tbody>
           </c:forEach>

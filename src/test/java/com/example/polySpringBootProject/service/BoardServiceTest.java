@@ -6,6 +6,7 @@ import com.example.polySpringBootProject.entity.MemberEntity;
 import com.example.polySpringBootProject.repository.BoardFileRepository;
 import com.example.polySpringBootProject.repository.BoardRepository;
 import com.example.polySpringBootProject.repository.MemberRepository;
+import jakarta.jws.soap.SOAPBinding;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -83,4 +84,42 @@ class BoardServiceTest {
 //            boardRepository.save(board);
 //        }
 //    }
+    @Test
+    void entityTest(){
+        MemberEntity memberEntity1 = MemberEntity.builder()
+                .id("test01")
+                .pw("12345")
+                .name("사용자01")
+                .post("00000")
+                .addr("주소01")
+                .addrDetail("상세주소01")
+                .email("user01@test.org")
+                .approval("Y")
+                .role(RoleType.ROLE_USER)
+                .build();
+        MemberEntity saveMember = memberRepository.save(memberEntity1);
+
+        BoardEntity boardEntity = BoardEntity.builder()
+                .title("제목제목")
+                .content("내용내용")
+                .notice("N")
+                .secret("N")
+                .del("N")
+                .noticeTop("N")
+                .member(saveMember)
+                .fileAttached(0)
+                .build();
+        BoardEntity saveBoard = boardRepository.save(boardEntity);
+
+        MemberEntity m = memberRepository.findById(saveMember.getNum()).get();
+        System.out.println("******************");
+        System.out.println(m.getBoardDatas());
+    }
+
+    @Test
+    void a(){
+        MemberEntity m = memberRepository.findById(1L).get();
+        System.out.println("*******************");
+        System.out.println(m.getBoardDatas());
+    }
 }

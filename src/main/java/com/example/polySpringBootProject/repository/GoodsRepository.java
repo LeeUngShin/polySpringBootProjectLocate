@@ -15,6 +15,6 @@ public interface GoodsRepository extends JpaRepository<GoodsEntity, Long> {
     
     
     int countByName(String name);  // 중복이름 확인
-    Page<GoodsEntity> findAll(Pageable pageable);  // 목록 페이징
+    Page<GoodsEntity> findAllByDel(Pageable pageable, String del);  // 목록 페이징
 
 }

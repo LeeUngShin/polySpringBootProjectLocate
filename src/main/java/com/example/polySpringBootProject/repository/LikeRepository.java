@@ -25,7 +25,12 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
     */
 
     @Query("select l.goods from LikeEntity l where l.member.id = :id")
-    Page<GoodsEntity> findByMemberId(Pageable pageable, @Param("id")String id);
+    Page<LikeEntity> findByMemberId(Pageable pageable, @Param("id")String id);
+
+    //Page<GoodsEntity> findByMemberId(Pageable pageable, String id);
+
+    @Query("select l.goods from LikeEntity l where l.member.id = :id")
+    List<GoodsEntity> findByMemberIdList(@Param("id")String id);
 
 
 }

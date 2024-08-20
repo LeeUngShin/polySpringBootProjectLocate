@@ -7,12 +7,14 @@ import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.service.AdminService;
 import com.example.polySpringBootProject.service.BoardService;
 import com.google.gson.Gson;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.experimental.PackagePrivate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,7 +24,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.rmi.server.ExportException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -162,17 +167,14 @@ public class adminController {
 
     @PostMapping("/noticeBoardWrite")
     public String noticeBoardWrite(BoardDto boardDto, HttpSession session, Model model){
-        System.out.println("공지글 받은 DTO : " + boardDto);
         String adminId = (String)session.getAttribute("loginId");
-        System.out.println("어드민 아이디 : " + adminId);
         try {
-            BoardResponse boardResponse = adminService.noticeBoardWrite(boardDto, adminId);
-            System.out.println("공지글 내용 : " + boardResponse);
+            boolean writeNoticeBoard = adminService.noticeBoardWrite(boardDto, adminId);
             if(adminId == null || adminId.equals("")){
                 return utils.showMessageAlert("관리자 계정만 공지글 작성이 가능합니다.", "/admin/noticeBoardForm", model);
             }
-            else if (boardResponse.isSuccess()) {
-                return utils.showMessageAlert("공지글 작성 완성", "/admin/boardList" + boardResponse.getBoardId(), model);
+            else if (writeNoticeBoard) {
+                return utils.showMessageAlert("공지글 작성 완성", "/admin/boardList", model);
             }
 
         }catch (Exception e){
@@ -216,9 +218,12 @@ public class adminController {
             String json = new Gson().toJson(boardDto);
             System.out.println("json : " + json);
             return json;
-        }catch (IllegalStateException e){
-            utils.showMessageAlert("유효하지 않은 게시글입니다.");
-            return "fail";
+        }catch (EntityNotFoundException e){
+            Map<String, String> errorMap = new HashMap<>();
+            errorMap.put("result", "fail");
+            String errorJson = new Gson().toJson(errorMap);
+            utils.showMessageAlert("게시글을 찾을 수 없습니다.");
+            return errorJson;
         }
     }
 
@@ -229,9 +234,9 @@ public class adminController {
 
             boolean deleteBoard = adminService.deleteBoard(boardNum);
             if(deleteBoard) return utils.showMessageAlert("삭제가 완료되었습니다.", "/admin/boardList", model);
-        }catch (IllegalStateException e){
+        }catch (EntityNotFoundException e){
             e.printStackTrace();
-            return utils.showMessageAlert("유효하지 않은 게시글입니다.", "/admin/boardList", model);
+            return utils.showMessageAlert("게시글을 찾을 수 없습니다.", "/admin/boardList", model);
         }catch (RuntimeException e){
             e.printStackTrace();
             return utils.showMessageAlert("게시글 삭제 중 오류가 발생했습니다.", "/admin/boardList", model);
@@ -258,21 +263,18 @@ public class adminController {
             else if(goodsRegister.equals("imageUploadFail")){
                 return utils.showMessageAlert("이미지업로드에 실패했습니다.", "/admin/goodsRegisterForm", model);
             }
-            else if(goodsRegister.equals("DBFail")){
-                return utils.showMessageAlert("DB관련 오류로 실패했습니다.", "/admin/goodsRegisterForm", model);
-            }
             else{
                 return utils.showMessageAlert("상품등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
             }
         }
-        catch (IllegalStateException e){
+        catch (DuplicateKeyException e){
             e.printStackTrace();
             return utils.showMessageAlert("상품명은 중복될 수 없습니다..", "/admin/goodsRegisterForm", model);
         }
         catch (Exception e){
             e.printStackTrace();
             System.out.println("컨트롤러에서 예외발생");
-            return utils.showMessageAlert("컨트롤러 예외로 상품 등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
+            return utils.showMessageAlert("상품 등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
         }
     }
 
@@ -300,6 +302,73 @@ public class adminController {
         model.addAttribute("lastPageSet", lastPageSet);
 
         return "admin/goods/goodsList";
+    }
 
+    @GetMapping("/goodsDetail/{goodsNum}")
+    public String detailGoods(@PathVariable("goodsNum") Long goodsNum, Model model){
+
+        try{
+            GoodsDto goodsDto = adminService.goodsDetail(goodsNum);
+            model.addAttribute("goodsDto", goodsDto);
+            System.out.println("등록일 : " + goodsDto.getRegTime());
+            return "admin/goods/goodsDetail";
+        }catch (EntityNotFoundException e){
+            e.printStackTrace();
+            utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/admin/goodsDetail/"+goodsNum, model);
+        }
+        return "admin/goods/goodsDetail";
+    }
+
+    @PostMapping("/deleteGoods/{goodsNum}")
+    public String deleteGoods(@PathVariable("goodsNum") Long goodsNum, Model model){
+        try{
+            boolean deleteGoods = adminService.goodsDelete(goodsNum);
+            if(deleteGoods) {
+                return utils.showMessageAlert("해당 상품이 삭제되었습니다.", "/admin/goodsList", model);
+            }
+            else {
+                return utils.showMessageAlert("상품 삭제에 실패했습니다.", "/admin/goodsList", model);
+
+            }
+        }
+        catch (EntityNotFoundException e){
+            e.printStackTrace();
+            return utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/admin/goodsList", model);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return utils.showMessageAlert("상품 삭제에 실패했습니다.", "/admin/goodsList", model);
+        }
+    }
+
+    @GetMapping("/modifyGoodsForm/{goodsNum}")
+    public String modifyGoodsForm(@PathVariable("goodsNum") Long goodsNum, Model model){
+
+        try{
+            GoodsDto goodsDto = adminService.goodsInfo(goodsNum);
+            model.addAttribute("goodsDto", goodsDto);
+            return "/admin/goods/goodsModifyForm";
+        }catch (EntityNotFoundException e){
+            return utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/admin/goodsList", model);
+        }
+    }
+
+    @PostMapping("/modifyGoods/{goodsNum}")
+    public String modifyGoods(@PathVariable("goodsNum") Long goodNum, Model model,
+                              GoodsDto goodsDto){
+
+        try{
+            GoodsDto modifyGoodsDto = adminService.goodsModify(goodNum, goodsDto);
+            if(modifyGoodsDto != null){
+                return utils.showMessageAlert("상품 수정에 성공했습니다.", "/admin/goodsDetail/" + goodNum, model);
+            }
+        }catch (EntityNotFoundException e){
+            e.printStackTrace();
+            return utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/admin/goodsList", model);
+        }catch (Exception e){
+            e.printStackTrace();
+            return utils.showMessageAlert("상품 수정에 실패했습니다.", "/admin/goodsList", model);
+        }
+        return utils.showMessageAlert("상품 실패했습니다.", "/admin/goodsList", model);
     }
 }

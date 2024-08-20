@@ -4,6 +4,7 @@ import com.example.polySpringBootProject.RoleType;
 import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.entity.*;
 import com.example.polySpringBootProject.repository.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-//@Transactional
+@Transactional
 class AdminServiceTest {
 
     @Autowired
@@ -41,6 +42,9 @@ class AdminServiceTest {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    BoardRepository boardRepository;
 
     @Test
     //@Transactional
@@ -153,23 +157,23 @@ class AdminServiceTest {
         GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
 
         GoodsEntity goodsEntity = GoodsEntity.builder()
-                .name("카테고리1상품")
+                .name("카테고리1상품테스트")
                 .price(1000)
                 .stock(100)
-                .explanation("카테고리1상품설명")
+                .explanation("카테고리1상품설명테스트")
                 .del("N")
                 .sellCnt(0)
                 .likeCnt(0)
                 .goodsCategory(goodsCategoryEntity)
                 .build();
         GoodsEntity savedGoodsEntity =  goodsRepository.save(goodsEntity);
-        savedGoodsEntity.setName("수정카테고리1상품");
+        savedGoodsEntity.setName("수정카테고리1테스트상품");
         
         // When
         GoodsEntity modifyGoodsEntity = goodsRepository.save(savedGoodsEntity);
 
         // Then
-        Assertions.assertEquals("수정카테고리1상품", modifyGoodsEntity.getName());
+        Assertions.assertEquals("수정카테고리1테스트상품", modifyGoodsEntity.getName());
 
     }
 
@@ -241,17 +245,18 @@ class AdminServiceTest {
                 .goods(saveGoods)
                 .member(saveMember)
                 .build();
-        saveGoods.addLike(likeEntity);
-        saveMember.addLike(likeEntity);
+        // saveGoods.addLike(likeEntity);
+        // saveMember.addLike(likeEntity);
+        saveGoods.setLikeCnt(saveGoods.getLikeCnt()+1);
+        goodsRepository.save(saveGoods);
         LikeEntity savedLike = likeRepository.save(likeEntity);
 
 
         // Then
         assertNotNull(savedLike);
-        assertEquals(1, saveGoods.getLikeEntitySet().size());
-        assertEquals(1, saveMember.getLikeEntitySet().size());
         assertEquals("사용자01", likeEntity.getMember().getName());
         assertTrue(adminService.likePresent(saveMember.getNum(), saveGoods.getNum()));
+        assertEquals(1,saveGoods.getLikeCnt());
     }
 
     @Test
@@ -398,15 +403,169 @@ class AdminServiceTest {
         int pageLimit = 7;
         Pageable pageable = PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "num"));
 
-        Page<GoodsEntity> goodsEntityPage = likeRepository.findByMemberId(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "num")), memberEntity1.getId());
-        Page<GoodsDto> goodsDtos = goodsEntityPage.map
-                (goods -> new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), goods.getStock(), goods.getGoodsCategory().getCategoryName(),
-                        goods.getCreatedTime()));
+        //Page<GoodsEntity> goodsEntityPage = likeRepository.findByMemberId(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "num")), memberEntity1.getId());
+//        Page<GoodsDto> goodsDtos = goodsEntityPage.map
+//                (goods -> new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), goods.getStock(), goods.getGoodsCategory().getCategoryName(),
+//                        goods.getCreatedTime()));
 
         System.out.println("**********************");
-        List<GoodsDto> goodsDtoList = goodsDtos.getContent();
-        for(GoodsDto goodsDto : goodsDtoList){
-            System.out.println(goodsDto.getGoodsName());
+        //List<GoodsDto> goodsDtoList = goodsDtos.getContent();
+//        for(GoodsDto goodsDto : goodsDtoList){
+//            System.out.println(goodsDto.getGoodsName());
+//        }
+    }
+
+    @Test
+    void entityTest(){
+        MemberEntity memberEntity = MemberEntity.builder()
+                .id("user0112")
+                .pw("12345")
+                .name("사용자0112")
+                .post("00000")
+                .addr("주소0112")
+                .addrDetail("상세주소0112")
+                .email("user0112@test.org")
+                .approval("Y")
+                .role(RoleType.ROLE_USER)
+                .build();
+        MemberEntity saveMember1 = memberRepository.save(memberEntity);
+
+        BoardEntity boardEntity = BoardEntity.builder()
+                .title("제목1")
+                .content("내용1")
+                .del("N")
+                .fileAttached(0)
+                .notice("N")
+                .noticeTop("N")
+                .secret("N")
+                .member(saveMember1)
+                .build();
+
+        BoardEntity saveBoard = boardRepository.save(boardEntity);
+        memberEntity.addBoard(saveBoard);
+        System.out.println("********************************************");
+        System.out.println(saveBoard);
+        System.out.println("********************************************");
+        System.out.println(memberEntity);
+        System.out.println("********************************************");
+        System.out.println(memberEntity.getBoardDatas());
+    }
+
+
+    @Test
+    void myLikeGoodsTest() {
+        MemberEntity memberEntity1 = MemberEntity.builder()
+                .id("test01")
+                .pw("12345")
+                .name("사용자01")
+                .post("00000")
+                .addr("주소01")
+                .addrDetail("상세주소01")
+                .email("user01@test.org")
+                .approval("Y")
+                .role(RoleType.ROLE_USER)
+                .build();
+        MemberEntity saveMember1 = memberRepository.save(memberEntity1);
+
+        MemberEntity memberEntity2 = MemberEntity.builder()
+                .id("test02")
+                .pw("12345")
+                .name("사용자02")
+                .post("00000")
+                .addr("주소01")
+                .addrDetail("상세주소02")
+                .email("user01@test.org")
+                .approval("Y")
+                .role(RoleType.ROLE_USER)
+                .build();
+        MemberEntity saveMember2 = memberRepository.save(memberEntity2);
+
+
+        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        for(int i=0;i<3;i++) {
+            GoodsEntity goodsEntity = GoodsEntity.builder()
+                    .name("카테고리1상품"+i)
+                    .price(1000)
+                    .stock(100)
+                    .explanation("카테고리1상품설명"+i)
+                    .del("N")
+                    .sellCnt(0)
+                    .likeCnt(0)
+                    .goodsCategory(goodsCategoryEntity)
+                    .build();
+            goodsRepository.save(goodsEntity);
+
+            LikeEntity likeEntity = LikeEntity.builder()
+                    .member(memberEntity1)
+                    .goods(goodsEntity)
+                    .build();
         }
+
+        for(int i=3;i<5;i++) {
+            GoodsEntity goodsEntity = GoodsEntity.builder()
+                    .name("카테고리1상품"+i)
+                    .price(1000)
+                    .stock(100)
+                    .explanation("카테고리1상품설명"+i)
+                    .del("N")
+                    .sellCnt(0)
+                    .likeCnt(0)
+                    .goodsCategory(goodsCategoryEntity)
+                    .build();
+            goodsRepository.save(goodsEntity);
+
+            LikeEntity likeEntity = LikeEntity.builder()
+                    .member(memberEntity2)
+                    .goods(goodsEntity)
+                    .build();
+            likeRepository.save(likeEntity);
+        }
+
+        for(int i=5;i<7;i++) {
+            GoodsEntity goodsEntity = GoodsEntity.builder()
+                    .name("카테고리1상품"+i)
+                    .price(1000)
+                    .stock(100)
+                    .explanation("카테고리1상품설명"+i)
+                    .del("N")
+                    .sellCnt(0)
+                    .likeCnt(0)
+                    .goodsCategory(goodsCategoryEntity)
+                    .build();
+            goodsRepository.save(goodsEntity);
+
+            LikeEntity likeEntity = LikeEntity.builder()
+                    .member(memberEntity2)
+                    .goods(goodsEntity)
+                    .build();
+            likeRepository.save(likeEntity);
+        }
+
+        MemberEntity m1 = memberRepository.findById("test01").get();
+        MemberEntity m2 = memberRepository.findById("test01").get();
+        System.out.println("***************");
+        System.out.println(m1.getLikeEntitySet());
+        System.out.println("***************");
+        System.out.println(m2.getLikeEntitySet());
+        System.out.println("***************");
+    }
+
+    @Test
+    void a(){
+        LikeEntity like = likeRepository.findById(1L).get();
+//        System.out.println("****************");
+//        System.out.println(like.getGoods());
+//        System.out.println("****************");
+//        System.out.println(like.getMember());
+//        System.out.println("****************");
+
+        MemberEntity member = memberRepository.findById(1L).get();
+        System.out.println("****************");
+        System.out.println(member.getBoardDatas());
+        System.out.println("****************");
+        System.out.println(member.getLikeEntitySet());
+        System.out.println("****************");
+        System.out.println(likeRepository.findByMemberIdList(member.getId()));
+        System.out.println("****************");
     }
 }

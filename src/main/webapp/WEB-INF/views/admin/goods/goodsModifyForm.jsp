@@ -24,22 +24,22 @@
           </div>
           <hr>
             <div id="goodsRegisterDiv">
-              <form action="/admin/goodsRegister" method="POST" enctype="multipart/form-data">
+              <form action="/admin/modifyGoods/${goodsDto.num}" method="POST" enctype="multipart/form-data">
                 <div class="mb-3"">
                   <label for="exampleInputName" class="form-label">상품명</label>
-                  <input type="text" class="form-control" id="exampleInputName" name="goodsName" required>
+                  <input type="text" class="form-control" id="exampleInputName" name="goodsName" value="${goodsDto.goodsName}" required>
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPrice" class="form-label">상품가격</label>
-                  <input type="number" class="form-control" id="exampleInputStock" name="price" required>
+                  <input type="number" class="form-control" id="exampleInputStock" name="price" value="${goodsDto.price}" required>
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputStock" class="form-label">상품수량</label>
-                  <input type="number" class="form-control" id="exampleInputStock" name="stock" required>
+                  <input type="number" class="form-control" id="exampleInputStock" name="stock" value="${goodsDto.stock}" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">카테고리</label>
-                    <select class="form-select" aria-label="Default select example" name="goodsCategory" required>
+                    <select class="form-select" aria-label="Default select example" name="goodsCategory" id="categorySelect" required>
                       <option selected>카테고리를 선택하세요</option>
                       <option value="카테고리1">카테고리1</option>
                       <option value="카테고리2">카테고리2</option>
@@ -51,13 +51,13 @@
                 </div>
                 <div class="input-group mb-3">
                   <span class="input-group-text">상품설명</span>
-                  <textarea class="form-control" aria-label="With textarea" name="goodsExplanation" ></textarea>
+                  <textarea class="form-control" aria-label="With textarea" name="goodsExplanation" >${goodsDto.goodsExplanation}</textarea>
                 </div>
                 <div class="mb-3">
                   <label for="formFile" class="form-label">상품이미지</label>
-                  <input class="form-control" type="file" id="formFile" name="goodsImageFile" required>
+                  <input class="form-control" type="file" id="formFile" name="goodsImageFile">
                 </div>
-                <button type="submit" class="btn btn-primary">상품등록</button>
+                <button type="submit" class="btn btn btn-light">상품정보수정</button>
               </form>
             </div>
           </div>
@@ -65,5 +65,8 @@
   </section>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    document.getElementById("categorySelect").value = "${goodsDto.goodsCategory}";
+  </script>
 </body>
 </html>

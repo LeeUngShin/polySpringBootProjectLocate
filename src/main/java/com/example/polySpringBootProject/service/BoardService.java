@@ -64,6 +64,7 @@ public class BoardService {
                     .build();
             m.addBoard(board);
             BoardEntity savedBoard = boardRepository.save(board);
+            m.addBoard(savedBoard);
             if(savedBoard==null) return -1L;
             Long savedBoardNum = savedBoard.getNum();
             return savedBoardNum;
@@ -115,7 +116,8 @@ public class BoardService {
                         .storedFileNameWithExtension(fileUploadService.getStoredFileNameWithExtension())
                         .boardEntity(savedBoard)
                         .build();
-                boardFileRepository.save(boardFileEntity);
+                BoardFileEntity savedBoardFileEntity = boardFileRepository.save(boardFileEntity);
+                BoardEntity savedBoardWithFile = boardRepository.findById(savedBoardNum).get();
                 return savedBoardNum;
             }
             else {

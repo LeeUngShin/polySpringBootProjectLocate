@@ -73,6 +73,7 @@ public class GoodsDto {
         goodsDto.setSellCnt(goodsEntity.getSellCnt());
         goodsDto.setLikeCnt(goodsEntity.getLikeCnt());
         goodsDto.setStoredGoodsImageName(goodsEntity.getGoodsImageEntity().getStoredFileNameWithExtension());
+        goodsDto.setRegTime(goodsEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         return goodsDto;
     }
 }
