@@ -35,6 +35,8 @@ public class QGoodsEntity extends EntityPathBase<GoodsEntity> {
 
     public final QGoodsImageEntity goodsImageEntity;
 
+    public final StringPath goodsSubCategory = createString("goodsSubCategory");
+
     public final NumberPath<Integer> likeCnt = createNumber("likeCnt", Integer.class);
 
     public final SetPath<LikeEntity, QLikeEntity> likeEntitySet = this.<LikeEntity, QLikeEntity>createSet("likeEntitySet", LikeEntity.class, QLikeEntity.class, PathInits.DIRECT2);

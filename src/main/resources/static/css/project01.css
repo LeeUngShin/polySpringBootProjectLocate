@@ -2,6 +2,7 @@ body{
   margin: 0;
 }
 
+
 #itemSearch{
     margin-top : 20px;
     padding-left : 230px;
@@ -37,22 +38,30 @@ body{
   margin : 0px 30px;
 }
 
-#main_section{
-  background-color: chartreuse;
-}
 .section{
 	flex-grow: 1;
 }
 
+/*
 .carousel-inner{
-    height:600px;
+    height:700px;
 }
+*/
+
 
 #footer{
-  flex-basis: 100px;
-  background-color: black;
-  color: white;
-  margin-top:10px;
+    display: flex;
+    flex-basis: 200px;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    color: white;
+    margin-top:10px;
+}
+
+.footerDiv{
+    margin-left : 30px;
+    margin-right : 30px;
 }
 
 
@@ -99,7 +108,6 @@ display: flex;
 .navbar-nav {
   margin: 0 auto;
 }
-
 
 .itemBucket{
     text-decoration: none;
@@ -266,3 +274,37 @@ itemBucket
   margin : 10px;
 }
 
+/* 홈화면 메인섹션*/
+/*콜랩스부분*/
+.d-block{
+    max-height : 600px;
+}
+
+
+
+/* 메뉴카테고리 */
+.homeArticleTitleDiv{
+    text-align : center;
+    margin-top : 100px;
+    margin-bottom : 50px;
+}
+
+.homeArticleTitle{
+font-family: 'NanumBarunGothicBold';
+font-size: xxx-large;
+}
+
+
+#article2, #article3{
+    padding-right : 200px;
+    padding-left : 200px;
+}
+
+.homeMenuCategory{
+    width : 100%;
+    height : 300px;
+}
+
+.card-text {
+  white-space: normal; /* or pre-wrap, pre, depending on your needs */
+}

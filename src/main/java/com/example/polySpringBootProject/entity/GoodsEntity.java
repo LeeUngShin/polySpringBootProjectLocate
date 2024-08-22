@@ -44,6 +44,9 @@ public class GoodsEntity extends BaseEntity{
     @Column
     private int likeCnt;  // 좋아요 개수
 
+    @Column
+    private String goodsSubCategory;
+
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)  // 다 대 일 (다 : 주인, 자식, 일 : 주인X, 부모)
     @JoinColumn(name = "goodsCategory_num")

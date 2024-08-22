@@ -94,6 +94,47 @@ ul{
     margin-left : 35px;
 }
 
+#memberMenuUp, #memberMenuDown{
+    display : none;
+}
+
+#memberMenuDown.memberMenuUpDownShow{
+    display : inline-block;
+}
+
+#memberMenuUp.memberMenuUpDownShow{
+    display : inline-block;
+}
+
+#boardMenuUp, #boardMenuDown{
+    display : none;
+}
+
+#boardMenuDown.boardMenuUpDownShow{
+    display : inline-block;
+}
+
+#boardMenuUp.boardMenuUpDownShow{
+    display : inline-block;
+}
+
+#goodsMenuUp, #goodsMenuDown{
+    display : none;
+}
+
+#goodsMenuDown.goodsMenuUpDownShow{
+    display : inline-block;
+}
+
+#goodsMenuUp.goodsMenuUpDownShow{
+    display : inline-block;
+}
+
+#goodsMenuUp{
+    display : none;
+}
+
+
 #memberMenu.memberLowMenu{
     display : block;
 }

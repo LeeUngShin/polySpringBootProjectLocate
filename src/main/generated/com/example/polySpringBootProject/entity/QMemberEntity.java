@@ -37,6 +37,8 @@ public class QMemberEntity extends EntityPathBase<MemberEntity> {
 
     public final StringPath email = createString("email");
 
+    public final EnumPath<com.example.polySpringBootProject.MemberGrade> grade = createEnum("grade", com.example.polySpringBootProject.MemberGrade.class);
+
     public final StringPath id = createString("id");
 
     public final SetPath<LikeEntity, QLikeEntity> likeEntitySet = this.<LikeEntity, QLikeEntity>createSet("likeEntitySet", LikeEntity.class, QLikeEntity.class, PathInits.DIRECT2);

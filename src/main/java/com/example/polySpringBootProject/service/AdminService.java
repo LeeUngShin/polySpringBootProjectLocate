@@ -209,6 +209,7 @@ public class AdminService {
                     .explanation(goodsDto.getGoodsExplanation())
                     .del("N")
                     .goodsCategory(goodsCategory)
+                    .goodsSubCategory(goodsDto.getGoodsSubCategory())
                     .likeCnt(0)
                     .sellCnt(0)
                     .build();

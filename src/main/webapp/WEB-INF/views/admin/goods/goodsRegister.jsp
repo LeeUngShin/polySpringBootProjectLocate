@@ -11,7 +11,7 @@
   <script src="/js/admin.js"></script>
   <title>Document</title>
 </head>
-<body>
+<body onload="addSubOption()">
   <%@include file = "../adminHeader.jsp" %>
 
   <section id="adminSection">
@@ -38,12 +38,18 @@
                   <input type="number" class="form-control" id="exampleInputStock" name="stock" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">카테고리</label>
-                    <select class="form-select" aria-label="Default select example" name="goodsCategory" required>
-                      <option selected>카테고리를 선택하세요</option>
-                      <option value="카테고리1">카테고리1</option>
-                      <option value="카테고리2">카테고리2</option>
-                      <option value="카테고리3">카테고리3</option>
+                    <label class="form-label">상위카테고리</label>
+                    <select class="form-select" aria-label="Default select example" name="goodsCategory" onchange = "addSubOption()" id="topOption" required>
+
+                      <option value="빵" selected>빵</option>
+                      <option value="케이크">케이크</option>
+                      <option value="디저트">디저트</option>
+                      <option value="음료">음료</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">하위카테고리</label>
+                    <select class="form-select" aria-label="Default select example" name="goodsSubCategory" id="subOption" required>
                     </select>
                 </div>
                 <div>

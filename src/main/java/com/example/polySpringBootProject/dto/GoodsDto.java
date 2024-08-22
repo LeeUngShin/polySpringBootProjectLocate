@@ -30,6 +30,8 @@ public class GoodsDto {
 
     private String goodsCategory;
 
+    private String goodsSubCategory;
+
     private String like;  // 좋아요 여부 "Y" "N"
 
     private int likeCnt;  // 좋아요 개수

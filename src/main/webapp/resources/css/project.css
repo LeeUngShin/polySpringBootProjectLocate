@@ -37,10 +37,13 @@ body{
 }
 
 #footer{
-  flex-basis: 100px;
-  background-color: black;
-  color: white;
-  margin-top:10px;
+    display: flex;
+    flex-basis: 150px;
+    justify-content: center;
+    align-items: center
+    background-color: black;
+    color: white;
+    margin-top:10px;
 }
 
 

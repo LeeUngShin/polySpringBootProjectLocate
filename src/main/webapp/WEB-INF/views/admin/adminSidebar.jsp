@@ -10,7 +10,8 @@
       <ul class="sideBar">
         <li>
           <a href="#" class="nav-link text-white" onclick="memberMenuToggle()">
-          <i class="bi bi-chevron-down"></i>
+          <i class="bi bi-chevron-down memberMenuUpDownShow" id = "memberMenuDown" ></i>
+          <i class="bi bi-chevron-up" id= "memberMenuUp" class="" ></i>
             회원관리
           </a>
         </li>
@@ -35,8 +36,9 @@
       <ul class="sideBar">
         <li>
           <a href="#" class="nav-link text-white" onclick="boardMenuToggle()">
-            <i class="bi bi-chevron-down"></i>
-            게시판관리
+            <i class="bi bi-chevron-down boardMenuUpDownShow" id="boardMenuDown"></i>
+            <i class="bi bi-chevron-up" id="boardMenuUp"></i>
+              게시판관리
           </a>
         </li>
         <ul>
@@ -60,8 +62,9 @@
       <ul class="sideBar">
         <li>
           <a href="#" class="nav-link text-white"  onclick="goodsMenuToggle()">
-            <i class="bi bi-chevron-down"></i>
-            상품관리
+            <i class="bi bi-chevron-down goodsMenuUpDownShow" id="goodsMenuDown"></i>
+            <i class="bi bi-chevron-up" id="goodsMenuUp"></i>
+              상품관리
           </a>
         </li>
         <ul>

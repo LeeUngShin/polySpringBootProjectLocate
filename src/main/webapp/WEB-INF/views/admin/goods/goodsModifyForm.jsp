@@ -11,7 +11,7 @@
   <script src="/js/admin.js"></script>
   <title>Document</title>
 </head>
-<body>
+<body onload = "modifySubOption()">
   <%@include file = "../adminHeader.jsp" %>
 
   <section id="adminSection">
@@ -20,7 +20,7 @@
           <div id="mainArticle">
           <%@include file="./goodsNav.jsp" %>
           <div style="text-align : center">
-            <h1 style="padding-top : 50px">상품등록</h1>
+            <h1 style="padding-top : 50px">상품수정</h1>
           </div>
           <hr>
             <div id="goodsRegisterDiv">
@@ -38,12 +38,21 @@
                   <input type="number" class="form-control" id="exampleInputStock" name="stock" value="${goodsDto.stock}" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">카테고리</label>
-                    <select class="form-select" aria-label="Default select example" name="goodsCategory" id="categorySelect" required>
-                      <option selected>카테고리를 선택하세요</option>
-                      <option value="카테고리1">카테고리1</option>
-                      <option value="카테고리2">카테고리2</option>
-                      <option value="카테고리3">카테고리3</option>
+                    <label class="form-label">상위카테고리</label>
+                    <select class="form-select" aria-label="Default select example" name="goodsCategory" id="topOption" value="${goodsDto.goodsCategory}" onchange = "modifySubOption()"required>
+                      <option value="빵" selected>빵</option>
+                      <option value="케이크">케이크</option>
+                      <option value="디저트">디저트</option>
+                      <option value="음료">음료</option>
+                      <!--<option value="빵" ${goodsDto.goodsCategory=='빵' ? 'selected' : ''}>빵</option>
+                      <option value="케이크" ${goodsDto.goodsCategory=='케이크' ? 'selected' : ''}>케이크</option>
+                      <option value="디저트" ${goodsDto.goodsCategory=='디저트' ? 'selected' : ''}>디저트</option>
+                      <option value="음료" ${goodsDto.goodsCategory=='음료' ? 'selected' : ''}>음료</option>-->
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">하위카테고리</label>
+                    <select class="form-select" aria-label="Default select example" name="goodsSubCategory" id="subOption" value="${goods.goodsSubCategory}" required>
                     </select>
                 </div>
                 <div>
@@ -66,7 +75,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>
-    document.getElementById("categorySelect").value = "${goodsDto.goodsCategory}";
+    document.getElementById("topOption").value = "${goodsDto.goodsCategory}";
   </script>
 </body>
 </html>

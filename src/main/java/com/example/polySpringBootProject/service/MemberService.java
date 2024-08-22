@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.service;
 
+import com.example.polySpringBootProject.MemberGrade;
 import com.example.polySpringBootProject.RoleType;
 import com.example.polySpringBootProject.dto.BoardDto;
 import com.example.polySpringBootProject.dto.MemberDto;
@@ -62,6 +63,7 @@ public class MemberService {
                 .addrDetail(joinDto.getAddrDetail())
                 .email(joinDto.getEmail())
                 .role(RoleType.ROLE_USER)
+                .grade(MemberGrade.BRONZE)
                 .approval("N")
                 .build();
 

@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.entity;
 
+import com.example.polySpringBootProject.MemberGrade;
 import com.example.polySpringBootProject.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -63,6 +64,9 @@ public class MemberEntity extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private RoleType role;
+
+    @Enumerated(EnumType.STRING)
+    private MemberGrade grade;
 
     //  mappedBy : 연관관계 주인이 아님을 나타냄, 값으로 주인에서 사용하는 외래키 필드명을 씀
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
