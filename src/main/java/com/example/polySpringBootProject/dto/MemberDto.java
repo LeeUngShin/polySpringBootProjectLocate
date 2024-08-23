@@ -47,12 +47,14 @@ public class MemberDto {
 
     private String regTime;
 
+    private String grade;
+
     public MemberDto(Long num, int price, int stock, String id, LocalDateTime createdTime){
         this.num = num;
         this.id = id;
     }
 
-    public MemberDto(Long num, String id, String post, String addr, String addrDetail, String email, String approval, LocalDateTime regTime){
+    public MemberDto(Long num, String id, String post, String addr, String addrDetail, String email, String approval, LocalDateTime regTime, String grade){
         this.num = num;
         this.id = id;
         this.post = post;
@@ -61,6 +63,7 @@ public class MemberDto {
         this.email = email;
         this.approval = approval;
         this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.grade = grade;
     }
 
     public static MemberDto entityToDto(MemberEntity member) {

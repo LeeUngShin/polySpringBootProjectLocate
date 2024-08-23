@@ -1,10 +1,12 @@
 package com.example.polySpringBootProject.service;
 
+import com.example.polySpringBootProject.MemberGrade;
 import com.example.polySpringBootProject.RoleType;
 import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.entity.*;
 import com.example.polySpringBootProject.repository.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -32,6 +35,9 @@ class AdminServiceTest {
     GoodsCategoryRepository goodsCategoryRepository;
 
     @Autowired
+    GoodsSubCategoryRepository goodsSubCategoryRepository;
+
+    @Autowired
     GoodsImageRepository goodsImageRepository;
 
     @Autowired
@@ -46,11 +52,14 @@ class AdminServiceTest {
     @Autowired
     BoardRepository boardRepository;
 
+    @Autowired
+    EntityManager em;
+
     @Test
     //@Transactional
     void goodsRegister() {
         // Given
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        GoodsSubCategoryEntity goodsSubCategoryEntity = goodsSubCategoryRepository.findById(1L).get();
         GoodsEntity goodsEntity = null;
         goodsEntity = GoodsEntity.builder()
                 .name("카테고리1상품")
@@ -60,7 +69,7 @@ class AdminServiceTest {
                 .del("N")
                 .sellCnt(0)
                 .likeCnt(0)
-                .goodsCategory(goodsCategoryEntity)
+                .goodsSubCategory(goodsSubCategoryEntity)
                 .build();
         // when
         GoodsEntity saveGoodsEntity =  goodsRepository.save(goodsEntity);
@@ -74,7 +83,7 @@ class AdminServiceTest {
         //@Transactional
     void goodsRegisters() {
         // Given
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        GoodsSubCategoryEntity goodsSubCategoryEntity = goodsSubCategoryRepository.findById(1L).get();
         for(int i=0;i<32;i++) {
             GoodsEntity goodsEntity = GoodsEntity.builder()
                     .name("카테고리1상품"+i)
@@ -84,7 +93,7 @@ class AdminServiceTest {
                     .del("N")
                     .sellCnt(0)
                     .likeCnt(0)
-                    .goodsCategory(goodsCategoryEntity)
+                    .goodsSubCategory(goodsSubCategoryEntity)
                     .build();
 
             GoodsImageEntity goodsImageEntity = GoodsImageEntity.builder()
@@ -103,7 +112,7 @@ class AdminServiceTest {
     @Test
     void goodsDetail() {
         // Given
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        GoodsSubCategoryEntity goodsSubCategoryEntity = goodsSubCategoryRepository.findById(1L).get();
         GoodsEntity goodsEntity = null;
         goodsEntity = GoodsEntity.builder()
                 .name("카테고리1상품")
@@ -113,7 +122,7 @@ class AdminServiceTest {
                 .del("N")
                 .sellCnt(0)
                 .likeCnt(0)
-                .goodsCategory(goodsCategoryEntity)
+                .goodsSubCategory(goodsSubCategoryEntity)
                 .build();
         GoodsEntity saveGoodsEntity =  goodsRepository.save(goodsEntity);
 
@@ -128,7 +137,7 @@ class AdminServiceTest {
     @Test
     void delete(){
         // Given
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        GoodsSubCategoryEntity goodsSubCategoryEntity = goodsSubCategoryRepository.findById(1L).get();
 
         GoodsEntity goodsEntity = GoodsEntity.builder()
                 .name("카테고리1상품")
@@ -138,7 +147,7 @@ class AdminServiceTest {
                 .del("N")
                 .sellCnt(0)
                 .likeCnt(0)
-                .goodsCategory(goodsCategoryEntity)
+                .goodsSubCategory(goodsSubCategoryEntity)
                 .build();
         GoodsEntity savedGoodsEntity =  goodsRepository.save(goodsEntity);
 
@@ -154,7 +163,7 @@ class AdminServiceTest {
     @Test
     void goodsModify() {
         // Given
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        GoodsSubCategoryEntity goodsSubCategoryEntity = goodsSubCategoryRepository.findById(1L).get();
 
         GoodsEntity goodsEntity = GoodsEntity.builder()
                 .name("카테고리1상품테스트")
@@ -164,7 +173,7 @@ class AdminServiceTest {
                 .del("N")
                 .sellCnt(0)
                 .likeCnt(0)
-                .goodsCategory(goodsCategoryEntity)
+                .goodsSubCategory(goodsSubCategoryEntity)
                 .build();
         GoodsEntity savedGoodsEntity =  goodsRepository.save(goodsEntity);
         savedGoodsEntity.setName("수정카테고리1테스트상품");
@@ -180,7 +189,7 @@ class AdminServiceTest {
     @Test
     void goodsList() {
         // Given
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        GoodsSubCategoryEntity goodsSubCategoryEntity = goodsSubCategoryRepository.findById(1L).get();
         for(int i=1;i<=34;i++) {
             GoodsEntity goodsEntity = GoodsEntity.builder()
                     .name("카테고리1상품"+i)
@@ -190,7 +199,7 @@ class AdminServiceTest {
                     .del("N")
                     .sellCnt(0)
                     .likeCnt(0)
-                    .goodsCategory(goodsCategoryEntity)
+                    .goodsSubCategory(goodsSubCategoryEntity)
                     .build();
             goodsRepository.save(goodsEntity);
         }
@@ -227,7 +236,7 @@ class AdminServiceTest {
                 .build();
         MemberEntity saveMember = memberRepository.save(memberEntity);
 
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        GoodsSubCategoryEntity goodsSubCategoryEntity = goodsSubCategoryRepository.findById(1L).get();
         GoodsEntity goodsEntity = GoodsEntity.builder()
                 .name("카테고리1상품")
                 .price(1000)
@@ -236,7 +245,7 @@ class AdminServiceTest {
                 .del("N")
                 .sellCnt(0)
                 .likeCnt(0)
-                .goodsCategory(goodsCategoryEntity)
+                .goodsSubCategory(goodsSubCategoryEntity)
                 .build();
         GoodsEntity saveGoods = goodsRepository.save(goodsEntity);
 
@@ -274,7 +283,7 @@ class AdminServiceTest {
                 .build();
         MemberEntity saveMember = memberRepository.save(memberEntity);
 
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        GoodsSubCategoryEntity goodsSubCategoryEntity = goodsSubCategoryRepository.findById(1L).get();
         GoodsEntity goodsEntity = GoodsEntity.builder()
                 .name("카테고리2상품")
                 .price(1000)
@@ -283,7 +292,7 @@ class AdminServiceTest {
                 .del("N")
                 .sellCnt(0)
                 .likeCnt(0)
-                .goodsCategory(goodsCategoryEntity)
+                .goodsSubCategory(goodsSubCategoryEntity)
                 .build();
         GoodsEntity saveGoods = goodsRepository.save(goodsEntity);
 
@@ -332,7 +341,7 @@ class AdminServiceTest {
         MemberEntity saveMember2 = memberRepository.save(memberEntity2);
 
 
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        GoodsSubCategoryEntity goodsSubCategoryEntity = goodsSubCategoryRepository.findById(1L).get();
         for(int i=0;i<5;i++) {
             GoodsEntity goodsEntity = GoodsEntity.builder()
                     .name("카테고리1상품"+i)
@@ -342,7 +351,7 @@ class AdminServiceTest {
                     .del("N")
                     .sellCnt(0)
                     .likeCnt(0)
-                    .goodsCategory(goodsCategoryEntity)
+                    .goodsSubCategory(goodsSubCategoryEntity)
                     .build();
             goodsRepository.save(goodsEntity);
 
@@ -364,7 +373,7 @@ class AdminServiceTest {
                     .del("N")
                     .sellCnt(0)
                     .likeCnt(0)
-                    .goodsCategory(goodsCategoryEntity)
+                    .goodsSubCategory(goodsSubCategoryEntity)
                     .build();
             goodsRepository.save(goodsEntity);
 
@@ -386,7 +395,7 @@ class AdminServiceTest {
                     .del("N")
                     .sellCnt(0)
                     .likeCnt(0)
-                    .goodsCategory(goodsCategoryEntity)
+                    .goodsSubCategory(goodsSubCategoryEntity)
                     .build();
             goodsRepository.save(goodsEntity);
 
@@ -481,7 +490,7 @@ class AdminServiceTest {
         MemberEntity saveMember2 = memberRepository.save(memberEntity2);
 
 
-        GoodsCategoryEntity goodsCategoryEntity = goodsCategoryRepository.findById(1L).get();
+        GoodsSubCategoryEntity goodsSubCategoryEntity = goodsSubCategoryRepository.findById(1L).get();
         for(int i=0;i<3;i++) {
             GoodsEntity goodsEntity = GoodsEntity.builder()
                     .name("카테고리1상품"+i)
@@ -491,7 +500,7 @@ class AdminServiceTest {
                     .del("N")
                     .sellCnt(0)
                     .likeCnt(0)
-                    .goodsCategory(goodsCategoryEntity)
+                    .goodsSubCategory(goodsSubCategoryEntity)
                     .build();
             goodsRepository.save(goodsEntity);
 
@@ -510,7 +519,7 @@ class AdminServiceTest {
                     .del("N")
                     .sellCnt(0)
                     .likeCnt(0)
-                    .goodsCategory(goodsCategoryEntity)
+                    .goodsSubCategory(goodsSubCategoryEntity)
                     .build();
             goodsRepository.save(goodsEntity);
 
@@ -530,7 +539,7 @@ class AdminServiceTest {
                     .del("N")
                     .sellCnt(0)
                     .likeCnt(0)
-                    .goodsCategory(goodsCategoryEntity)
+                    .goodsSubCategory(goodsSubCategoryEntity)
                     .build();
             goodsRepository.save(goodsEntity);
 
@@ -550,22 +559,6 @@ class AdminServiceTest {
         System.out.println("***************");
     }
 
-    @Test
-    void a(){
-        LikeEntity like = likeRepository.findById(1L).get();
-//        System.out.println("****************");
-//        System.out.println(like.getGoods());
-//        System.out.println("****************");
-//        System.out.println(like.getMember());
-//        System.out.println("****************");
 
-        MemberEntity member = memberRepository.findById(1L).get();
-        System.out.println("****************");
-        System.out.println(member.getBoardDatas());
-        System.out.println("****************");
-        System.out.println(member.getLikeEntitySet());
-        System.out.println("****************");
-        System.out.println(likeRepository.findByMemberIdList(member.getId()));
-        System.out.println("****************");
-    }
 }
+

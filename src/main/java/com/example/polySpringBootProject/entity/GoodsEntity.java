@@ -39,17 +39,37 @@ public class GoodsEntity extends BaseEntity{
     private String del;  // 상품삭제 여부
 
     @Column
+    private int kcal;  // 칼로리
+
+    @Column
+    private int protein;  // 단백질
+
+    @Column
+    private int fat;  // 지방
+
+    @Column
+    private int natrium;  // 나트륨
+
+    @Column
+    private int sugar;  // 당류
+    
+    @Column
+    private int weight;  // 중량
+
+    @Column
     private int sellCnt;  // 판매횟수
 
     @Column
     private int likeCnt;  // 좋아요 개수
 
-    @Column
-    private String goodsSubCategory;
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)  // 다 대 일 (다 : 주인, 자식, 일 : 주인X, 부모)
+    @JoinColumn(name = "goodsSubCategoryNum")
+    private GoodsSubCategoryEntity goodsSubCategory;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)  // 다 대 일 (다 : 주인, 자식, 일 : 주인X, 부모)
-    @JoinColumn(name = "goodsCategory_num")
+    @JoinColumn(name = "goodsCategoryNum")
     private GoodsCategoryEntity goodsCategory;
 
     @ToString.Exclude

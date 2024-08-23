@@ -6,6 +6,7 @@ import com.example.polySpringBootProject.dto.BoardResponse;
 import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.entity.*;
+import com.example.polySpringBootProject.entity.GoodsSubCategoryEntity;
 import com.example.polySpringBootProject.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
@@ -34,7 +35,7 @@ public class AdminService {
     @Autowired
     GoodsRepository goodsRepository;
     @Autowired
-    GoodsCategoryRepository goodsCategoryRepository;
+    GoodsSubCategoryRepository goodsSubCategoryRepository;
     @Autowired
     GoodsImageRepository goodsImageRepository;
     @Autowired
@@ -61,7 +62,7 @@ public class AdminService {
         int pageLimit = 10;  // 한페이지에 보여줄 회원 수
         Page<MemberEntity> memberEntityPage = memberRepository.findByApproval(PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N");
         Page<MemberDto> memberDtoPage = memberEntityPage.map
-                (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime()));
+                (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime(), member.getGrade().toString()));
         return memberDtoPage;
     }
     @Transactional
@@ -81,7 +82,7 @@ public class AdminService {
         int pageLimit = 10;  // 한페이지에 보여줄 회원 수
         Page<MemberEntity> memberEntityPage = memberRepository.findAll(PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
         Page<MemberDto> memberDtoPage = memberEntityPage.map
-                (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime()));
+                (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime(), member.getGrade().toString()));
         return memberDtoPage;
     }
 
@@ -193,11 +194,11 @@ public class AdminService {
     @Transactional
     public String goodsRegister(GoodsDto goodsDto){
 
-        Optional<GoodsCategoryEntity> goodsCategoryEntity = goodsCategoryRepository.findByCategoryName(goodsDto.getGoodsCategory());
-        if(goodsCategoryEntity.isEmpty()){
+        Optional<GoodsSubCategoryEntity> goodsSubCategoryEntity = goodsSubCategoryRepository.findByCategoryName(goodsDto.getGoodsSubCategory());
+        if(goodsSubCategoryEntity.isEmpty()){
             throw new EntityNotFoundException("해당 카테고리를 찾을 수 없습니다.");
         }
-        GoodsCategoryEntity goodsCategory = goodsCategoryEntity.get();
+        GoodsSubCategoryEntity goodsSubCategory = goodsSubCategoryEntity.get();
 
         try{
             duplicateGoodsName(goodsDto.getGoodsName());
@@ -208,8 +209,13 @@ public class AdminService {
                     .stock(goodsDto.getStock())
                     .explanation(goodsDto.getGoodsExplanation())
                     .del("N")
-                    .goodsCategory(goodsCategory)
-                    .goodsSubCategory(goodsDto.getGoodsSubCategory())
+                    .goodsSubCategory(goodsSubCategory)
+                    .kcal(goodsDto.getKcal())
+                    .protein(goodsDto.getProtein())
+                    .fat(goodsDto.getFat())
+                    .natrium(goodsDto.getNatrium())
+                    .sugar(goodsDto.getSugar())
+                    .weight(goodsDto.getWeight())
                     .likeCnt(0)
                     .sellCnt(0)
                     .build();
@@ -322,7 +328,7 @@ public class AdminService {
         int pageLimit = 10;  // 한페이지에 보여줄 회원 수
         Page<GoodsEntity> goodsEntityPage = goodsRepository.findAllByDel(PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N");
         Page<GoodsDto> goodsDtoPage = goodsEntityPage.map
-                (goods -> new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), goods.getStock(), goods.getGoodsCategory().getCategoryName(), goods.getCreatedTime(), goods.getGoodsImageEntity().getStoredFileNameWithExtension()));
+                (goods -> new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), goods.getStock(), goods.getGoodsSubCategory().getCategoryName(), goods.getCreatedTime(), goods.getGoodsImageEntity().getStoredFileNameWithExtension()));
         return goodsDtoPage;
     }
 

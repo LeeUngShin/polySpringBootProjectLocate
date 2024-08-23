@@ -17,12 +17,13 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        상품
+                        상품안내
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">상품카테고리1</a></li>
-                        <li><a class="dropdown-item" href="#">상품카테고리2</a></li>
-                        <li><a class="dropdown-item" href="#">상품카테고리3</a></li>
+                        <li><a class="dropdown-item" href="/goods/menu?topCategory=bread&subCategory=all">빵</a></li>
+                        <li><a class="dropdown-item" href="/goods/menu?topCategory=cake&subCategory=all">케이크</a></li>
+                        <li><a class="dropdown-item" href="/goods/menu?topCategory=dessert&subCategory=all">디저트</a></li>
+                        <li><a class="dropdown-item" href="/goods/menu?topCategory=drink&subCategory=all">음료</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

@@ -52,6 +52,30 @@
                     <select class="form-select" aria-label="Default select example" name="goodsSubCategory" id="subOption" required>
                     </select>
                 </div>
+                <div class="mb-3"">
+                  <label for="exampleInputKcal" class="form-label">칼로리(Kcal)</label>
+                  <input type="number" class="form-control" id="exampleInputKcal" name="kcal" required>
+                </div>
+                <div class="mb-3"">
+                  <label for="exampleInputProtein" class="form-label">단백질(g)</label>
+                  <input type="number" class="form-control" id="exampleInputProtein" name="protein" required>
+                </div>
+                <div class="mb-3"">
+                  <label for="exampleInputFat" class="form-label">지방(g)</label>
+                  <input type="number" class="form-control" id="exampleInputFat" name="fat" required>
+                </div>
+                <div class="mb-3"">
+                  <label for="exampleInputNatrium" class="form-label">나트륨(mg)</label>
+                  <input type="text" class="form-control" id="exampleInputNatrium" name="natrium" required>
+                </div>
+                <div class="mb-3"">
+                  <label for="exampleInputSuger" class="form-label">당류(g)</label>
+                  <input type="text" class="form-control" id="exampleInputSuger" name="sugar" required>
+                </div>
+                <div class="mb-3"">
+                  <label for="exampleInputWeight" class="form-label">중량(g)</label>
+                  <input type="text" class="form-control" id="exampleInputWeight" name="weight" required>
+                </div>
                 <div>
                   <label class="form-label">상품설명</label>
                 </div>

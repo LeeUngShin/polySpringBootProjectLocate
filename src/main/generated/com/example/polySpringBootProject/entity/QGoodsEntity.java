@@ -31,11 +31,15 @@ public class QGoodsEntity extends EntityPathBase<GoodsEntity> {
 
     public final StringPath explanation = createString("explanation");
 
+    public final NumberPath<Integer> fat = createNumber("fat", Integer.class);
+
     public final QGoodsCategoryEntity goodsCategory;
 
     public final QGoodsImageEntity goodsImageEntity;
 
-    public final StringPath goodsSubCategory = createString("goodsSubCategory");
+    public final QGoodsSubCategoryEntity goodsSubCategory;
+
+    public final NumberPath<Integer> kcal = createNumber("kcal", Integer.class);
 
     public final NumberPath<Integer> likeCnt = createNumber("likeCnt", Integer.class);
 
@@ -43,16 +47,24 @@ public class QGoodsEntity extends EntityPathBase<GoodsEntity> {
 
     public final StringPath name = createString("name");
 
+    public final NumberPath<Integer> natrium = createNumber("natrium", Integer.class);
+
     public final NumberPath<Long> num = createNumber("num", Long.class);
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
+
+    public final NumberPath<Integer> protein = createNumber("protein", Integer.class);
 
     public final NumberPath<Integer> sellCnt = createNumber("sellCnt", Integer.class);
 
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
 
+    public final NumberPath<Integer> sugar = createNumber("sugar", Integer.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedTime = _super.updatedTime;
+
+    public final NumberPath<Integer> weight = createNumber("weight", Integer.class);
 
     public QGoodsEntity(String variable) {
         this(GoodsEntity.class, forVariable(variable), INITS);
@@ -74,6 +86,7 @@ public class QGoodsEntity extends EntityPathBase<GoodsEntity> {
         super(type, metadata, inits);
         this.goodsCategory = inits.isInitialized("goodsCategory") ? new QGoodsCategoryEntity(forProperty("goodsCategory")) : null;
         this.goodsImageEntity = inits.isInitialized("goodsImageEntity") ? new QGoodsImageEntity(forProperty("goodsImageEntity"), inits.get("goodsImageEntity")) : null;
+        this.goodsSubCategory = inits.isInitialized("goodsSubCategory") ? new QGoodsSubCategoryEntity(forProperty("goodsSubCategory"), inits.get("goodsSubCategory")) : null;
     }
 
 }

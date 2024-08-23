@@ -134,8 +134,12 @@ function modifySubOption(){
         subOption3.text = "도넛";
         subOption.add(subOption3);
         var subOption4 = document.createElement("option");
-        subOption4.value = "파이/패스트리";
-        subOption4.text = "파이/패스트리";
+        subOption4.value = "파이";
+        subOption4.text = "파이";
+        subOption.add(subOption4);
+        var subOption4 = document.createElement("option");
+        subOption4.value = "카스테라";
+        subOption4.text = "카스테라";
         subOption.add(subOption4);
     }
     else if(topOption == "케이크"){
@@ -174,8 +178,8 @@ function modifySubOption(){
         subOption2.text = "아이스크림";
         subOption.add(subOption2);
         var subOption3 = document.createElement("option");
-        subOption3.value = "초콜릿/캔디";
-        subOption3.text = "초콜릿/캔디";
+        subOption3.value = "초콜릿";
+        subOption3.text = "초콜릿";
         subOption.add(subOption3);
         var subOption4 = document.createElement("option");
         subOption4.value = "잼";

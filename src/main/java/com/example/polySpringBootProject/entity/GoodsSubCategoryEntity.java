@@ -13,9 +13,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor  // 모든 변수를 매개변수로 받는 생성자 자동생성
 @NoArgsConstructor  // 매개변수가 없는 생성자 자동생성
-@Table(name = "tbl_goodsCategory")  // 테이블 이름 지정(이 애노테이션 안쓰면 클래스명이 테이블명)
+@Table(name = "tbl_goodsSubCategory")  // 테이블 이름 지정(이 애노테이션 안쓰면 클래스명이 테이블명)
 @Entity  // 이 클래스로 DB 생성
-public class GoodsCategoryEntity {
+public class GoodsSubCategoryEntity {
     @Id  // 기본키 속성
     @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
     private Long num;
@@ -23,9 +23,11 @@ public class GoodsCategoryEntity {
     @Column(length = 200, nullable = false)  // 일반 속성
     private String categoryName;
 
-    @OneToMany(mappedBy = "goodsCategoryEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<GoodsSubCategoryEntity> goodsSubCategoryEntityList = new ArrayList<>();
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)  // 다 대 일 (다 : 주인, 자식, 일 : 주인X, 부모)
+    @JoinColumn(name = "goodsCategoryNum")  // 연관관계 주인임을 나타냄 , name = 외래키 이름
+    private GoodsCategoryEntity goodsCategoryEntity;
 
-    @OneToMany(mappedBy = "goodsCategory", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "goodsSubCategory", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<GoodsEntity> goodsList = new ArrayList<>();
 }

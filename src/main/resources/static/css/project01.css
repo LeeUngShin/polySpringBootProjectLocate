@@ -57,6 +57,8 @@ body{
     background-color: black;
     color: white;
     margin-top:10px;
+    font-size : 10px;
+    font-size : 13px;
 }
 
 .footerDiv{
@@ -305,6 +307,8 @@ font-size: xxx-large;
     height : 300px;
 }
 
+/*
 .card-text {
-  white-space: normal; /* or pre-wrap, pre, depending on your needs */
+  white-space: normal;
 }
+*/

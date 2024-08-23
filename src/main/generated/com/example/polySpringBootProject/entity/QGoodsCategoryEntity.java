@@ -24,6 +24,8 @@ public class QGoodsCategoryEntity extends EntityPathBase<GoodsCategoryEntity> {
 
     public final ListPath<GoodsEntity, QGoodsEntity> goodsList = this.<GoodsEntity, QGoodsEntity>createList("goodsList", GoodsEntity.class, QGoodsEntity.class, PathInits.DIRECT2);
 
+    public final ListPath<GoodsSubCategoryEntity, QGoodsSubCategoryEntity> goodsSubCategoryEntityList = this.<GoodsSubCategoryEntity, QGoodsSubCategoryEntity>createList("goodsSubCategoryEntityList", GoodsSubCategoryEntity.class, QGoodsSubCategoryEntity.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> num = createNumber("num", Long.class);
 
     public QGoodsCategoryEntity(String variable) {

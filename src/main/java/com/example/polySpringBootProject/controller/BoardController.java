@@ -3,11 +3,14 @@ package com.example.polySpringBootProject.controller;
 import com.example.polySpringBootProject.dto.BoardDto;
 import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.entity.BoardEntity;
+import com.example.polySpringBootProject.entity.GoodsSubCategoryEntity;
+import com.example.polySpringBootProject.repository.GoodsSubCategoryRepository;
 import com.example.polySpringBootProject.service.BoardService;
 import com.example.polySpringBootProject.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.Subject;
 import java.io.IOException;
 import java.util.List;
 
@@ -33,6 +37,9 @@ public class BoardController {
         this.utils = utils;
         this.memberService = memberService;
     }
+
+    @Autowired
+    GoodsSubCategoryRepository goodsSubCategoryRepository;
 
 //	@RequestMapping(value="/list", method=RequestMethod.GET)
 //	public String boardList(HttpServletRequest request) {
@@ -258,4 +265,5 @@ public class BoardController {
         model.addAttribute("boardType", boardType);
         return "board/boardPaging";
     }
+
 }

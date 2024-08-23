@@ -20,7 +20,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-//@Transactional
+@Transactional
 class BoardServiceTest {
 
     @Autowired
@@ -93,7 +93,6 @@ class BoardServiceTest {
 //    }
 
     @Test
-    @Transactional
     void entityTest(){
         MemberEntity memberEntity1 = MemberEntity.builder()
                 .id("test05")
