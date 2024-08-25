@@ -95,7 +95,7 @@ public class GoodsDto {
         goodsDto.setGoodsExplanation(goodsEntity.getExplanation());
         goodsDto.setSellCnt(goodsEntity.getSellCnt());
         goodsDto.setLikeCnt(goodsEntity.getLikeCnt());
-        goodsDto.setStoredGoodsImageName(goodsEntity.getGoodsImageEntity().getStoredFileNameWithExtension());
+        //goodsDto.setStoredGoodsImageName(goodsEntity.getGoodsImageEntity().getStoredFileNameWithExtension());
         goodsDto.setRegTime(goodsEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         goodsDto.setKcal(goodsEntity.getKcal());
         goodsDto.setProtein(goodsEntity.getProtein());

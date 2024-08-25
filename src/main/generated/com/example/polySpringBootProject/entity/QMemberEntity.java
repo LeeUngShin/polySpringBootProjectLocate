@@ -53,6 +53,8 @@ public class QMemberEntity extends EntityPathBase<MemberEntity> {
 
     public final EnumPath<com.example.polySpringBootProject.RoleType> role = createEnum("role", com.example.polySpringBootProject.RoleType.class);
 
+    public final NumberPath<Integer> sellTotalPrice = createNumber("sellTotalPrice", Integer.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedTime = _super.updatedTime;
 

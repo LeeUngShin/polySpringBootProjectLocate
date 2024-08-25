@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GoodsRepository extends JpaRepository<GoodsEntity, Long> {
@@ -25,12 +26,14 @@ public interface GoodsRepository extends JpaRepository<GoodsEntity, Long> {
     //@Query()
     //List<GoodsEntity> findByGoodsCategoryCategoryName(String topCategory);
 
-    List<GoodsEntity> findByGoodsCategoryCategoryNameTop4OrderBySellCntDescLikeCntDesc(String topCategory);
+    List<GoodsEntity> findTop4ByGoodsCategoryCategoryNameOrderBySellCntDescLikeCntDesc(String topCategory);
 
     //@Query()
     //List<GoodsEntity> findByGoodsSubCategoryCategoryNameTop4OrderBySellCntDescLikeCntDesc(String topCategory);
 
-    List<GoodsEntity> findByGoodsSubCategoryCategoryNameTop4OrderBySellCntDescLikeCntDesc(String topCategory);
+    List<GoodsEntity> findTop4ByGoodsSubCategoryCategoryNameOrderBySellCntDescLikeCntDesc(String topCategory);
+
+    Optional<GoodsEntity> findByName(String goodsName);
 
 
 

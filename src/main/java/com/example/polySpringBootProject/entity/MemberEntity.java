@@ -52,7 +52,11 @@ public class MemberEntity extends BaseEntity{
     @Column
     private String email;
 
+    @Column
     private String approval;
+
+    @Column
+    private int sellTotalPrice;
 
 //    @CreationTimestamp
 //    //@Temporal(TemporalType.TIMESTAMP)
