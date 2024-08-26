@@ -65,34 +65,34 @@
             <div id="pageNum">
                 <div style="flex-grow: 1;padding-left: 150px;">
                     <c:if test="${empty keyword}">
-                        <a href="/board/board?board=${boardType}&age=1">처음</a>
-                    <c:choose>
-                       <c:when test="${currentPage<=blockLimit}">  <!--첫페이지이면 전페이지가 없음-->
-                          이전
-                       </c:when>
-                        <c:otherwise>
-                            <a href="/board/board?board=${boardType}&page=${startPage-1}">이전</a>
-                        </c:otherwise>
-                    </c:choose>
-                    <c:forEach begin="${startPage}" end="${endPage}" var="count">
+                            <a href="/board/board?board=${boardType}&age=1">처음</a>
                         <c:choose>
-                            <c:when test = "${count != currentPage}">
-                                <a href="/board/board?board=${boardType}&page=${count}">${count}</a>
-                            </c:when>
+                           <c:when test="${currentPage<=blockLimit}">  <!--첫페이지이면 전페이지가 없음-->
+                              이전
+                           </c:when>
                             <c:otherwise>
-                                ${count}
+                                <a href="/board/board?board=${boardType}&page=${startPage-1}">이전</a>
                             </c:otherwise>
                         </c:choose>
-                    </c:forEach>
-                    <c:choose>
-                        <c:when test="${isLast}">
-                            다음
-                        </c:when>
-                        <c:otherwise>
-                            <a href="/board/board?board=${boardType}&page=${endPage+1}">다음</a>
-                        </c:otherwise>
-                    </c:choose>
-                    <a href="/board/board?board=${boardType}&page=${boardList.totalPages}">마지막</a>
+                        <c:forEach begin="${startPage}" end="${endPage}" var="count">
+                            <c:choose>
+                                <c:when test = "${count != currentPage}">
+                                    <a href="/board/board?board=${boardType}&page=${count}">${count}</a>
+                                </c:when>
+                                <c:otherwise>
+                                    ${count}
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${isLast}">
+                                다음
+                            </c:when>
+                            <c:otherwise>
+                                <a href="/board/board?board=${boardType}&page=${endPage+1}">다음</a>
+                            </c:otherwise>
+                        </c:choose>
+                        <a href="/board/board?board=${boardType}&page=${boardList.totalPages}">마지막</a>
                     </c:if>
 
                     <c:if test="${not empty keyword}">

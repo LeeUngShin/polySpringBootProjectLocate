@@ -1,8 +1,10 @@
 package com.example.polySpringBootProject.service;
 
 import com.example.polySpringBootProject.dto.GoodsDto;
+import com.example.polySpringBootProject.entity.GoodsCategoryEntity;
 import com.example.polySpringBootProject.entity.GoodsEntity;
 import com.example.polySpringBootProject.entity.GoodsSubCategoryEntity;
+import com.example.polySpringBootProject.repository.GoodsCategoryRepository;
 import com.example.polySpringBootProject.repository.GoodsRepository;
 import com.example.polySpringBootProject.repository.GoodsSubCategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,23 +28,43 @@ public class GoodsService {
     @Autowired
     GoodsSubCategoryRepository goodsSubCategoryRepository;
 
+    @Autowired
+    GoodsCategoryRepository goodsCategoryRepository;
+
     public Page<GoodsDto> getGoods(Pageable pageable, String topCategory, String subCategory){
 
         int page = pageable.getPageNumber()-1;
         int pageLimit = 8;
 
-        if(subCategory.equals("all")){
-            Page<GoodsEntity> goodsEntityPageTopCategoryAll = goodsRepository.findByGoodsCategoryCategoryName(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "name")), topCategory);
-            Page<GoodsDto> goodsDto = goodsEntityPageTopCategoryAll.map
-                    (goods -> new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), goods.getGoodsImageEntity().getStoredFileNameWithExtension()));
-            return goodsDto;
+        Page<GoodsDto> goodsDto;
 
+        if(subCategory.equals("all")){
+            Page<GoodsEntity> goodsEntityPageTopCategoryAll = goodsRepository.findByGoodsCategoryCategoryNameOrderByNumDesc(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "name")), topCategory);
+
+            goodsDto = goodsEntityPageTopCategoryAll.map
+                    (goods -> {
+                        if (goods.getGoodsImageEntity() != null && !goods.getGoodsImageEntity().isEmpty()) {
+                            String imageFileName = goods.getGoodsImageEntity().get(0).getStoredFileNameWithExtension();
+                            return new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), imageFileName);
+                        } else {
+                            // 비어 있는 경우
+                            return new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice());
+                        }
+                    });
         }else {
-            Page<GoodsEntity> goodsEntityPageSubCategory =  goodsRepository.findByGoodsCategoryCategoryName(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "name")), subCategory);
-            Page<GoodsDto> goodsDto = goodsEntityPageSubCategory.map
-                    (goods -> new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), goods.getGoodsImageEntity().getStoredFileNameWithExtension()));
-            return goodsDto;
+            Page<GoodsEntity> goodsEntityPageSubCategory = goodsRepository.findByGoodsSubCategoryCategoryNameOrderByNumDesc(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "name")), subCategory);
+            goodsDto = goodsEntityPageSubCategory.map
+                    (goods -> {
+                        if (goods.getGoodsImageEntity() != null && !goods.getGoodsImageEntity().isEmpty()) {
+                            String imageFileName = goods.getGoodsImageEntity().get(0).getStoredFileNameWithExtension();
+                            return new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), imageFileName);
+                        } else {
+                            // 비어 있는 경우
+                            return new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice());
+                        }
+                    });
         }
+        return goodsDto;
     }
 
     public List<GoodsDto> getBestGoods(String topCategory, String subCategory){
@@ -51,8 +73,15 @@ public class GoodsService {
             List<GoodsEntity> goodsEntityTopCategoryAll = goodsRepository.findTop4ByGoodsCategoryCategoryNameOrderBySellCntDescLikeCntDesc(topCategory);
             List<GoodsDto> goodsDtoList = new ArrayList<>();
             for(GoodsEntity goodsEntity : goodsEntityTopCategoryAll){
-                GoodsDto goodsDto = GoodsDto.entityToGoodsDto(goodsEntity);
-                goodsDtoList.add(goodsDto);
+                if(goodsEntity.getGoodsImageEntity().isEmpty() || goodsEntity.getGoodsImageEntity()==null) {
+                    GoodsDto goodsDto = GoodsDto.entityToGoodsDtoNotImg(goodsEntity);
+                    goodsDtoList.add(goodsDto);
+
+                }
+                else{
+                    GoodsDto goodsDto = GoodsDto.entityToGoodsDto(goodsEntity);
+                    goodsDtoList.add(goodsDto);
+                }
             }
             return goodsDtoList;
 
@@ -60,28 +89,43 @@ public class GoodsService {
             List<GoodsEntity> goodsEntitySubCategory =  goodsRepository.findTop4ByGoodsSubCategoryCategoryNameOrderBySellCntDescLikeCntDesc(subCategory);
             List<GoodsDto> goodsDtoList = new ArrayList<>();
             for(GoodsEntity goodsEntity : goodsEntitySubCategory){
-                GoodsDto goodsDto = GoodsDto.entityToGoodsDto(goodsEntity);
-                goodsDtoList.add(goodsDto);
+                if(goodsEntity.getGoodsImageEntity().isEmpty() || goodsEntity.getGoodsImageEntity()==null) {
+                    GoodsDto goodsDto = GoodsDto.entityToGoodsDtoNotImg(goodsEntity);
+                    goodsDtoList.add(goodsDto);
+                }
+                else{
+                    GoodsDto goodsDto = GoodsDto.entityToGoodsDto(goodsEntity);
+                    goodsDtoList.add(goodsDto);
+                }
             }
             return goodsDtoList;
         }
-
     }
 
-    public List<GoodsSubCategoryEntity> getSubCategoryList(){
+    public List<GoodsSubCategoryEntity> getSubCategoryList(String topCategory){
 
-        return goodsSubCategoryRepository.findAll();
-
+        List<GoodsSubCategoryEntity> goodsSubCategoryEntityList = goodsSubCategoryRepository.findByGoodsCategoryEntityCategoryName(topCategory);
+        return goodsSubCategoryEntityList;
     }
 
-    public GoodsDto goodsDetail(/*Long goodsNum,*/String goodsName){
+    public int getCategoryListCnt(){
 
-        //GoodsEntity goodsEntity = goodsRepository.findById(goodsNum).orElseThrow(() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
+        List<GoodsCategoryEntity> goodsCategoryEntity = goodsCategoryRepository.findAll();
+        int categoryCnt = goodsCategoryEntity.size();
+        return categoryCnt;
+    }
 
-        GoodsEntity goodsEntity1 = goodsRepository.findByName(goodsName).orElseThrow(() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
-        GoodsDto goodsDto = GoodsDto.entityToGoodsDto(goodsEntity1);
+    public GoodsDto goodsDetail(Long goodsNum){
 
-        //GoodsDto goodsDto = GoodsDto.entityToGoodsDto(goodsEntity);
-        return goodsDto;
+        GoodsEntity goodsEntity = goodsRepository.findById(goodsNum).orElseThrow(() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
+
+        if(goodsEntity.getGoodsImageEntity()==null || goodsEntity.getGoodsImageEntity().isEmpty()) {
+            GoodsDto goodsDto = GoodsDto.entityToGoodsDtoNotImg(goodsEntity);
+            return goodsDto;
+        }
+        else {
+            GoodsDto goodsDto = GoodsDto.entityToGoodsDto(goodsEntity);
+            return goodsDto;
+        }
     }
 }

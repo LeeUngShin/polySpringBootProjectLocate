@@ -20,8 +20,8 @@ public interface GoodsRepository extends JpaRepository<GoodsEntity, Long> {
 
     Page<GoodsEntity> findAll(Pageable pageable);
 
-    Page<GoodsEntity> findByGoodsCategoryCategoryName(Pageable pageable, String categoryName);
-    Page<GoodsEntity> findByGoodsSubCategoryCategoryName(Pageable pageable, String subCategoryName);
+    Page<GoodsEntity> findByGoodsCategoryCategoryNameOrderByNumDesc(Pageable pageable, String categoryName);
+    Page<GoodsEntity> findByGoodsSubCategoryCategoryNameOrderByNumDesc(Pageable pageable, String subCategoryName);
 
     //@Query()
     //List<GoodsEntity> findByGoodsCategoryCategoryName(String topCategory);

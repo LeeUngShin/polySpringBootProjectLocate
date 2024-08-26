@@ -24,10 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.rmi.server.ExportException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @Slf4j
@@ -311,6 +308,7 @@ public class adminController {
             GoodsDto goodsDto = adminService.goodsDetail(goodsNum);
             model.addAttribute("goodsDto", goodsDto);
             System.out.println("등록일 : " + goodsDto.getRegTime());
+            System.out.println("상품 이미지" + goodsDto.getStoredGoodsImageName());
             return "admin/goods/goodsDetail";
         }catch (EntityNotFoundException e){
             e.printStackTrace();
@@ -347,6 +345,7 @@ public class adminController {
         try{
             GoodsDto goodsDto = adminService.goodsInfo(goodsNum);
             model.addAttribute("goodsDto", goodsDto);
+            System.out.println("수정할 객체 : " + goodsDto);
             return "/admin/goods/goodsModifyForm";
         }catch (EntityNotFoundException e){
             return utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/admin/goodsList", model);
@@ -356,6 +355,7 @@ public class adminController {
     @PostMapping("/modifyGoods/{goodsNum}")
     public String modifyGoods(@PathVariable("goodsNum") Long goodNum, Model model,
                               GoodsDto goodsDto){
+        System.out.println("수정내용 객체 : " + goodsDto);
 
         try{
             GoodsDto modifyGoodsDto = adminService.goodsModify(goodNum, goodsDto);

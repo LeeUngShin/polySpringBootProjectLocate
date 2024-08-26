@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Setter
 @Getter
@@ -48,6 +49,8 @@ public class GoodsDto {
     
     private int sugar; // 당류
 
+    private List<String> allergy;
+
     private String regTime;
 
     private MultipartFile goodsImageFile;  // 파일을 담는 용도
@@ -85,17 +88,24 @@ public class GoodsDto {
         this.storedGoodsImageName = storedFileName;
     }
 
+    public GoodsDto(Long num, String name, int price){
+        this.num = num;
+        this.goodsName = name;
+        this.price = price;
+    }
+
     public static GoodsDto entityToGoodsDto(GoodsEntity goodsEntity) {
         GoodsDto goodsDto = new GoodsDto();
         goodsDto.setNum(goodsEntity.getNum());
         goodsDto.setGoodsName(goodsEntity.getName());
         goodsDto.setPrice(goodsEntity.getPrice());
         goodsDto.setStock(goodsEntity.getStock());
-        goodsDto.setGoodsCategory(goodsEntity.getGoodsSubCategory().getCategoryName());
+        goodsDto.setGoodsCategory(goodsEntity.getGoodsCategory().getCategoryName());
+        goodsDto.setGoodsSubCategory(goodsEntity.getGoodsSubCategory().getCategoryName());
         goodsDto.setGoodsExplanation(goodsEntity.getExplanation());
         goodsDto.setSellCnt(goodsEntity.getSellCnt());
         goodsDto.setLikeCnt(goodsEntity.getLikeCnt());
-        //goodsDto.setStoredGoodsImageName(goodsEntity.getGoodsImageEntity().getStoredFileNameWithExtension());
+        goodsDto.setStoredGoodsImageName(goodsEntity.getGoodsImageEntity().get(0).getStoredFileNameWithExtension());
         goodsDto.setRegTime(goodsEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         goodsDto.setKcal(goodsEntity.getKcal());
         goodsDto.setProtein(goodsEntity.getProtein());
@@ -103,6 +113,29 @@ public class GoodsDto {
         goodsDto.setNatrium(goodsEntity.getNatrium());
         goodsDto.setSugar(goodsEntity.getSugar());
         goodsDto.setWeight(goodsEntity.getWeight());
+        goodsDto.setAllergy(goodsEntity.getAllergy());
+        return goodsDto;
+    }
+
+    public static GoodsDto entityToGoodsDtoNotImg(GoodsEntity goodsEntity) {
+        GoodsDto goodsDto = new GoodsDto();
+        goodsDto.setNum(goodsEntity.getNum());
+        goodsDto.setGoodsName(goodsEntity.getName());
+        goodsDto.setPrice(goodsEntity.getPrice());
+        goodsDto.setStock(goodsEntity.getStock());
+        goodsDto.setGoodsCategory(goodsEntity.getGoodsCategory().getCategoryName());
+        goodsDto.setGoodsSubCategory(goodsEntity.getGoodsSubCategory().getCategoryName());
+        goodsDto.setGoodsExplanation(goodsEntity.getExplanation());
+        goodsDto.setSellCnt(goodsEntity.getSellCnt());
+        goodsDto.setLikeCnt(goodsEntity.getLikeCnt());
+        goodsDto.setRegTime(goodsEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        goodsDto.setKcal(goodsEntity.getKcal());
+        goodsDto.setProtein(goodsEntity.getProtein());
+        goodsDto.setFat(goodsEntity.getFat());
+        goodsDto.setNatrium(goodsEntity.getNatrium());
+        goodsDto.setSugar(goodsEntity.getSugar());
+        goodsDto.setWeight(goodsEntity.getWeight());
+        goodsDto.setAllergy(goodsEntity.getAllergy());
         return goodsDto;
     }
 }

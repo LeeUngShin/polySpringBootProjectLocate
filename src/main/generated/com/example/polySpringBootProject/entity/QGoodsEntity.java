@@ -24,6 +24,8 @@ public class QGoodsEntity extends EntityPathBase<GoodsEntity> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
+    public final ListPath<String, StringPath> allergy = this.<String, StringPath>createList("allergy", String.class, StringPath.class, PathInits.DIRECT2);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdTime = _super.createdTime;
 
@@ -35,7 +37,7 @@ public class QGoodsEntity extends EntityPathBase<GoodsEntity> {
 
     public final QGoodsCategoryEntity goodsCategory;
 
-    public final QGoodsImageEntity goodsImageEntity;
+    public final ListPath<GoodsImageEntity, QGoodsImageEntity> goodsImageEntity = this.<GoodsImageEntity, QGoodsImageEntity>createList("goodsImageEntity", GoodsImageEntity.class, QGoodsImageEntity.class, PathInits.DIRECT2);
 
     public final QGoodsSubCategoryEntity goodsSubCategory;
 
@@ -85,7 +87,6 @@ public class QGoodsEntity extends EntityPathBase<GoodsEntity> {
     public QGoodsEntity(Class<? extends GoodsEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.goodsCategory = inits.isInitialized("goodsCategory") ? new QGoodsCategoryEntity(forProperty("goodsCategory")) : null;
-        this.goodsImageEntity = inits.isInitialized("goodsImageEntity") ? new QGoodsImageEntity(forProperty("goodsImageEntity"), inits.get("goodsImageEntity")) : null;
         this.goodsSubCategory = inits.isInitialized("goodsSubCategory") ? new QGoodsSubCategoryEntity(forProperty("goodsSubCategory"), inits.get("goodsSubCategory")) : null;
     }
 

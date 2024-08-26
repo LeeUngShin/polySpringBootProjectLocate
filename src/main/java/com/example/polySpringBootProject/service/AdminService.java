@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Member;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,9 @@ public class AdminService {
     MemberRepository memberRepository;
     @Autowired
     GoodsRepository goodsRepository;
+
+    @Autowired
+    GoodsCategoryRepository goodsCategoryRepository;
     @Autowired
     GoodsSubCategoryRepository goodsSubCategoryRepository;
     @Autowired
@@ -194,6 +198,12 @@ public class AdminService {
     @Transactional
     public String goodsRegister(GoodsDto goodsDto){
 
+        Optional<GoodsCategoryEntity> goodsCategoryEntity = goodsCategoryRepository.findBycategoryName(goodsDto.getGoodsCategory());
+        if(goodsCategoryEntity.isEmpty()){
+            throw new EntityNotFoundException("해당 카테고리를 찾을 수 없습니다.");
+        }
+        GoodsCategoryEntity goodsCategory = goodsCategoryEntity.get();
+
         Optional<GoodsSubCategoryEntity> goodsSubCategoryEntity = goodsSubCategoryRepository.findByCategoryName(goodsDto.getGoodsSubCategory());
         if(goodsSubCategoryEntity.isEmpty()){
             throw new EntityNotFoundException("해당 카테고리를 찾을 수 없습니다.");
@@ -209,6 +219,7 @@ public class AdminService {
                     .stock(goodsDto.getStock())
                     .explanation(goodsDto.getGoodsExplanation())
                     .del("N")
+                    .goodsCategory(goodsCategory)
                     .goodsSubCategory(goodsSubCategory)
                     .kcal(goodsDto.getKcal())
                     .protein(goodsDto.getProtein())
@@ -216,9 +227,11 @@ public class AdminService {
                     .natrium(goodsDto.getNatrium())
                     .sugar(goodsDto.getSugar())
                     .weight(goodsDto.getWeight())
+                    .allergy(goodsDto.getAllergy())
                     .likeCnt(0)
                     .sellCnt(0)
                     .build();
+            GoodsEntity saveGoods = goodsRepository.save(goodsEntity);
 
             boolean goodsImageUpload = fileUploadService.GoodsImageUpload(goodsDto.getGoodsImageFile());
             if(goodsImageUpload==false){
@@ -230,11 +243,10 @@ public class AdminService {
                     .storedFileName(fileUploadService.getStoredFileName())
                     .uploadPath(fileUploadService.getUploadPath())
                     .storedFileNameWithExtension(fileUploadService.getStoredFileNameWithExtension())
+                    .goodsEntity(saveGoods)
                     .build();
 
             GoodsImageEntity goodsImage = goodsImageRepository.save(goodsImageEntity);
-            goodsEntity.setGoodsImageEntity(goodsImage);
-            GoodsEntity saveGoods = goodsRepository.save(goodsEntity);
             System.out.println("상품등록 완료");
             System.out.println(saveGoods);
             System.out.println(saveGoods.getGoodsImageEntity());
@@ -288,6 +300,7 @@ public class AdminService {
     @Transactional
     public GoodsDto goodsModify(Long goodsNum, GoodsDto goodsDto) {
         System.out.println("수정할 디티오의 이미지 : " + goodsDto.getGoodsImageFile().isEmpty());
+        System.out.println("서비스에서 수정객체 가격 : " + goodsDto.getPrice());
         Optional<GoodsEntity> goodsEntity = goodsRepository.findById(goodsNum);
         GoodsEntity goods = goodsEntity.get();
         if (goodsEntity.isEmpty() || goodsEntity == null) {
@@ -299,14 +312,33 @@ public class AdminService {
             goods.setPrice(goodsDto.getPrice());
             goods.setStock(goodsDto.getStock());
             goods.setExplanation(goodsDto.getGoodsExplanation());
+            goods.setKcal(goodsDto.getKcal());
+            goods.setProtein(goodsDto.getProtein());
+            goods.setFat(goodsDto.getFat());
+            goods.setNatrium(goodsDto.getNatrium());
+            goods.setSugar(goodsDto.getSugar());
+            goods.setWeight(goodsDto.getWeight());
             GoodsEntity modifyGoodsEntity = goodsRepository.save(goods);
+            System.out.println("수정 후 db에서 가져온 가격 : " + modifyGoodsEntity.getPrice());
             GoodsDto modifyGoodsDto = GoodsDto.entityToGoodsDto(modifyGoodsEntity);
+            System.out.println("수정 후 db에서 가져와서 디티오 저장 가격 : " + modifyGoodsDto.getPrice());
             return modifyGoodsDto;
         }
         else {
             System.out.println("여기 걸리나?");
-            GoodsImageEntity goodsImage = goodsImageRepository.findByGoodsEntityNum(goods.getGoodsImageEntity().getNum()).orElse(null);
+            goods.setName(goodsDto.getGoodsName());
+            goods.setPrice(goodsDto.getPrice());
+            goods.setStock(goodsDto.getStock());
+            goods.setExplanation(goodsDto.getGoodsExplanation());
+            goods.setKcal(goodsDto.getKcal());
+            goods.setPrice(goodsDto.getProtein());
+            goods.setFat(goodsDto.getFat());
+            goods.setNatrium(goodsDto.getNatrium());
+            goods.setSugar(goodsDto.getSugar());
+            goods.setWeight(goodsDto.getWeight());
+            GoodsEntity modifyGoodsEntity = goodsRepository.save(goods);
 
+            GoodsImageEntity goodsImage = goodsImageRepository.findByGoodsEntityNum(goodsNum).orElseThrow(()->new EntityNotFoundException("해당 데이터를 찾을 수 없습니다."));
             boolean modifyGoodsImg = fileUploadService.GoodsImageUpload(goodsDto.getGoodsImageFile());
             if(modifyGoodsImg) {
                 goodsImage.setOriginalFileName(fileUploadService.getOriginalFileName());
@@ -315,8 +347,7 @@ public class AdminService {
                 goodsImage.setUploadPath(fileUploadService.getUploadPath());
             }
             GoodsImageEntity modifyGoodsImage = goodsImageRepository.save(goodsImage);
-            goods.setGoodsImageEntity(modifyGoodsImage);
-            GoodsEntity modifyGoodsEntity = goodsRepository.save(goods);
+
             GoodsDto modifyGoodsDto = GoodsDto.entityToGoodsDto(modifyGoodsEntity);
             return modifyGoodsDto;
         }
@@ -328,7 +359,7 @@ public class AdminService {
         int pageLimit = 10;  // 한페이지에 보여줄 회원 수
         Page<GoodsEntity> goodsEntityPage = goodsRepository.findAllByDel(PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N");
         Page<GoodsDto> goodsDtoPage = goodsEntityPage.map
-                (goods -> new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), goods.getStock(), goods.getGoodsSubCategory().getCategoryName(), goods.getCreatedTime(), goods.getGoodsImageEntity().getStoredFileNameWithExtension()));
+                (goods -> new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), goods.getStock(), goods.getGoodsSubCategory().getCategoryName(), goods.getCreatedTime(), goods.getGoodsImageEntity().get(0).getStoredFileNameWithExtension()));
         return goodsDtoPage;
     }
 

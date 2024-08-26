@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.entity;
 
+import com.example.polySpringBootProject.MyConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -62,6 +63,11 @@ public class GoodsEntity extends BaseEntity{
     @Column
     private int likeCnt;  // 좋아요 개수
 
+    @Lob  // Ensure @Lob is used for large data
+    @Column(columnDefinition = "LONGTEXT")  // Use LONGTEXT to ensure sufficient space
+    @Convert(converter = MyConverter.class)
+    private List<String> allergy;
+
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)  // 다 대 일 (다 : 주인, 자식, 일 : 주인X, 부모)
     @JoinColumn(name = "goodsSubCategoryNum")
@@ -73,11 +79,10 @@ public class GoodsEntity extends BaseEntity{
     private GoodsCategoryEntity goodsCategory;
 
     @ToString.Exclude
-    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "goodsImageNum")
-    private GoodsImageEntity goodsImageEntity;
+    @OneToMany(mappedBy = "goodsEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<GoodsImageEntity> goodsImageEntity = new ArrayList<>();
 
-    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<LikeEntity> likeEntitySet = new HashSet<>();  // 중복 방지를 위해 Set 사용
 
     public void addLike(LikeEntity likeEntity){

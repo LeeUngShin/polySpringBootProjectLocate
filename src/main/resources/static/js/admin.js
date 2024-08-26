@@ -35,8 +35,12 @@ function addSubOption(){
         subOption3.text = "도넛";
         subOption.add(subOption3);
         var subOption4 = document.createElement("option");
-        subOption4.value = "파이/패스트리";
-        subOption4.text = "파이/패스트리";
+        subOption4.value = "파이";
+        subOption4.text = "파이";
+        subOption.add(subOption4);
+        var subOption5 = document.createElement("option");
+        subOption5.value = "카스테라";
+        subOption5.text = "카스테라";
         subOption.add(subOption4);
     }
     else if(topOption == "케이크"){
@@ -59,109 +63,6 @@ function addSubOption(){
         var subOption5 = document.createElement("option");
         subOption5.value = "조각케이크";
         subOption5.text = "조각케이크";
-        subOption.add(subOption5);
-        var subOption6 = document.createElement("option");
-        subOption6.value = "선물용케이크";
-        subOption6.text = "선물용케이크";
-        subOption.add(subOption6);
-    }
-    else if(topOption == "디저트"){
-        var subOption1 = document.createElement("option");
-        subOption1.value = "마카롱";
-        subOption1.text = "마카롱";
-        subOption.add(subOption1);
-        var subOption2 = document.createElement("option");
-        subOption2.value = "아이스크림";
-        subOption2.text = "아이스크림";
-        subOption.add(subOption2);
-        var subOption3 = document.createElement("option");
-        subOption3.value = "초콜릿/캔디";
-        subOption3.text = "초콜릿/캔디";
-        subOption.add(subOption3);
-        var subOption4 = document.createElement("option");
-        subOption4.value = "잼";
-        subOption4.text = "잼";
-        subOption.add(subOption4);
-        var subOption5 = document.createElement("option");
-        subOption5.value = "쿠키";
-        subOption5.text = "쿠키";
-        subOption.add(subOption5);
-    }
-    else if(topOption == "음료"){
-        var subOption1 = document.createElement("option");
-        subOption1.value = "커피";
-        subOption1.text = "커피";
-        subOption.add(subOption1);
-        var subOption2 = document.createElement("option");
-        subOption2.value = "밀크티";
-        subOption2.text = "밀크티";
-        subOption.add(subOption2);
-        var subOption3 = document.createElement("option");
-        subOption3.value = "스무디";
-        subOption3.text = "스무디";
-        subOption.add(subOption3);
-        var subOption4 = document.createElement("option");
-        subOption4.value = "빙수";
-        subOption4.text = "빙수";
-        subOption.add(subOption4);
-        var subOption5 = document.createElement("option");
-        subOption5.value = "우유";
-        subOption5.text = "우유";
-        subOption.add(subOption5);
-        var subOption6 = document.createElement("option");
-        subOption6.value = "완제음료";
-        subOption6.text = "완제음료";
-        subOption.add(subOption6);
-    }
-}
-
-function modifySubOption(){
-    var topOption = document.getElementById("topOption").value;
-    var subOption = document.getElementById("subOption");
-    subOption.innerHTML = "";  // 서브옵션 선택부분 제거
-    if(topOption == "빵"){
-
-        var subOption1 = document.createElement("option");  // option 태그 생성
-        subOption1.value = "식빵";
-        subOption1.text = "식빵";
-        subOption.add(subOption1);
-        var subOption2 = document.createElement("option");
-        subOption2.value = "건강빵";
-        subOption2.text = "건강빵";
-        subOption.add(subOption2);
-        var subOption3 = document.createElement("option");
-        subOption3.value = "도넛";
-        subOption3.text = "도넛";
-        subOption.add(subOption3);
-        var subOption4 = document.createElement("option");
-        subOption4.value = "파이";
-        subOption4.text = "파이";
-        subOption.add(subOption4);
-        var subOption4 = document.createElement("option");
-        subOption4.value = "카스테라";
-        subOption4.text = "카스테라";
-        subOption.add(subOption4);
-    }
-    else if(topOption == "케이크"){
-        var subOption1 = document.createElement("option");
-        subOption1.value = "생크림케이크";
-        subOption1.text = "생크림케이크";
-        subOption.add(subOption1);
-        var subOption2 = document.createElement("option");
-        subOption2.value = "티라미수";
-        subOption2.text = "티라미수";
-        subOption.add(subOption2);
-        var subOption3 = document.createElement("option");
-        subOption3.value = "치즈케이크";
-        subOption3.text = "치즈케이크";
-        subOption.add(subOption3);
-        var subOption4 = document.createElement("option");
-        subOption4.value = "조각케이크";
-        subOption4.text = "조각케이크";
-        subOption.add(subOption4);
-        var subOption5 = document.createElement("option");
-        subOption5.value = "캐릭터케이크";
-        subOption5.text = "캐릭터케이크";
         subOption.add(subOption5);
         var subOption6 = document.createElement("option");
         subOption6.value = "선물용케이크";
@@ -217,6 +118,150 @@ function modifySubOption(){
         subOption.add(subOption6);
     }
 }
+
+function modifySubOption(goodsSubCategory){
+    var topOption = document.getElementById("topOption").value;
+    var subOption = document.getElementById("subOption");
+    subOption.innerHTML = "";  // 서브옵션 선택부분 제거
+    if(topOption == "빵"){
+
+        var subOption1 = document.createElement("option");  // option 태그 생성
+        subOption1.value = "식빵";
+        subOption1.text = "식빵";
+        if(goodsSubCategory=="식빵") subOption1.selected;
+        subOption.add(subOption1);
+
+        var subOption2 = document.createElement("option");
+        subOption2.value = "건강빵";
+        subOption2.text = "건강빵";
+        if(goodsSubCategory=="건강빵") subOption2.selected;
+        subOption.add(subOption2);
+
+        var subOption3 = document.createElement("option");
+        subOption3.value = "도넛";
+        subOption3.text = "도넛";
+        if(goodsSubCategory=="도넛") subOption3.selected;
+        subOption.add(subOption3);
+
+        var subOption4 = document.createElement("option");
+        subOption4.value = "파이";
+        subOption4.text = "파이";
+        if(goodsSubCategory=="파이") subOption4.selected;
+        subOption.add(subOption4);
+
+        var subOption4 = document.createElement("option");
+        subOption5.value = "카스테라";
+        subOption5.text = "카스테라";
+        if(goodsSubCategory=="카스테라") subOption5.selected;
+        subOption.add(subOption5);
+    }
+    else if(topOption == "케이크"){
+        var subOption1 = document.createElement("option");
+        subOption1.value = "생크림케이크";
+        subOption1.text = "생크림케이크";
+        if(goodsSubCategory=="생크림케이크") subOption1.selected;
+        subOption.add(subOption1);
+
+        var subOption2 = document.createElement("option");
+        subOption2.value = "티라미수";
+        subOption2.text = "티라미수";
+        if(goodsSubCategory=="티라미수") subOption2.selected;
+        subOption.add(subOption2);
+
+        var subOption3 = document.createElement("option");
+        subOption3.value = "치즈케이크";
+        subOption3.text = "치즈케이크";
+        if(goodsSubCategory=="치즈케이크") subOption3.selected;
+        subOption.add(subOption3);
+
+        var subOption4 = document.createElement("option");
+        subOption4.value = "조각케이크";
+        subOption4.text = "조각케이크";
+        if(goodsSubCategory=="조각케이크") subOption4.selected;
+        subOption.add(subOption4);
+
+        var subOption5 = document.createElement("option");
+        subOption5.value = "캐릭터케이크";
+        subOption5.text = "캐릭터케이크";
+        if(goodsSubCategory=="캐릭터케이크") subOption5.selected;
+        subOption.add(subOption5);
+
+        var subOption6 = document.createElement("option");
+        subOption6.value = "선물용케이크";
+        subOption6.text = "선물용케이크";
+        if(goodsSubCategory=="선물용케이크") subOption6.selected;
+        subOption.add(subOption6);
+    }
+    else if(topOption == "디저트"){
+        var subOption1 = document.createElement("option");
+        subOption1.value = "마카롱";
+        subOption1.text = "마카롱";
+        if(goodsSubCategory=="마카롱") subOption1.selected;
+        subOption.add(subOption1);
+
+        var subOption2 = document.createElement("option");
+        subOption2.value = "아이스크림";
+        subOption2.text = "아이스크림";
+        if(goodsSubCategory=="아이스크림") subOption2.selected;
+        subOption.add(subOption2);
+
+        var subOption3 = document.createElement("option");
+        subOption3.value = "초콜릿";
+        subOption3.text = "초콜릿";
+        if(goodsSubCategory=="초콜릿") subOption3.selected = true;
+        subOption.add(subOption3);
+
+        var subOption4 = document.createElement("option");
+        subOption4.value = "잼";
+        subOption4.text = "잼";
+        if(goodsSubCategory=="잼") subOption4.selected;
+        subOption.add(subOption4);
+
+        var subOption5 = document.createElement("option");
+        subOption5.value = "쿠키";
+        subOption5.text = "쿠키";
+        if(goodsSubCategory=="쿠키") subOption5.selected;
+        subOption.add(subOption5);
+    }
+    else if(topOption == "음료"){
+        var subOption1 = document.createElement("option");
+        subOption1.value = "커피";
+        subOption1.text = "커피";
+        if(goodsSubCategory=="커피") subOption1.selected;
+        subOption.add(subOption1);
+
+        var subOption2 = document.createElement("option");
+        subOption2.value = "밀크티";
+        subOption2.text = "밀크티";
+        if(goodsSubCategory=="밀크티") subOption2.selected;
+        subOption.add(subOption2);
+
+        var subOption3 = document.createElement("option");
+        subOption3.value = "스무디";
+        subOption3.text = "스무디";
+        if(goodsSubCategory=="스무디") subOption3.selected;
+        subOption.add(subOption3);
+
+        var subOption4 = document.createElement("option");
+        subOption4.value = "빙수";
+        subOption4.text = "빙수";
+        if(goodsSubCategory=="빙수") subOption4.selected;
+        subOption.add(subOption4);
+
+        var subOption5 = document.createElement("option");
+        subOption5.value = "우유";
+        subOption5.text = "우유";
+        if(goodsSubCategory=="우유") subOption5.selected;
+        subOption.add(subOption5);
+
+        var subOption6 = document.createElement("option");
+        subOption6.value = "완제음료";
+        subOption6.text = "완제음료";
+        if(goodsSubCategory=="완제음료") subOption6.selected;
+        subOption.add(subOption6);
+    }
+}
+
 
 function boardDetail(boardNum){
     currentBoardNum = boardNum;

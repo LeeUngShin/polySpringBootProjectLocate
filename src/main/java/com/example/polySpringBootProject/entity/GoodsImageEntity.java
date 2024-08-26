@@ -30,6 +30,7 @@ public class GoodsImageEntity {
     @Column
     private String storedFileNameWithExtension;
 
-    @OneToOne(mappedBy = "goodsImageEntity", fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "goodNum")
     private GoodsEntity goodsEntity;
 }

@@ -20,10 +20,10 @@
                         상품안내
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/goods/menu?topCategory=bread&subCategory=all">빵</a></li>
-                        <li><a class="dropdown-item" href="/goods/menu?topCategory=cake&subCategory=all">케이크</a></li>
-                        <li><a class="dropdown-item" href="/goods/menu?topCategory=dessert&subCategory=all">디저트</a></li>
-                        <li><a class="dropdown-item" href="/goods/menu?topCategory=drink&subCategory=all">음료</a></li>
+                        <li><a class="dropdown-item" href="/goods/menu?topCategory=빵&subCategory=all&page=1">빵</a></li>
+                        <li><a class="dropdown-item" href="/goods/menu?topCategory=케이크&subCategory=all&page=1">케이크</a></li>
+                        <li><a class="dropdown-item" href="/goods/menu?topCategory=디저트&subCategory=all&page=1">디저트</a></li>
+                        <li><a class="dropdown-item" href="/goods/menu?topCategory=음료&subCategory=all&page=1">음료</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

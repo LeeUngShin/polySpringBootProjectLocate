@@ -23,8 +23,7 @@
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/home" class="frontMenu">Home</a></li>
-                <li class="breadcrumb-item"><a href="#" class="frontMenu">Library</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Data</li>
+                <li class="breadcrumb-item active" aria-current="page">상품안내</li>
               </ol>
             </nav>
           </div>
@@ -33,23 +32,20 @@
           </div>
           <div class="row">
             <ul class="nav nav-underline">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">active</a>
+              <li class="nav-item" onclick="menuClick(this)">
+                <a class="nav-link" href="/goods/menu?topCategory=all&subCategory=all&page=1">전체</a>
               </li>
               <li class="nav-item" onclick="menuClick(this)">
-                <a class="nav-link" aria-current="page"  href="#">전체</a>
+                <a class="nav-link" href="/goods/menu?topCategory=빵&subCategory=all&page=1">빵</a>
               </li>
               <li class="nav-item" onclick="menuClick(this)">
-                <a class="nav-link" href="#">빵</a>
+                <a class="nav-link" href="/goods/menu?topCategory=케이크&subCategory=all&page=1">케이크</a>
               </li>
               <li class="nav-item" onclick="menuClick(this)">
-                <a class="nav-link" href="#">케이크</a>
-              </li>
-              <li class="nav-item" onclick="menuClick(this)">
-                <a class="nav-link" href="#">디저트</a>
+                <a class="nav-link" href="/goods/menu?topCategory=디저트&subCategory=all&page=1">디저트</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#" onclick="menuClick(this)">음료</a>
+                <a class="nav-link" href="/goods/menu?topCategory=음료&subCategory=all&page=1" onclick="menuClick(this)">음료</a>
               </li>
             </ul>
           </div>
@@ -57,26 +53,13 @@
         <div class="row" id="subMenu">
           <ul class="nav nav-underline">
             <li class="nav-item">
-              <a class="nav-link active" href="#">active</a>
+              <a class="nav-link" href="/goods/menu?topCategory=${topCategory}&subCategory=all&page=1" onclick="menuClick(this)">전체</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" onclick="menuClick(this)">전체</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" onclick="menuClick(this)">식빵</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" onclick="menuClick(this)">건강빵</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" onclick="menuClick(this)">빵2</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" onclick="menuClick(this)">빵3</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" onclick="menuClick(this)">빵4</a>
-            </li>
+            <c:forEach items="${goodsSubCategoryEntityList}" var = "item">
+              <li class="nav-item">
+                <a class="nav-link" href="/goods/menu?topCategory=${topCategory}&subCategory=${item.categoryName}&page=1" onclick="menuClick(this)">${item.categoryName}</a>
+              </li>
+            </c:forEach>
           </ul>
         </div>
       </article>
@@ -88,56 +71,22 @@
         <hr style="border: none; border-top: 1.5px solid #023586; margin: 10px 0px 0px 0px;">
 
         <div class="row" id="goodsCard">
-          <div class="col-lg-3 col-md-6">
-            <a href="#">
-              <div class="card" style="width: 18rem;" onmouseover="menuHover()" onmouseout="menuHoverOut()" id="menuCard">
-                <div class="menuImgDiv">
-                  <img src="detailMenuBackgroundImg.jpg" class="card-img-top menuImg" alt="...">
-                  <div id="menuHover">
-                  </div>
+            <c:forEach items="${bestGoodsDtoList}" var = "item">
+                <div class="col-lg-3 col-md-6">
+                    <a href="/goods/detail/${item.num}?page=${currentPage}">
+                      <div class="card" style="width: 18rem;" onmouseover="menuHover()" onmouseout="menuHoverOut()" id="menuCard">
+                        <div class="menuImgDiv">
+                          <img src="/upload/goods/${item.storedGoodsImageName}" class="card-img-top menuImg" alt="...">
+                          <div id="menuHover">
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          <h6 class="card-title">베트스메뉴 ${item.goodsName}</h6>
+                        </div>
+                      </div>
+                    </a>
                 </div>
-                <div class="card-body">
-                  <h7 class="card-title">베트스메뉴1</h7>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="card" style="width: 18rem;">
-              <div class="menuImgDiv">
-                <img src="detailMenuBackgroundImg.jpg" class="card-img-top menuImg" alt="...">
-                <div id="menuHover">
-                </div>
-              </div>
-              <div class="card-body">
-                <h7 class="card-title">베트스메뉴2</h7>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="card" style="width: 18rem;">
-              <div class="menuImgDiv">
-                <img src="detailMenuBackgroundImg.jpg" class="card-img-top menuImg" alt="...">
-                <div id="menuHover">
-                </div>
-              </div>
-              <div class="card-body">
-                <h7 class="card-title">베트스메뉴3</h7>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="card" style="width: 18rem;">
-              <div class="menuImgDiv">
-                <img src="detailMenuBackgroundImg.jpg" class="card-img-top menuImg" alt="...">
-                <div id="menuHover">
-                </div>
-              </div>
-              <div class="card-body">
-                <h7 class="card-title">베트스메뉴4</h7>
-              </div>
-            </div>
-          </div>
+            </c:forEach>
         </div>
       </article>
 
@@ -148,56 +97,70 @@
         <hr style="border: none; border-top: 1.5px solid #023586; margin: 10px 0px 0px 0px;">
 
         <div class="row" id="goodsCard">
-          <div class="col-lg-3 col-md-6">
-            <a href="#">
-              <div class="card" style="width: 18rem;" onmouseover="menuHover()" onmouseout="menuHoverOut()" id="menuCard">
-                <div class="menuImgDiv">
-                  <img src="detailMenuBackgroundImg.jpg" class="card-img-top menuImg" alt="...">
-                  <div id="menuHover">
+           <c:forEach items="${goodsDtoPage.content}" var="goods">
+              <div class="col-lg-3 col-md-6">
+                <a href="/goods/detail/${goods.num}?page=${currentPage}">
+                  <div class="card" style="width: 18rem;" onmouseover="menuHover()" onmouseout="menuHoverOut()" id="menuCard">
+                    <div class="menuImgDiv">
+                      <img src="/upload/goods/${goods.storedGoodsImageName}" class="card-img-top menuImg" alt="...">
+                      <div id="menuHover">
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <h6 class="card-title">${goods.goodsName}</h6>
+                    </div>
                   </div>
-                </div>
-                <div class="card-body">
-                  <h7 class="card-title">베트스메뉴1</h7>
-                </div>
+                </a>
               </div>
-            </a>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="card" style="width: 18rem;">
-              <div class="menuImgDiv">
-                <img src="detailMenuBackgroundImg.jpg" class="card-img-top menuImg" alt="...">
-                <div id="menuHover">
-                </div>
-              </div>
-              <div class="card-body">
-                <h7 class="card-title">베트스메뉴2</h7>
-              </div>
+           </c:forEach>
+        </div>
+        <div id="pageNum">
+            <div style="flex-grow: 1;">
+                <c:choose>
+                    <c:when test="${currentPage == 1}">
+                        처음
+                    </c:when>
+                    <c:otherwise>
+                        <a href="/goods/menu?topCategory=${topCategory}&subCategory=${subCategory}&page=1">처음</a>
+                    </c:otherwise>
+                </c:choose>
+                <c:choose>
+                    <c:when test="${currentPage<=blockLimit}">
+                        이전
+                    </c:when>
+                    <c:otherwise>
+                        <a href = "/goods/menu?topCategory=${topCategory}&subCategory=${subCategory}&page=${startPage-1}">이전</a>
+                    </c:otherwise>
+                </c:choose>
+
+                <c:forEach begin="${startPage}" end ="${endPage}" var = "count">
+                    <c:choose>
+                        <c:when test = "${count != currentPage}">
+                            <a href="/goods/menu?topCategory=${topCategory}&subCategory=${subCategory}&page=${count}">${count}</a>
+                        </c:when>
+                        <c:otherwise>
+                            ${count}
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+                <c:choose>
+                    <c:when test="${isLast}">
+                        다음
+                    </c:when>
+                    <c:otherwise>
+                        <a href= "/goods/menu?topCategory=${topCategory}&subCategory=${subCategory}&page=${endPage+1}">다음</a>
+                    </c:otherwise>
+                </c:choose>
+                <c:choose>
+                    <c:when test="${currentPage==totalPage}">
+                        마지막
+                    </c:when>
+                    <c:otherwise>
+                        <a href="/goods/menu?topCategory=${topCategory}&subCategory=${subCategory}&page=${totalPage}">마지막</a>
+                    </c:otherwise>
+                </c:choose>
             </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="card" style="width: 18rem;">
-              <div class="menuImgDiv">
-                <img src="detailMenuBackgroundImg.jpg" class="card-img-top menuImg" alt="...">
-                <div id="menuHover">
-                </div>
-              </div>
-              <div class="card-body">
-                <h7 class="card-title">베트스메뉴3</h7>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="card" style="width: 18rem;">
-              <div class="menuImgDiv">
-                <img src="detailMenuBackgroundImg.jpg" class="card-img-top menuImg" alt="...">
-                <div id="menuHover">
-                </div>
-              </div>
-              <div class="card-body">
-                <h7 class="card-title">베트스메뉴4</h7>
-              </div>
-            </div>
-          </div>
+
         </div>
       </article>
     </div>

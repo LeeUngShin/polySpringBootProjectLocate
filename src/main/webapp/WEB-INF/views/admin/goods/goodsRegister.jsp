@@ -69,12 +69,27 @@
                   <input type="text" class="form-control" id="exampleInputNatrium" name="natrium" required>
                 </div>
                 <div class="mb-3"">
-                  <label for="exampleInputSuger" class="form-label">당류(g)</label>
-                  <input type="text" class="form-control" id="exampleInputSuger" name="sugar" required>
+                  <label for="exampleInputSugar" class="form-label">당류(g)</label>
+                  <input type="text" class="form-control" id="exampleInputSugar" name="sugar" required>
                 </div>
                 <div class="mb-3"">
                   <label for="exampleInputWeight" class="form-label">중량(g)</label>
                   <input type="text" class="form-control" id="exampleInputWeight" name="weight" required>
+                </div>
+                <div class="mb-3"">
+                        <label for="" class="form-label">알러지</label>
+                    <div>
+                        <input type="checkbox" id="wheat" name="allergy" value="밀">
+                        <label for="wheat">밀&nbsp&nbsp</label>
+                        <input type="checkbox" id="soybean" name="allergy" value="대두">
+                        <label for="soybean">대두&nbsp&nbsp</label>
+                        <input type="checkbox" id="milk" name="allergy" value="우유">
+                        <label for="milk">우유&nbsp&nbsp</label>
+                        <input type="checkbox" id="egg" name="allergy" value="계란">
+                        <label for="egg">계란&nbsp&nbsp</label>
+                        <input type="checkbox" id="caffeine" name="allergy" value="고카페인">
+                        <label for="caffeine">고카페인</label>
+                    </div>
                 </div>
                 <div>
                   <label class="form-label">상품설명</label>
