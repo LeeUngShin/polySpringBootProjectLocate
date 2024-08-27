@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg">
     <div class="itemCategory">
         <i class="bi bi-justify"></i>
     </div>
@@ -20,6 +20,7 @@
                         상품안내
                     </a>
                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/goods/menu?topCategory=all&subCategory=all&page=1">전체</a></li>
                         <li><a class="dropdown-item" href="/goods/menu?topCategory=빵&subCategory=all&page=1">빵</a></li>
                         <li><a class="dropdown-item" href="/goods/menu?topCategory=케이크&subCategory=all&page=1">케이크</a></li>
                         <li><a class="dropdown-item" href="/goods/menu?topCategory=디저트&subCategory=all&page=1">디저트</a></li>
@@ -50,14 +51,16 @@
                     </ul>
                 </li>
             </ul>
+           <div id="itemBucketDiv">
+                <a class="itemBucket" href="#">
+                    <i class="bi bi-person-fill"></i>
+                    내 주문
+                </a>
+                <a class="itemBucket" href="#">
+                    <i class="bi bi-cart"></i>
+                    장바구니
+                </a>
+            </div>
         </div>
     </div>
-    <a class="itemBucket" href="#">
-        <i class="bi bi-person-fill"></i>
-        내 주문
-    </a>
-    <a class="itemBucket" href="#">
-        <i class="bi bi-cart"></i>
-        장바구니
-    </a>
 </nav>

@@ -1,0 +1,18 @@
+/*사이드바*/
+.myNav{
+    color : black;
+}
+
+.myMainRow{
+    margin-left : 50px;
+    margin-right : 50px;
+    margin-top : 60px;
+}
+.active{
+    font-family: 'NanumGothicBold';
+}
+
+.myNavDiv{
+    border : solid black 2px;
+    border-radius : 5px;
+}

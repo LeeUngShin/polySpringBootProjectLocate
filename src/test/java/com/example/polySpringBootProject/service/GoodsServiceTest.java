@@ -20,7 +20,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-//@Transactional
+@Transactional
 class GoodsServiceTest {
 
     @Autowired
@@ -465,5 +465,55 @@ class GoodsServiceTest {
         System.out.println("엔티티 : " + goodsRepository.findById(1L).get().getAllergy());
         System.out.println("엔티티 알러지 : " + goodsRepository.findById(1L).get().getAllergy().size());
         System.out.println("엔티티 타입" + goodsRepository.findById(1L).get().getAllergy().getClass().getName());
+    }
+
+    @Test
+    void goodsLike() {
+
+//        MemberEntity memberEntity1 = MemberEntity.builder()
+//                .id("testUser")
+//                .pw("12345")
+//                .name("테스트유저")
+//                .post("00000")
+//                .addr("주소01")
+//                .addrDetail("상세주소01")
+//                .email("testUser@test.org")
+//                .approval("Y")
+//                .role(RoleType.ROLE_USER)
+//                .grade(MemberGrade.BRONZE)
+//                .build();
+//        MemberEntity saveMember1 = memberRepository.save(memberEntity1);
+
+//        GoodsCategoryEntity goodsCategoryEntity1 = goodsCategoryRepository.findById(1L).get();
+//        GoodsSubCategoryEntity subCategoryEntity1 = goodsSubCategoryRepository.findByCategoryName("식빵").get();
+//        List<String> alleryList = new ArrayList<>();
+//        GoodsEntity goodsEntity16 = GoodsEntity.builder()
+//                .name("테스트상품")
+//                .price(1000)
+//                .stock(10)
+//                .explanation("식빵27")
+//                .del("N")
+//                .kcal(10)
+//                .protein(21)
+//                .fat(15)
+//                .natrium(12)
+//                .sugar(5)
+//                .weight(85)
+//                .sellCnt(0)
+//                .likeCnt(0)
+//                .allergy(alleryList)
+//                .goodsCategory(goodsCategoryEntity1)
+//                .goodsSubCategory(subCategoryEntity1)
+//                .build();
+//        GoodsEntity savedGoodsEntity = goodsRepository.save(goodsEntity16);
+
+
+        MemberEntity saveMember1 = memberRepository.findById("testUser").get();
+        GoodsEntity savedGoodsEntity = goodsRepository.findById(45L).get();
+        // 찜하기
+        System.out.println("초기 찜개수 : " + savedGoodsEntity.getLikeCnt());
+        goodsService.goodsLike(saveMember1.getId(), savedGoodsEntity.getNum(), true);
+        GoodsEntity likeAddGoodEnitity = goodsRepository.findById(savedGoodsEntity.getNum()).get();
+        System.out.println("찜한 후 찜개수: " + likeAddGoodEnitity.getLikeCnt());
     }
 }

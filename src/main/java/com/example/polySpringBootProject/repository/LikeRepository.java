@@ -10,13 +10,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
 
     List<LikeEntity> findByMemberId(String id);
 
-
     boolean existsByMemberNumAndGoodsNum(Long memberNum, Long goodsNum);
+    boolean existsByMemberIdAndGoodsNum(String memberId, Long goodsNum);
+
+    Optional<LikeEntity> findByMemberNumAndGoodsNum(Long memberNum, Long goodsNum);
 
     /*
     // 특정 회원과 상품에 대한 좋아요가 존재하는지 확인하는 JPQL 쿼리

@@ -5,16 +5,18 @@ import com.example.polySpringBootProject.entity.GoodsEntity;
 import com.example.polySpringBootProject.entity.GoodsSubCategoryEntity;
 import com.example.polySpringBootProject.repository.GoodsSubCategoryRepository;
 import com.example.polySpringBootProject.service.GoodsService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -68,15 +70,56 @@ public class GoodsController {
     @GetMapping("/detail/{goodsNum}")
     public String goodsDetail(@PathVariable("goodsNum") Long goodsNum,
                               Model model,
-                              @RequestParam("page") int page){
+                              @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                              HttpSession session,
+                              HttpServletResponse response){
 
         GoodsDto goodsDto = goodsService.goodsDetail(goodsNum);
+        String goodsMyLike = goodsService.goodsMyLike((String) session.getAttribute("loginId"), goodsNum);
+        System.out.println("찜되어 있는지? " + goodsMyLike);
         model.addAttribute("goodsDto", goodsDto);
         model.addAttribute("page", page);
         model.addAttribute("topCategory", goodsDto.getGoodsCategory());
         model.addAttribute("subCategory", goodsDto.getGoodsSubCategory());
 
+        Cookie cookie = new Cookie("goodsMyLike", goodsMyLike);
+        response.addCookie(cookie);
+
         return "goods/goodsDetail";
+    }
+
+    @PostMapping("/goodsLike")
+    public String goodsLike(HttpServletRequest request){
+
+        String loginId = request.getParameter("loginId");
+        String goodsNumStr = request.getParameter("goodsNum");
+        Long goodsNum = Long.parseLong(goodsNumStr);
+        String likeTFStr = request.getParameter("goodsLikeTF");
+        boolean likeTF = Boolean.parseBoolean(likeTFStr);
+        System.out.println("찜한 유저 아이디 : " + loginId);
+        System.out.println("찜한 상품 번호 : " + goodsNum);
+        System.out.println("찜했는지 : " + likeTF);
+
+        try{
+            boolean goodsLike = goodsService.goodsLike(loginId, goodsNum, likeTF);
+            if(goodsLike){
+                System.out.println("찜 추가/취소 성공");
+                return "{\"result\" : \"success\"}";
+            }else {
+                return "{\"result\" : \"fail\"}";
+            }
+        }catch (EntityNotFoundException e){
+            e.printStackTrace();
+            return "{\"result\" : \"fail\"}";
+
+        }catch (RuntimeException e){
+            e.printStackTrace();
+            return "{\"result\" : \"fail\"}";
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return "{\"result\" : \"fail\"}";
+        }
     }
 
 

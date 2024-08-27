@@ -312,5 +312,4 @@ function deleteGoods(goodsNum){
         var goodsDeleteButton = document.getElementById("goodsDelete");
         goodsDeleteButton.submit();
     }
-
 }

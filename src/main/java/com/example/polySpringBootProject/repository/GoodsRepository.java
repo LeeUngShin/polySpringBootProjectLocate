@@ -26,6 +26,9 @@ public interface GoodsRepository extends JpaRepository<GoodsEntity, Long> {
     //@Query()
     //List<GoodsEntity> findByGoodsCategoryCategoryName(String topCategory);
 
+    List<GoodsEntity> findTop4ByOrderBySellCntDescLikeCntDesc();
+    List<GoodsEntity> findTop8ByOrderBySellCntDescLikeCntDesc();
+
     List<GoodsEntity> findTop4ByGoodsCategoryCategoryNameOrderBySellCntDescLikeCntDesc(String topCategory);
 
     //@Query()
@@ -34,9 +37,6 @@ public interface GoodsRepository extends JpaRepository<GoodsEntity, Long> {
     List<GoodsEntity> findTop4ByGoodsSubCategoryCategoryNameOrderBySellCntDescLikeCntDesc(String topCategory);
 
     Optional<GoodsEntity> findByName(String goodsName);
-
-
-
 
     //List<GoodsEntity> findByGoodsCategoryCategoryName(String categoryName);
     //List<GoodsEntity> findByGoodsSubCategoryCategoryName(String subCategoryName);
