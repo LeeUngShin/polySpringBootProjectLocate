@@ -1,6 +1,8 @@
 /*사이드바*/
 .myNav{
     color : black;
+    padding-top : 10px;
+    padding-bottom : 10px;
 }
 
 .myMainRow{
@@ -8,11 +10,11 @@
     margin-right : 50px;
     margin-top : 60px;
 }
-.active{
-    font-family: 'NanumGothicBold';
-}
 
 .myNavDiv{
-    border : solid black 2px;
+    border : solid #c6c7c8 2px;
     border-radius : 5px;
+    font-size : 17px;
+    font-family: 'NanumBarunGothic';
+    padding: 10px;
 }

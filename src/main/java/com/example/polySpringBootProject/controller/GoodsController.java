@@ -72,6 +72,7 @@ public class GoodsController {
                               Model model,
                               @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                               HttpSession session,
+                              HttpServletRequest request,
                               HttpServletResponse response){
 
         GoodsDto goodsDto = goodsService.goodsDetail(goodsNum);
@@ -81,9 +82,15 @@ public class GoodsController {
         model.addAttribute("page", page);
         model.addAttribute("topCategory", goodsDto.getGoodsCategory());
         model.addAttribute("subCategory", goodsDto.getGoodsSubCategory());
-
         Cookie cookie = new Cookie("goodsMyLike", goodsMyLike);
-        response.addCookie(cookie);
+
+        if(goodsMyLike.equals("Y")) {
+            response.addCookie(cookie);
+        }
+        else{
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
 
         return "goods/goodsDetail";
     }
