@@ -1,7 +1,7 @@
 package com.example.polySpringBootProject.entity;
 
-import com.example.polySpringBootProject.MemberGrade;
-import com.example.polySpringBootProject.RoleType;
+import com.example.polySpringBootProject.enumClass.MemberGrade;
+import com.example.polySpringBootProject.enumClass.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -47,7 +47,7 @@ public class MemberEntity extends BaseEntity{
 
     @Column
     // @NotBlank(message = "age cannot be blank")  int는 이 애노테이션 불가
-    private int age;
+    private String phone;
 
     @Column
     private String email;
@@ -79,17 +79,6 @@ public class MemberEntity extends BaseEntity{
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     Set<LikeEntity> likeEntitySet = new HashSet<>();  // 중복 방지를 위해 Set 사용
 
-    public void addBoard(BoardEntity boardEntity){
-        if (boardDatas == null) {
-            boardDatas = new ArrayList<>(); // Ensure initialization if not done already
-        }
-        boardDatas.add(boardEntity);
-    }
-
-    public void addLike(LikeEntity likeEntity){
-        if (likeEntitySet == null) {
-            likeEntitySet = new HashSet<>(); // Ensure initialization if not done already
-        }
-        likeEntitySet.add(likeEntity);
-    }
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderEntity> orderEntityList = new ArrayList<>();
 }

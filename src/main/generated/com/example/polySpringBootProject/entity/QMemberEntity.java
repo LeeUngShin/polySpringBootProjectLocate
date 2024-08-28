@@ -26,8 +26,6 @@ public class QMemberEntity extends EntityPathBase<MemberEntity> {
 
     public final StringPath addrDetail = createString("addrDetail");
 
-    public final NumberPath<Integer> age = createNumber("age", Integer.class);
-
     public final StringPath approval = createString("approval");
 
     public final ListPath<BoardEntity, QBoardEntity> boardDatas = this.<BoardEntity, QBoardEntity>createList("boardDatas", BoardEntity.class, QBoardEntity.class, PathInits.DIRECT2);
@@ -37,7 +35,7 @@ public class QMemberEntity extends EntityPathBase<MemberEntity> {
 
     public final StringPath email = createString("email");
 
-    public final EnumPath<com.example.polySpringBootProject.MemberGrade> grade = createEnum("grade", com.example.polySpringBootProject.MemberGrade.class);
+    public final EnumPath<com.example.polySpringBootProject.enumClass.MemberGrade> grade = createEnum("grade", com.example.polySpringBootProject.enumClass.MemberGrade.class);
 
     public final StringPath id = createString("id");
 
@@ -47,11 +45,15 @@ public class QMemberEntity extends EntityPathBase<MemberEntity> {
 
     public final NumberPath<Long> num = createNumber("num", Long.class);
 
+    public final ListPath<OrderEntity, QOrderEntity> orderEntityList = this.<OrderEntity, QOrderEntity>createList("orderEntityList", OrderEntity.class, QOrderEntity.class, PathInits.DIRECT2);
+
+    public final StringPath phone = createString("phone");
+
     public final StringPath post = createString("post");
 
     public final StringPath pw = createString("pw");
 
-    public final EnumPath<com.example.polySpringBootProject.RoleType> role = createEnum("role", com.example.polySpringBootProject.RoleType.class);
+    public final EnumPath<com.example.polySpringBootProject.enumClass.RoleType> role = createEnum("role", com.example.polySpringBootProject.enumClass.RoleType.class);
 
     public final NumberPath<Integer> sellTotalPrice = createNumber("sellTotalPrice", Integer.class);
 

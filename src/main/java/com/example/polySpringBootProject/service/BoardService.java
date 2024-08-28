@@ -1,6 +1,6 @@
 package com.example.polySpringBootProject.service;
 
-import com.example.polySpringBootProject.BoardType;
+import com.example.polySpringBootProject.enumClass.BoardType;
 import com.example.polySpringBootProject.dto.BoardDto;
 import com.example.polySpringBootProject.entity.BoardEntity;
 import com.example.polySpringBootProject.entity.BoardFileEntity;
@@ -16,11 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,9 +59,7 @@ public class BoardService {
                     .del(boardDto.getDelete())
                     .boardType(BoardType.FREE_BOARD)
                     .build();
-            m.addBoard(board);
             BoardEntity savedBoard = boardRepository.save(board);
-            m.addBoard(savedBoard);
             if(savedBoard==null) return -1L;
             Long savedBoardNum = savedBoard.getNum();
             return savedBoardNum;

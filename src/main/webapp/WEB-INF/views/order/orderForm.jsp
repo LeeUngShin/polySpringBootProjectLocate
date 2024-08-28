@@ -8,14 +8,42 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <link rel="stylesheet" href = "/css/project01.css">
 <link rel="stylesheet" href = "/css/order.css">
+<style>
+</style>
 </head>
 <body>
 <div id="container">
     <%@include file = "../header.jsp" %>
     <%@include file = "../nav.jsp" %>
     <hr>
-    <section class="section ">
+    ${memberDto}
+    <section class="section">
       <article>
+        <div class="container">
+            <div class = "row">
+                <div class="col-12">
+                    <h2>주문결제</h2>
+                <div>
+            </div>
+        </div>
+      </article>
+      <article>
+        <div class="container text-center orderFormBack">
+          <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col address">
+                        <i class="bi bi-pin-map-fill"></i>
+                        배송지
+                    </div>
+                </div>
+                <div class="row payMethod">
+                    <div class="col payMethod">왼쪽2</div>
+                </div>
+            </div>
+            <div class="col payInfo">오른쪽1</div>
+          </div>
+        </div>
       </article>
     </section>
 
@@ -25,9 +53,9 @@
   <script src="/js/order.js"></script>
   <script>
     var loginId = '<%=(String)session.getAttribute("loginId")%>';
-    alert(loginId);
+    //alert(loginId);
     if(loginId=="null" || loginId==""){
-        alert("회원만 접근 가능합니다.");
+        //alert("회원만 접근 가능합니다.");
         location.href="/home";
     }
   </script>

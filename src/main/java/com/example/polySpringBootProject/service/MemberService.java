@@ -1,7 +1,7 @@
 package com.example.polySpringBootProject.service;
 
-import com.example.polySpringBootProject.MemberGrade;
-import com.example.polySpringBootProject.RoleType;
+import com.example.polySpringBootProject.enumClass.MemberGrade;
+import com.example.polySpringBootProject.enumClass.RoleType;
 import com.example.polySpringBootProject.dto.BoardDto;
 import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.entity.BoardEntity;
@@ -62,6 +62,7 @@ public class MemberService {
                 .addr(joinDto.getAddr())
                 .addrDetail(joinDto.getAddrDetail())
                 .email(joinDto.getEmail())
+                .phone(joinDto.getPhone())
                 .role(RoleType.ROLE_USER)
                 .grade(MemberGrade.BRONZE)
                 .approval("N")

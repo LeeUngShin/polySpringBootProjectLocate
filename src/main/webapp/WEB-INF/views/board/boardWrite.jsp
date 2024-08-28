@@ -19,6 +19,7 @@
 		<div id="container">
 		<%@include file = "../header.jsp" %>
 		<%@include file = "../nav.jsp" %>
+            <hr>
 		<div class="section">
 		    <div id="boardWriteDiv">
                 <h2>게시글 등록</h2>

@@ -62,7 +62,7 @@
                       <div class="card-body">
                         <h2 class="card-title">BREAD</h2>
                         <p class="card-text menuCategoryHashTag">#식빵&nbsp&nbsp#도넛&nbsp&nbsp#파이&nbsp&nbsp#페스트리&nbsp&nbsp<br>#건강빵&nbsp&nbsp#추천메뉴</p>
-                        <a href="#" class="btn btn-outline-secondary">상품 보러가기</a>
+                        <a href="/goods/menu?topCategory=빵&subCategory=all&page=1" class="btn btn-outline-secondary">상품 보러가기</a>
                       </div>
                     </div>
                   </div>
@@ -72,7 +72,7 @@
                       <div class="card-body">
                         <h2 class="card-title">CAKE</h2>
                         <p class="card-text menuCategoryHashTag">#생크림케이크&nbsp&nbsp#티라미수&nbsp&nbsp#치즈케이크&nbsp&nbsp<br>#조각케이크&nbsp&nbsp#캐릭터케이크</p>
-                        <a href="#" class="btn btn-outline-secondary">상품 보러가기</a>
+                        <a href="/goods/menu?topCategory=케이크&subCategory=all&page=1" class="btn btn-outline-secondary">상품 보러가기</a>
                       </div>
                     </div>
                   </div>
@@ -82,7 +82,7 @@
                       <div class="card-body">
                         <h2 class="card-title">DESSERT</h2>
                         <p class="card-text menuCategoryHashTag">#마카롱&nbsp&nbsp#아이스크림&nbsp&nbsp#초콜릿&nbsp&nbsp#사탕&nbsp&nbsp<br>#잼&nbsp&nbsp#쿠키</p>
-                        <a href="#" class="btn btn-outline-secondary">상품 보러가기</a>
+                        <a href="/goods/menu?topCategory=디저트&subCategory=all&page=1" class="btn btn-outline-secondary">상품 보러가기</a>
                       </div>
                     </div>
                   </div>
@@ -92,7 +92,7 @@
                       <div class="card-body">
                         <h2 class="card-title">Drink</h2>
                         <p class="card-text menuCategoryHashTag">#커피&nbsp&nbsp#밀크티&nbsp&nbsp#스무디&nbsp&nbsp#빙수&nbsp&nbsp#우유&nbsp&nbsp<br>#완제음료</p>
-                        <a href="#" class="btn btn-outline-secondary">상품 보러가기</a>
+                        <a href="/goods/menu?topCategory=음료&subCategory=all&page=1" class="btn btn-outline-secondary">상품 보러가기</a>
                       </div>
                     </div>
                   </div>

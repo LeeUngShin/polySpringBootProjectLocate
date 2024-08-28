@@ -1,23 +1,17 @@
 package com.example.polySpringBootProject.service;
 
-import com.example.polySpringBootProject.BoardType;
-import com.example.polySpringBootProject.RoleType;
+import com.example.polySpringBootProject.enumClass.BoardType;
+import com.example.polySpringBootProject.enumClass.RoleType;
 import com.example.polySpringBootProject.entity.BoardEntity;
 import com.example.polySpringBootProject.entity.MemberEntity;
 import com.example.polySpringBootProject.repository.BoardFileRepository;
 import com.example.polySpringBootProject.repository.BoardRepository;
 import com.example.polySpringBootProject.repository.MemberRepository;
-import jakarta.jws.soap.SOAPBinding;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.lang.reflect.Member;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

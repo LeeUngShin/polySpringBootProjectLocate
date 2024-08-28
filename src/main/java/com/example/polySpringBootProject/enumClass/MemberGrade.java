@@ -1,4 +1,4 @@
-package com.example.polySpringBootProject;
+package com.example.polySpringBootProject.enumClass;
 
 public enum MemberGrade {
     BRONZE,

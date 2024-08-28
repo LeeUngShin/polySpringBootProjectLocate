@@ -13,7 +13,8 @@
 <div id="container">
     <%@include file = "../header.jsp" %>
     <%@include file = "../nav.jsp" %>
-    <section class="section ">
+            <hr>
+    <section class="section">
       <article class="article2">
           <div class="container">
             <div class="row">
@@ -49,7 +50,8 @@
                     <div>
                         <h1 id="menuName">${goodsDto.goodsName}</h1>
                         <p id="menuExplain">${goodsDto.goodsExplanation}</p>
-                        <h5>추가정보</h5>
+                        <h5>가격정보</h5>
+                        <p class="menuInfo">${goodsDto.price}원</p>
                         <hr>
                         <h5>영양정보</h5>
                         <p class="menuInfo">총내용량 : ${goodsDto.weight}gㆍ100g 당 칼로리 : ${goodsDto.kcal}kcal<br>
@@ -65,11 +67,11 @@
                         <hr>
 
                         <button type="button" class="btn btn-outline-secondary"
-                        onclick="javascript:location.replace('매핑주소')">
+                        onclick="javascript:location.replace('/order/orderForm/${goodsDto.num}')">
                             구매
                         </button>
                         <button type="button" class="btn btn-outline-secondary"
-                        onclick="javascript:location.replace('매핑주소')">
+                        onclick="javascript:location.replace('/order/orderForm/${goodsDto.num}')">
                           <i class="bi bi-cart-plus"></i> 장바구니
                         </button>
                         <button type="button" class="btn btn-outline-secondary" onclick="likeYesNo('${sessionScope.loginId}', '${goodsDto.num}')">

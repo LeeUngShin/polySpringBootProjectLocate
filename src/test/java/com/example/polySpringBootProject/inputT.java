@@ -2,6 +2,7 @@ package com.example.polySpringBootProject;
 
 import com.example.polySpringBootProject.entity.BoardEntity;
 import com.example.polySpringBootProject.entity.MemberEntity;
+import com.example.polySpringBootProject.enumClass.RoleType;
 import com.example.polySpringBootProject.repository.BoardRepository;
 import com.example.polySpringBootProject.repository.MemberRepository;
 import org.junit.jupiter.api.Test;

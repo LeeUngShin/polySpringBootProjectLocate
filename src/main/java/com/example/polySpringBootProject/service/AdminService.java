@@ -1,8 +1,7 @@
 package com.example.polySpringBootProject.service;
 
-import com.example.polySpringBootProject.BoardType;
+import com.example.polySpringBootProject.enumClass.BoardType;
 import com.example.polySpringBootProject.dto.BoardDto;
-import com.example.polySpringBootProject.dto.BoardResponse;
 import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.entity.*;
@@ -11,7 +10,6 @@ import com.example.polySpringBootProject.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,8 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Member;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Service

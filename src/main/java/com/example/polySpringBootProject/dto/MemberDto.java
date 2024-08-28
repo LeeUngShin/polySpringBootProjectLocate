@@ -41,6 +41,14 @@ public class MemberDto {
     @NotBlank(message = "이메일을 입력하세요")
     private String email;
 
+    private String phone;
+
+    private String phone1;
+
+    private String phone2;
+
+    private String phone3;
+
     private String approval;
 
     private String roleType;
@@ -77,6 +85,10 @@ public class MemberDto {
         memberDto.setAddrDetail(member.getAddrDetail());
         memberDto.setPost(member.getPost());
         memberDto.setEmail(member.getEmail());
+        memberDto.setPhone(member.getPhone());
+        memberDto.setPhone1(member.getPhone().substring(0,3));
+        memberDto.setPhone2(member.getPhone().substring(3,7));
+        memberDto.setPhone3(member.getPhone().substring(7,11));
         memberDto.setApproval(member.getApproval());
         memberDto.setRoleType(member.getRole().toString());
         return memberDto;

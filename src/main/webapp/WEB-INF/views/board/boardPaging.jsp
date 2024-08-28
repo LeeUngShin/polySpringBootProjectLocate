@@ -12,6 +12,7 @@
 		<div id="container">
 			<%@include file = "../header.jsp" %>
 			<%@include file = "../nav.jsp" %>
+            <hr>
         <div class="section ">
             <table class="table table-striped table-hover" >
                 <thead class="table-dark">

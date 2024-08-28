@@ -26,7 +26,7 @@ public class QBoardEntity extends EntityPathBase<BoardEntity> {
 
     public final ListPath<BoardFileEntity, QBoardFileEntity> boardFileEntities = this.<BoardFileEntity, QBoardFileEntity>createList("boardFileEntities", BoardFileEntity.class, QBoardFileEntity.class, PathInits.DIRECT2);
 
-    public final EnumPath<com.example.polySpringBootProject.BoardType> boardType = createEnum("boardType", com.example.polySpringBootProject.BoardType.class);
+    public final EnumPath<com.example.polySpringBootProject.enumClass.BoardType> boardType = createEnum("boardType", com.example.polySpringBootProject.enumClass.BoardType.class);
 
     public final ListPath<CommentEntity, QCommentEntity> commentEntityList = this.<CommentEntity, QCommentEntity>createList("commentEntityList", CommentEntity.class, QCommentEntity.class, PathInits.DIRECT2);
 

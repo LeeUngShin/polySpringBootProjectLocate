@@ -13,6 +13,7 @@
     <div id="container">
     <%@include file = "../header.jsp" %>
     <%@include file = "../nav.jsp" %>
+    <hr>
     <div class="section" id="boardWriteForm">
         <h2>게시글 수정</h2>
         <hr>

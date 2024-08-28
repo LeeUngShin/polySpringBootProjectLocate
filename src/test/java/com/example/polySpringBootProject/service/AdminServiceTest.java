@@ -1,13 +1,9 @@
 package com.example.polySpringBootProject.service;
 
-import com.example.polySpringBootProject.MemberGrade;
-import com.example.polySpringBootProject.RoleType;
-import com.example.polySpringBootProject.dto.GoodsDto;
+import com.example.polySpringBootProject.enumClass.RoleType;
 import com.example.polySpringBootProject.entity.*;
 import com.example.polySpringBootProject.repository.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -301,8 +295,6 @@ class AdminServiceTest {
                 .goods(saveGoods)
                 .member(saveMember)
                 .build();
-        saveGoods.addLike(likeEntity);
-        saveMember.addLike(likeEntity);
         LikeEntity savedLike = likeRepository.save(likeEntity);
         likeRepository.deleteById(savedLike.getNum());
 
@@ -359,8 +351,6 @@ class AdminServiceTest {
                     .member(memberEntity1)
                     .goods(goodsEntity)
                     .build();
-            memberEntity1.addLike(likeEntity);
-            goodsEntity.addLike(likeEntity);
             likeRepository.save(likeEntity);
         }
 
@@ -381,8 +371,6 @@ class AdminServiceTest {
                     .member(memberEntity2)
                     .goods(goodsEntity)
                     .build();
-            memberEntity2.addLike(likeEntity);
-            goodsEntity.addLike(likeEntity);
             likeRepository.save(likeEntity);
         }
 
@@ -403,8 +391,6 @@ class AdminServiceTest {
                     .member(memberEntity1)
                     .goods(goodsEntity)
                     .build();
-            memberEntity1.addLike(likeEntity);
-            goodsEntity.addLike(likeEntity);
             likeRepository.save(likeEntity);
         }
 
@@ -451,7 +437,6 @@ class AdminServiceTest {
                 .build();
 
         BoardEntity saveBoard = boardRepository.save(boardEntity);
-        memberEntity.addBoard(saveBoard);
         System.out.println("********************************************");
         System.out.println(saveBoard);
         System.out.println("********************************************");

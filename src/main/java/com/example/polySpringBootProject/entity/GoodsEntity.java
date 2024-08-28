@@ -3,6 +3,8 @@ package com.example.polySpringBootProject.entity;
 import com.example.polySpringBootProject.MyConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import org.aspectj.weaver.ast.Or;
+import org.hibernate.query.Order;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -85,11 +87,8 @@ public class GoodsEntity extends BaseEntity{
     @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<LikeEntity> likeEntitySet = new HashSet<>();  // 중복 방지를 위해 Set 사용
 
-    public void addLike(LikeEntity likeEntity){
-        if (likeEntitySet == null) {
-            likeEntitySet = new HashSet<>(); // Ensure initialization if not done already
-        }
-        likeEntitySet.add(likeEntity);
-    }
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderEntity> orderEntityList = new ArrayList<>();
+
 }
 

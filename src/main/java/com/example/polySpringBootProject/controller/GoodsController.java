@@ -27,10 +27,13 @@ public class GoodsController {
     @Autowired
     GoodsService goodsService;
 
+    @Autowired
+    Utils utils;
+
     @GetMapping("/menu")
     public String menu(@PageableDefault(page = 1) Pageable pageable,
-                       @RequestParam("topCategory") String topCategory,
-                       @RequestParam("subCategory") String subCategory,
+                       @RequestParam(value="topCategory", defaultValue = "all") String topCategory,
+                       @RequestParam(value = "subCategory", defaultValue = "all") String subCategory,
                        Model model) {
 
         Page<GoodsDto> goodsDtoPage = goodsService.getGoods(pageable, topCategory, subCategory);
@@ -74,25 +77,29 @@ public class GoodsController {
                               HttpSession session,
                               HttpServletRequest request,
                               HttpServletResponse response){
+        try {
+            GoodsDto goodsDto = goodsService.goodsDetail(goodsNum);
+            String goodsMyLike = goodsService.goodsMyLike((String) session.getAttribute("loginId"), goodsNum);
+            System.out.println("찜되어 있는지? " + goodsMyLike);
+            model.addAttribute("goodsDto", goodsDto);
+            model.addAttribute("page", page);
+            model.addAttribute("topCategory", goodsDto.getGoodsCategory());
+            model.addAttribute("subCategory", goodsDto.getGoodsSubCategory());
+            Cookie cookie = new Cookie("goodsMyLike", goodsMyLike);
 
-        GoodsDto goodsDto = goodsService.goodsDetail(goodsNum);
-        String goodsMyLike = goodsService.goodsMyLike((String) session.getAttribute("loginId"), goodsNum);
-        System.out.println("찜되어 있는지? " + goodsMyLike);
-        model.addAttribute("goodsDto", goodsDto);
-        model.addAttribute("page", page);
-        model.addAttribute("topCategory", goodsDto.getGoodsCategory());
-        model.addAttribute("subCategory", goodsDto.getGoodsSubCategory());
-        Cookie cookie = new Cookie("goodsMyLike", goodsMyLike);
+            if (goodsMyLike.equals("Y")) {
+                response.addCookie(cookie);
+            } else {
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
 
-        if(goodsMyLike.equals("Y")) {
-            response.addCookie(cookie);
+            return "goods/goodsDetail";
         }
-        else{
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
+        catch (EntityNotFoundException e){
+            e.printStackTrace();
+            return utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/goods/menu", model);
         }
-
-        return "goods/goodsDetail";
     }
 
     @PostMapping("/goodsLike")

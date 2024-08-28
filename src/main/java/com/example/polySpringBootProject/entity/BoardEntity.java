@@ -1,7 +1,6 @@
 package com.example.polySpringBootProject.entity;
 
-import com.example.polySpringBootProject.BoardType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.polySpringBootProject.enumClass.BoardType;
 import jakarta.persistence.*;
 import lombok.*;
 

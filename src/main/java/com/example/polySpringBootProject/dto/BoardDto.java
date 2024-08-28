@@ -1,6 +1,6 @@
 package com.example.polySpringBootProject.dto;
 
-import com.example.polySpringBootProject.BoardType;
+import com.example.polySpringBootProject.enumClass.BoardType;
 import com.example.polySpringBootProject.entity.BoardEntity;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;

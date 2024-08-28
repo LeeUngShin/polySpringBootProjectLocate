@@ -16,7 +16,7 @@ public class LikeEntity {
 
     @Id  // 기본키 속성
     @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
-    private Long num;  // 상품번호
+    private Long num;  // 기본키 번호
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)

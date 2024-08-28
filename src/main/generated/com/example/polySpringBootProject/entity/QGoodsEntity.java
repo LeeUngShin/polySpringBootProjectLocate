@@ -53,6 +53,8 @@ public class QGoodsEntity extends EntityPathBase<GoodsEntity> {
 
     public final NumberPath<Long> num = createNumber("num", Long.class);
 
+    public final ListPath<OrderEntity, QOrderEntity> orderEntityList = this.<OrderEntity, QOrderEntity>createList("orderEntityList", OrderEntity.class, QOrderEntity.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
 
     public final NumberPath<Integer> protein = createNumber("protein", Integer.class);

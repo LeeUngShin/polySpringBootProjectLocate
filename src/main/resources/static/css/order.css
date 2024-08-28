@@ -1,0 +1,18 @@
+/*주문 폼css */
+
+/*주문 폼 배경색*/
+.orderFormBack{
+    background-color: #F5F5F5;
+}
+
+/*주소창*/
+.address{
+    border : solid 1px #E0E0E0;
+    border-radius : 5px;
+}
+
+
+
+/*결제방법창*/
+
+/*결제정보창*/

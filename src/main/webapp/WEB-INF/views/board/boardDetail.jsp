@@ -13,6 +13,7 @@
         <div id="container">
             <%@include file = "../header.jsp" %>
             <%@include file = "../nav.jsp" %>
+            <hr>
             <div class="section"">
                 <table class="table table-bordered" id="boardDetail">
                     <tr>

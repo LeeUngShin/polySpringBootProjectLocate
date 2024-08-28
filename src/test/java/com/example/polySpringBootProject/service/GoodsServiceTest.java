@@ -1,7 +1,7 @@
 package com.example.polySpringBootProject.service;
 
-import com.example.polySpringBootProject.MemberGrade;
-import com.example.polySpringBootProject.RoleType;
+import com.example.polySpringBootProject.enumClass.MemberGrade;
+import com.example.polySpringBootProject.enumClass.RoleType;
 import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.entity.*;
 import com.example.polySpringBootProject.repository.*;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

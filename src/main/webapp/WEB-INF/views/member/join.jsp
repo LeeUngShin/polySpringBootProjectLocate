@@ -49,10 +49,14 @@
 				<input type="text" class="form-control" id="sample6_detailAddress" name="addrDetail"" placeholder="상세주소" style="width:304px; display:inline-block" required>
 				<input type="hidden" class="form-control" id="sample6_extraAddress" placeholder="참고항목"style="width:90px; display:inline-block">
 			</div>
-	           <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">이메일</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" name="email" required>
-               </div>
+	        <div class="mb-3">
+               <label for="exampleInputEmail1" class="form-label">이메일</label>
+               <input type="text" class="form-control" id="exampleInputEmail1" name="email" required>
+            </div>
+		    <div class="mb-3">
+		      <label for="exampleInputPhone" class="form-label">전화번호(숫자만입력)</label>
+		      <input type="text" class="form-control" id="exampleInputPhone" name ="phone" required>
+		    </div>
 
              <!--
             <div style="display: flex;">
