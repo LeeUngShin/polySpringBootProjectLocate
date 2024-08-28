@@ -182,6 +182,7 @@
             item.classList.add('active');
         });
     });
+
   </script>
 </body>
 </html>

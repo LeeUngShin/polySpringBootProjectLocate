@@ -52,7 +52,7 @@
                 </li>
             </ul>
            <div id="itemBucketDiv">
-                <a class="itemBucket" href="/my/myOrder" onclick="myMenu(${sessionScope.loginId})">
+                <a class="itemBucket" href="/my/myOrder">
                     <i class="bi bi-person-fill"></i>
                     내 주문
                 </a>

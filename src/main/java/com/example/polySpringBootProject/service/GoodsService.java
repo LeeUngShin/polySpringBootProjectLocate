@@ -87,7 +87,6 @@ public class GoodsService {
 
     public List<GoodsDto> getBestGoods(String topCategory, String subCategory){
 
-
         if(subCategory.equals("all") && topCategory.equals("all")){
             List<GoodsEntity> goodsEntityTopCategoryAll = goodsRepository.findTop4ByOrderBySellCntDescLikeCntDesc();
             List<GoodsDto> goodsDtoList = new ArrayList<>();
@@ -136,6 +135,24 @@ public class GoodsService {
             }
             return goodsDtoList;
         }
+    }
+
+    public List<GoodsDto> getMainBestMenu(){
+
+        List<GoodsEntity> goodsEntityList = goodsRepository.findTop8ByOrderBySellCntDescLikeCntDesc();
+        List<GoodsDto> goodsDtoList = new ArrayList<>();
+        for(GoodsEntity goodsEntity : goodsEntityList){
+            if(goodsEntity.getGoodsImageEntity().isEmpty() || goodsEntity.getGoodsImageEntity() == null) {
+                GoodsDto goodsDto = GoodsDto.entityToGoodsDtoNotImg(goodsEntity);
+                goodsDtoList.add(goodsDto);
+            }
+            else{
+                GoodsDto goodsDto = GoodsDto.entityToGoodsDto(goodsEntity);
+                goodsDtoList.add(goodsDto);
+            }
+        }
+        return goodsDtoList;
+
     }
 
     public List<GoodsSubCategoryEntity> getSubCategoryList(String topCategory){

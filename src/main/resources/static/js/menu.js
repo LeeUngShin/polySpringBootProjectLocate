@@ -50,3 +50,4 @@ function menuHoverOut(goodsNum){
     var menuHover = document.getElementById("menuHover_"+goodsNum);
     menuHover.style.visibility = "hidden";
 }
+

@@ -33,5 +33,13 @@
         }
     }
   </script>
+     <script>
+        var role = '<%=(String)session.getAttribute("role")%>';
+        //alert(role);
+        if((role != "ROLE_ADMIN") || role=='null' || role==""){
+            alert("관리자만 접근 가능합니다.")
+            window.location.href = "/home";
+        }
+      </script>
 </body>
 </html>

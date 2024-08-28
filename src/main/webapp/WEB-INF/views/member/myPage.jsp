@@ -117,5 +117,14 @@
         		        }).open();
         		    }
         		</script>
+        		 <script>
+                    var role = '<%=(String)session.getAttribute("role")%>';
+                    //alert(role);
+                    if((role != "ROLE_ADMIN" && role != "ROLE_USER") || role=='null' || role==""){
+                        alert("회원만 접근 가능합니다.")
+                        window.location.href = "/home";
+                    }
+                  </script>
 	</body>
+
 </html>

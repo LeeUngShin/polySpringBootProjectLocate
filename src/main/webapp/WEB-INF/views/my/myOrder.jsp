@@ -31,6 +31,8 @@
                   <a class="nav-link myNav" href="#">주문내역</a>
                   <a class="nav-link myNav" href="#">장바구니</a>
                 </nav>
+                          <button onclick="test()">버튼</button>
+
               </div>
               <div class="col-10">
                 col-8
@@ -44,13 +46,15 @@
 </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="/js/my.js"></script>
-  <script>
-    var loginId = '<%=(String)session.getAttribute("loginId")%>';
-    alert(loginId);
-    if(loginId=="null" || loginId==""){
-        alert("회원만 접근 가능합니다.");
-        location.href="/home";
+  <script src="/js/menu.js"></script>
+ <script>
+    var role = '<%=(String)session.getAttribute("role")%>';
+    //alert(role);
+    if((role != "ROLE_ADMIN" && role != "ROLE_USER") || role=='null' || role==""){
+        alert("회원만 접근 가능합니다.")
+        window.location.href = "/home";
     }
   </script>
+
 </body>
 </html>
