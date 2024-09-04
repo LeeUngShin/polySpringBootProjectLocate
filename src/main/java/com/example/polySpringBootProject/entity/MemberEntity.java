@@ -58,6 +58,9 @@ public class MemberEntity extends BaseEntity{
     @Column
     private int sellTotalPrice;
 
+    @Column
+    private int accumulatedMoney;
+
 //    @CreationTimestamp
 //    //@Temporal(TemporalType.TIMESTAMP)
 //    LocalDateTime reg_date;

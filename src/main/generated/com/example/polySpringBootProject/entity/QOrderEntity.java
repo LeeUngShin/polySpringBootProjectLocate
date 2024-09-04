@@ -27,6 +27,8 @@ public class QOrderEntity extends EntityPathBase<OrderEntity> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdTime = _super.createdTime;
 
+    public final EnumPath<com.example.polySpringBootProject.enumClass.DeliveryType> deliveryPrice = createEnum("deliveryPrice", com.example.polySpringBootProject.enumClass.DeliveryType.class);
+
     public final EnumPath<com.example.polySpringBootProject.enumClass.DeliveryType> deliveryType = createEnum("deliveryType", com.example.polySpringBootProject.enumClass.DeliveryType.class);
 
     public final QGoodsEntity goods;

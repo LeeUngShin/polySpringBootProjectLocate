@@ -3,13 +3,101 @@
 /*주문 폼 배경색*/
 .orderFormBack{
     background-color: #F5F5F5;
+    padding-top : 50px;
+    margin-top : 30px;
 }
 
-/*주소창*/
-.address{
+/*주문결제 카테고리 박스*/
+.orderPayment{
     border : solid 1px #E0E0E0;
     border-radius : 5px;
+      font-family: "Noto Sans KR", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 500;
+      font-style: normal;
+      background-color : white;
+      padding : 30px;
+      margin-bottom: 30px;
+      margin-left : 10px;
+      margin-right : 10px;
 }
+
+/*주소변경 버튼 위치 잡기*/
+#addressModifyButton{
+    display : flex;
+    justify-content : space-between;
+    align-items : center;
+}
+/*왼쪽 오른쪽 정렬*/
+.orderPaymentAll{
+    display : flex;
+    justify-content: center;
+}
+
+.orderPaymentLeft{
+    width: 700px;
+}
+.orderPaymentRight{
+    width: 400px;
+    height : 600px;
+    border : solid 1px black;
+ }
+
+ /*상품 이미지*/
+ #orderPaymentImg{
+    width: 100px;
+    height: 100px;
+ }
+ #orderGoods{
+    display : flex;
+ }
+
+ /*배송비 부분*/
+ #delivery{
+    width: 350px;
+    height: 35px;
+    background-color: #edeaea;
+    margin-top: 20px;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 20px;
+    padding-left: 20px;
+    font-size: 12px;
+ }
+
+/*가격계산*/
+.goodsPrice{
+    display: flex;
+    justify-content: space-between;
+    padding-right: 10px;
+    padding-left: 10px;
+
+}
+
+/*결제하기 버튼*/
+
+#paymentButtonDiv{
+    text-align : center;
+}
+#paymentButton{
+    width: 300px;
+    height: 50px;
+    font-size: 20px;
+}
+
+
+/*
+.noto-sans-kr-<uniquifier> {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+*/
+
 
 
 

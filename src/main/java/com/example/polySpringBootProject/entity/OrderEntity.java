@@ -44,6 +44,9 @@ public class OrderEntity extends BaseEntity{
     @Column
     private DeliveryType deliveryType;
 
+    @Column
+    private DeliveryType deliveryPrice;
+
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 

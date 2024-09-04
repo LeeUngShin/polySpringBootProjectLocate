@@ -22,6 +22,8 @@ public class QMemberEntity extends EntityPathBase<MemberEntity> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
+    public final NumberPath<Integer> accumulatedMoney = createNumber("accumulatedMoney", Integer.class);
+
     public final StringPath addr = createString("addr");
 
     public final StringPath addrDetail = createString("addrDetail");
