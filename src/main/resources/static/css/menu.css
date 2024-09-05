@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top : 80px;
+  padding-top : 50px;
 }
 
 #detailMenuBar{
@@ -41,7 +41,7 @@
   font-weight: bold;
 }
 
-.nav-item{
+.menuNav{
     padding : 0px;
 }
 

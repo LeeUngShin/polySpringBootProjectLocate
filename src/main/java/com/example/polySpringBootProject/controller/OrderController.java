@@ -58,4 +58,9 @@ public class OrderController {
             return utils.showMessageAlert("주문 처리중 에러가 발생했습니다.", "/goods/detail/"+goodsNum, model);
         }
     }
+
+    @GetMapping("/orderResult")
+    public String orderResult(){
+        return "order/orderResult";
+    }
 }

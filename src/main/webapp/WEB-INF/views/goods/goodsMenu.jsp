@@ -14,7 +14,7 @@
     <%@include file = "../header.jsp" %>
     <%@include file = "../nav.jsp" %>
     <hr>
-    <div class="section ">
+    <div>
       <article class="article1">
         <div class="col" id="detailMenuBar">
           <div class="row">
@@ -33,18 +33,19 @@
           </div>
           <div class="row">
             <ul class="nav nav-underline">
-              <li class="nav-item">
+              <li class="menuNav">
                 <a class="nav-link tab-menu__item ${topCategory eq 'all' ? 'active' : ''}" href="/goods/menu?topCategory=all&subCategory=all&page=1">전체</a>
               </li>
-              <li class="nav-item">
+              <li class="menuNav">
                 <a class="nav-link tab-menu__item ${topCategory eq '빵' ? 'active' : ''}" href="/goods/menu?topCategory=빵&subCategory=all&page=1">빵</a>
               </li>
-              <li class="nav-item">
+              <li class="menuNav">
                 <a class="nav-link tab-menu__item ${topCategory eq '케이크' ? 'active' : ''}" href="/goods/menu?topCategory=케이크&subCategory=all&page=1">케이크</a>
               </li>
-              <li class="nav-item">
+              <li class="menuNav">
                 <a class="nav-link tab-menu__item ${topCategory eq '디저트' ? 'active' : ''}" href="/goods/menu?topCategory=디저트&subCategory=all&page=1">디저트</a>
-              </li>              <li class="nav-item">
+              </li>
+              <li class="menuNav">
                 <a class="nav-link tab-menu__item ${topCategory eq '음료' ? 'active' : ''}" href="/goods/menu?topCategory=음료&subCategory=all&page=1">음료</a>
               </li>
             </ul>
@@ -52,11 +53,11 @@
         </div>
         <div class="row" id="subMenu">
           <ul class="nav nav-underline">
-            <li class="nav-item">
+            <li class="menuNav">
               <a class="nav-link ${subCategory eq 'all' ? 'active' : ''}" href="/goods/menu?topCategory=${topCategory}&subCategory=all&page=1">전체</a>
             </li>
             <c:forEach items="${goodsSubCategoryEntityList}" var = "item">
-              <li class="nav-item">
+              <li class="menuNav">
                 <a class="nav-link ${subCategory eq item.categoryName ? 'active' : ''}" href="/goods/menu?topCategory=${topCategory}&subCategory=${item.categoryName}&page=1">
                     ${item.categoryName}
                 </a>

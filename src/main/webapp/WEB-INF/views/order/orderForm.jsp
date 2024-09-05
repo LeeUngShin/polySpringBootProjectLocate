@@ -11,9 +11,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-
-<style>
-</style>
 </head>
 <body>
 <div id="container">
@@ -23,12 +20,12 @@
     ${memberDto}
     <section class="section">
       <article>
-        <div class="container">
-            <div class = "row">
-                <div class="col-12">
-                    <h2>주문결제</h2>
-                <div>
-            </div>
+        <div>
+          <div class = "row">
+            <div class="col-12">
+              <h2>주문결제</h2>
+            <div>
+          </div>
         </div>
       </article>
       <article>
@@ -113,7 +110,7 @@
             </div>
             <p style="text-align : right; padding-right : 10px;">적립금 50원 적립예정</p>
             <div id="paymentButtonDiv">
-                <button type="button" class="btn btn-primary" id="paymentButton">결제하기</button>
+                <button type="button" class="btn btn-primary" id="paymentButton" onclick="window.location.href='/order/orderResult';">결제하기</button>
             </div>
           </div>
         </div>

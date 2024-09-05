@@ -12,6 +12,11 @@ public class MyController {
     public String myOrder(){
 
         return "my/myOrder";
+    }
 
+    @GetMapping("/myOrderDetail")
+    public String myOrderDetail(){
+
+        return "my/myOrderDetail";
     }
 }

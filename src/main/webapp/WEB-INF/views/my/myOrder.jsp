@@ -14,28 +14,26 @@
 <div id="container">
     <%@include file = "../header.jsp" %>
     <%@include file = "../nav.jsp" %>
-    <hr>
-    <section class="section ">
+    <hr style="margin-bottom : 45px;">
+    <section id="myMenuSection">
+      <%@include file = "./mySideBar.jsp" %>
       <article>
-          <div class="container">
-            <div class="row myMainRow">
-              <div class="col-2">
-                <h2 style="margin-bottom : 20px;">My Menu</h2>
-                <nav class="nav flex-column myNavDiv">
-                  <a class="nav-link active myNav" aria-current="page" href="#" style="font-weight : bold">홈</a>
-                  <a class="nav-link myNav" href="/member/modify">회원정보 수정</a>
-                  <a class="nav-link myNav" href="/member/delete">회원탈퇴</a>
-                  <hr>
-                  <a class="nav-link myNav" href="/member/myBoard?page=1">게시글 모아보기</a>
-                  <hr>
-                  <a class="nav-link myNav" href="#">주문내역</a>
-                  <a class="nav-link myNav" href="#">장바구니</a>
-                </nav>
-                          <button onclick="test()">버튼</button>
-
-              </div>
-              <div class="col-10">
-                col-8
+          <div class="orderDiv">
+            <div id="orderDetailDiv">
+              <h3 class="fontBold">주문내역</h3>
+              <hr>
+              <p><span class="fontBold">2024.08.10</span><a href="/my/myOrderDetail"><span style="float : right">주문상세보기<i class="bi bi-chevron-right"></i></span></a></p>
+              <div class="orderDetail">
+                <div id="orderDetail1">
+                  <div><img src="./catdog.jpg" class="goodsImg"></div>
+                  <div id="orderDetail1_info">
+                    <span class="fontBold">상품준비중</span> <i class="bi bi-chevron-right"></i>
+                    <hr>
+                    <a href="#"><p>베리크린 야채/과일 세정제 칼슘파우더</a> <a href="#"><span class="cartButton"><i class="bi bi-cart"></i></span></a></p>
+                    <p><span class="fontBold">5000원</span></5000> / 1개</p>
+                    <p>주문번호 00000000000</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

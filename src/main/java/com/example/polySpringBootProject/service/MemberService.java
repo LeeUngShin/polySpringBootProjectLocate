@@ -66,6 +66,7 @@ public class MemberService {
                 .role(RoleType.ROLE_USER)
                 .grade(MemberGrade.BRONZE)
                 .approval("N")
+                .accumulatedMoney(0)
                 .build();
 
         if (memberRepository.save(member) != null) {

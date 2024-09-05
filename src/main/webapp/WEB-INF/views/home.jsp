@@ -111,7 +111,7 @@
                         <div class="card">
                             <img src="/upload/goods/${goods.storedGoodsImageName}" class="card-img-top homeMenuCategory_article2" alt="...">
                             <div class="card-body">
-                              <h2 class="card-title">${goods.goodsName}</h2>
+                              <h4 class="card-title">${goods.goodsName}</h4>
                               <a href="/goods/detail/${goods.num}" class="btn btn-outline-secondary">상품 보러가기</a>
                             </div>
                         </div>
