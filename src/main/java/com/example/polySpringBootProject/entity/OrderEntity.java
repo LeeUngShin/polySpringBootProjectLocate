@@ -27,28 +27,34 @@ public class OrderEntity extends BaseEntity{
     private long orderUniqueNumber;
 
     @Column
-    private int totalPrice;
+    private String submitPost;
 
     @Column
-    private int orderGoodsAmount;
+    private String submitAddr;
 
     @Column
-    private String orderPost;
+    private String submitAddrDetail;
 
-    @Column
-    private String orderAddr;
-
-    @Column
-    private String orderAddrDetail;
-
-    @Column
+    @Enumerated(EnumType.STRING)
     private DeliveryType deliveryType;
 
     @Column
-    private DeliveryType deliveryPrice;
+    private String submitOrderMessageChoice;
 
     @Column
-    private int useAccumulatedMoney;
+    private int submitUseAccumulatedMoney;
+
+    @Column
+    private int submitAmount;
+
+    @Column
+    private int submitDeliveryPrice;
+
+    @Column
+    private int submitFinalPrice;
+
+    @Column
+    private int submitAccumulatedMoney;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;

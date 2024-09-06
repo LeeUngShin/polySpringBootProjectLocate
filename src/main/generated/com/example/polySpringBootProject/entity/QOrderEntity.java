@@ -27,8 +27,6 @@ public class QOrderEntity extends EntityPathBase<OrderEntity> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdTime = _super.createdTime;
 
-    public final EnumPath<com.example.polySpringBootProject.enumClass.DeliveryType> deliveryPrice = createEnum("deliveryPrice", com.example.polySpringBootProject.enumClass.DeliveryType.class);
-
     public final EnumPath<com.example.polySpringBootProject.enumClass.DeliveryType> deliveryType = createEnum("deliveryType", com.example.polySpringBootProject.enumClass.DeliveryType.class);
 
     public final QGoodsEntity goods;
@@ -37,24 +35,30 @@ public class QOrderEntity extends EntityPathBase<OrderEntity> {
 
     public final NumberPath<Long> num = createNumber("num", Long.class);
 
-    public final StringPath orderAddr = createString("orderAddr");
-
-    public final StringPath orderAddrDetail = createString("orderAddrDetail");
-
-    public final NumberPath<Integer> orderGoodsAmount = createNumber("orderGoodsAmount", Integer.class);
-
-    public final StringPath orderPost = createString("orderPost");
-
     public final NumberPath<Long> orderUniqueNumber = createNumber("orderUniqueNumber", Long.class);
 
     public final EnumPath<com.example.polySpringBootProject.enumClass.PaymentMethod> paymentMethod = createEnum("paymentMethod", com.example.polySpringBootProject.enumClass.PaymentMethod.class);
 
-    public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
+    public final NumberPath<Integer> submitAccumulatedMoney = createNumber("submitAccumulatedMoney", Integer.class);
+
+    public final StringPath submitAddr = createString("submitAddr");
+
+    public final StringPath submitAddrDetail = createString("submitAddrDetail");
+
+    public final NumberPath<Integer> submitAmount = createNumber("submitAmount", Integer.class);
+
+    public final NumberPath<Integer> submitDeliveryPrice = createNumber("submitDeliveryPrice", Integer.class);
+
+    public final NumberPath<Integer> submitFinalPrice = createNumber("submitFinalPrice", Integer.class);
+
+    public final StringPath submitOrderMessageChoice = createString("submitOrderMessageChoice");
+
+    public final StringPath submitPost = createString("submitPost");
+
+    public final NumberPath<Integer> submitUseAccumulatedMoney = createNumber("submitUseAccumulatedMoney", Integer.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedTime = _super.updatedTime;
-
-    public final NumberPath<Integer> useAccumulatedMoney = createNumber("useAccumulatedMoney", Integer.class);
 
     public QOrderEntity(String variable) {
         this(OrderEntity.class, forVariable(variable), INITS);
