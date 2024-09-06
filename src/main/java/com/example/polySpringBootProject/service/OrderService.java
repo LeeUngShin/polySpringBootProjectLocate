@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.service;
 
+import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.dto.OrderDetailDto;
 import com.example.polySpringBootProject.dto.OrderDto;
@@ -16,6 +17,7 @@ import org.aspectj.weaver.ast.Or;
 import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +36,18 @@ public class OrderService {
         MemberDto memberDto = MemberDto.entityToDto(member);
         return memberDto;
     }
+
+    public GoodsDto orderGoodsInfo(Long goodsNum) {
+        GoodsEntity goods = goodsRepository.findById(goodsNum).orElseThrow(() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
+        if (goods.getGoodsImageEntity() == null || goods.getGoodsImageEntity().isEmpty()) {
+            GoodsDto goodsDto = GoodsDto.entityToGoodsDtoNotImg(goods);
+            return goodsDto;
+        } else {
+            GoodsDto goodsDto = GoodsDto.entityToGoodsDto(goods);
+            return goodsDto;
+        }
+    }
+
 
     public OrderDetailDto orderComplete(OrderDto orderDto, String loginId, Long goodsNum){
 

@@ -80,19 +80,26 @@ public class GoodsController {
         try {
             GoodsDto goodsDto = goodsService.goodsDetail(goodsNum);
             String goodsMyLike = goodsService.goodsMyLike((String) session.getAttribute("loginId"), goodsNum);
+            System.out.println("현재 상품을 내가 찜햇나?? " + goodsMyLike);
+            if(goodsMyLike.equals("Y")){
+                model.addAttribute("goodsLike", "Y");
+            }
+            if(goodsMyLike.equals("N")) {
+                model.addAttribute("goodsLike", "N");
+            }
             System.out.println("찜되어 있는지? " + goodsMyLike);
             model.addAttribute("goodsDto", goodsDto);
             model.addAttribute("page", page);
             model.addAttribute("topCategory", goodsDto.getGoodsCategory());
             model.addAttribute("subCategory", goodsDto.getGoodsSubCategory());
-            Cookie cookie = new Cookie("goodsMyLike", goodsMyLike);
-
-            if (goodsMyLike.equals("Y")) {
-                response.addCookie(cookie);
-            } else {
-                cookie.setMaxAge(0);
-                response.addCookie(cookie);
-            }
+//            Cookie cookie = new Cookie("goodsMyLike", goodsMyLike);
+//
+//            if (goodsMyLike.equals("Y")) {
+//                response.addCookie(cookie);
+//            } else {
+//                cookie.setMaxAge(0);
+//                response.addCookie(cookie);
+//            }
 
             return "goods/goodsDetail";
         }
@@ -118,9 +125,9 @@ public class GoodsController {
             boolean goodsLike = goodsService.goodsLike(loginId, goodsNum, likeTF);
             if(goodsLike){
                 System.out.println("찜 추가/취소 성공");
-                return "{\"result\" : \"success\"}";
+                return "{\"result\" : \"true\"}";
             }else {
-                return "{\"result\" : \"fail\"}";
+                return "{\"result\" : \"false\"}";
             }
         }catch (EntityNotFoundException e){
             e.printStackTrace();

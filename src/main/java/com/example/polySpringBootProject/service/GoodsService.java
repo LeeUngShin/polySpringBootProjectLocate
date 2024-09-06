@@ -168,6 +168,7 @@ public class GoodsService {
         return categoryCnt;
     }
 
+
     public GoodsDto goodsDetail(Long goodsNum){
 
         GoodsEntity goodsEntity = goodsRepository.findById(goodsNum).orElseThrow(() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
@@ -234,4 +235,6 @@ public class GoodsService {
             return "N";
         }
     }
+
+
 }

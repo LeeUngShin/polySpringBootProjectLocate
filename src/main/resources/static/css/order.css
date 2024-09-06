@@ -81,11 +81,28 @@
 
 #paymentButtonDiv{
     text-align : center;
+    margin-top : 20px;
 }
 #paymentButton{
     width: 300px;
     height: 50px;
     font-size: 20px;
+}
+
+/*수량 선택 부분*/
+.amountButton{
+    border: solid 1px black;
+    width: 30px;
+    margin : 0px;
+    text-align : center
+}
+
+#amount{
+    border: solid 1px black;
+    margin : 0px;
+    display: inline-block;
+    width: 30px;
+    text-align: center;
 }
 
 

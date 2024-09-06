@@ -1,5 +1,6 @@
 package com.example.polySpringBootProject.controller;
 
+import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.dto.OrderDetailDto;
 import com.example.polySpringBootProject.dto.OrderDto;
@@ -7,6 +8,7 @@ import com.example.polySpringBootProject.service.OrderService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +24,24 @@ public class OrderController {
 
     @GetMapping("/orderForm/{goodsNum}")
     public String orderForm(HttpSession session, Model model,
-                            @PathVariable("goodsNum")Long goodsNum){
+                            @PathVariable("goodsNum")Long goodsNum,
+                            @RequestParam("amount")int amount){
         String loginId = (String) session.getAttribute("loginId");
         try{
             MemberDto memberDto = orderService.loginMemberInfo(loginId);
+            GoodsDto goodsDto = orderService.orderGoodsInfo(goodsNum);
+            if(goodsDto.getPrice()*amount >=30000){
+                System.out.println("배송비 없음");
+                model.addAttribute("deliveryPrice", "N");
+            }
+            else{
+                System.out.println("배송비 있음");
+                model.addAttribute("deliveryPrice", "Y");
+            }
             model.addAttribute("memberDto", memberDto);
-
+            model.addAttribute("goodsDto", goodsDto);
+            model.addAttribute("amount", amount);
+            model.addAttribute("finalPrice", goodsDto.getPrice()*amount);
             return "order/orderForm";
         }catch (EntityNotFoundException e){
             e.printStackTrace();
@@ -49,18 +63,22 @@ public class OrderController {
 
             model.addAttribute("savedOrderDetailDto", savedOrderDetailDto);
 
-            return "my/orderComplete";
+            return "order/orderResult";
         }catch (EntityNotFoundException e){
             e.printStackTrace();
             return utils.showMessageAlert("회원 또는 상품 정보를 찾을 수 없습니다.", "/goods/menu", model);
-        }catch (RuntimeException e){
+        }catch (DataAccessException e){
+            e.printStackTrace();
+            return utils.showMessageAlert("데이터 처리 중 오류가 발생했습니다.", "/goods/detail/"+goodsNum, model);
+        }
+        catch (RuntimeException e){
             e.printStackTrace();
             return utils.showMessageAlert("주문 처리중 에러가 발생했습니다.", "/goods/detail/"+goodsNum, model);
         }
     }
 
-    @GetMapping("/orderResult")
-    public String orderResult(){
-        return "order/orderResult";
-    }
+//    @GetMapping("/orderResult")
+//    public String orderResult(){
+//        return "order/orderResult";
+//    }
 }

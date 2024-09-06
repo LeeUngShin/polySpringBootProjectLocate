@@ -54,6 +54,8 @@ public class QOrderEntity extends EntityPathBase<OrderEntity> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedTime = _super.updatedTime;
 
+    public final NumberPath<Integer> useAccumulatedMoney = createNumber("useAccumulatedMoney", Integer.class);
+
     public QOrderEntity(String variable) {
         this(OrderEntity.class, forVariable(variable), INITS);
     }

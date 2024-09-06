@@ -1,12 +1,10 @@
-function likeYesNo(loginId, goodsNum){
+function likeYesNo(loginId, goodsNum, goodsLikeTF){
 
     if(loginId==null || loginId==""){
         alert("회원만 상품을 찜할 수 있습니다.");
         return;
     }
 
-    var like = document.getElementById("like");
-    var likeNot = document.getElementById("likeNot");
     like.classList.toggle("likeYesNo");
     likeNot.classList.toggle("likeYesNo");
 
@@ -31,8 +29,13 @@ function likeYesNo(loginId, goodsNum){
     .then((response) => response.json())
     .then((data) =>{
         console.log(data);
-        if(data.result == "fail"){
-            alert("처리 중 에러 발생");
+        if(data=="true"){
+            like.classList.add("likeYesNo");
+            likeNot.classList.remove("likeYesNo");
+        }
+        else if(data=="false"){
+            likeNot.classList.add("likeYesNo");
+            like.classList.remove("likeYesNo");
         }
      })
     .catch(error => {
@@ -51,3 +54,43 @@ function menuHoverOut(goodsNum){
     menuHover.style.visibility = "hidden";
 }
 
+function amountPlus(stock){
+    //alert(stock);
+    var currentAmount = document.getElementById("amount").value;
+    var currentAmountNum = parseInt(currentAmount, 10);
+    if(currentAmountNum >= stock){
+        alert("상품 재고를 넘을 수 없습니다.");
+        return;
+    }
+    document.getElementById("amount").value = currentAmountNum+1;
+
+}
+
+function amountMinus(stock){
+
+    //alert(stock);
+    var currentAmount = document.getElementById("amount").value;
+    var currentAmountNum = parseInt(currentAmount, 10);
+    if(currentAmountNum<=1){
+        alert("최소 1개를 선택해야 합니다.");
+        return;
+    }
+    document.getElementById("amount").value = currentAmountNum-1;
+}
+
+function amountPlusMinus(stock){
+
+    //alert(stock);
+    var currentAmount = document.getElementById("amount").value;
+    var currentAmountNum = parseInt(currentAmount, 10);
+    if(currentAmountNum >= stock){
+        alert("상품 재고를 넘을 수 없습니다.");
+        document.getElementById("amount").value = 1;
+        return;
+    }
+    if(currentAmountNum<=1){
+        alert("최소 1개를 선택해야 합니다.");
+        document.getElementById("amount").value = 1;
+        return;
+    }
+}

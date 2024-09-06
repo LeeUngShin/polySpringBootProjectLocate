@@ -48,7 +48,15 @@
                 </div>
                 <div class="col goodsDetailExplain">
                     <div>
-                        <h1 id="menuName">${goodsDto.goodsName}</h1>
+                        <h1 id="menuName">${goodsDto.goodsName}
+                            <button type="button" class="btn btn-outline-secondary" onclick="likeYesNo('${sessionScope.loginId}', '${goodsDto.num}', '${goodsLike}')">
+                              <i class="bi bi-heart-fill" id="like" style="color : red;"></i>
+
+                              <i class="bi bi-heart" id="likeNot"></i>
+                               찜하기
+                            </button>
+                            ${goodsLike}
+                        </h1>
                         <p id="menuExplain">${goodsDto.goodsExplanation}</p>
                         <h5>가격정보</h5>
                         <p class="menuInfo">${goodsDto.price}원</p>
@@ -65,20 +73,28 @@
                             함유
                         </p>
                         <hr>
-
-                        <button type="button" class="btn btn-outline-secondary"
-                        onclick="javascript:location.replace('/order/orderForm/${goodsDto.num}')">
-                            구매
-                        </button>
+                        <form action="/order/orderForm/${goodsDto.num}" method="get">
+                            <!--
+                            <button type="button" class="btn btn-outline-secondary"
+                            onclick="javascript:location.replace('/order/orderForm/${goodsDto.num}')">
+                                구매
+                            </button>-->
+                            <button type="submit" class="btn btn-outline-secondary" style="margin-bottom : 10px;">
+                              <i class="bi bi-cart-plus"></i> 구매
+                            </button>
+                            수량
+                            <span>
+                                <button type="button" class="amountButton" onclick="amountMinus(${goodsDto.stock})" >-</button>
+                                <input id="amount" name="amount" value="1" onchange="amountPlusMinus(${goodsDto.stock})"></input>
+                                <button type="button" class="amountButton" onclick="amountPlus(${goodsDto.stock})" change="amountPlus(${goodsDto.stock})">+</button>
+                            </span>
+                        </form>
+                        <div>
                         <button type="button" class="btn btn-outline-secondary"
                         onclick="javascript:location.replace('/order/orderForm/${goodsDto.num}')">
                           <i class="bi bi-cart-plus"></i> 장바구니
                         </button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="likeYesNo('${sessionScope.loginId}', '${goodsDto.num}')">
-                          <i class="bi bi-heart-fill ${goodsMyLike ? 'likeYesNo' : ''}" id="like" style="color : red;"></i>
-                          <i class="bi bi-heart ${goodsMyLike ? '' : 'likeYesNo'}" id="likeNot"></i>
-                           찜하기
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -86,6 +102,10 @@
         </div>
       </article>
     </section>
+    <form>
+    <div name="aa">1000</div>
+
+    </form>
 
 
     <%@ include file = "../footer.jsp" %>
@@ -93,19 +113,27 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="/js/menu.js"></script>
   <script>
-     // 모든 쿠키를 문자열로 가져옵니다.
-     const cookieString = document.cookie;
+    var goodsLike = '${goodsLike}';
+    if(goodsLike == 'Y'){
+        like.classList.add("likeYesNo");
+        likeNot.classList.remove("likeYesNo");
+    }
+    if(goodsLike == 'N'){
+        like.classList.remove("likeYesNo");
+        likeNot.classList.add("likeYesNo");
+    }
+  </script>
 
-     // 쿠키 문자열에서 '='를 기준으로 값을 분리합니다.
+  <script>
+  /*   const cookieString = document.cookie;
+
      const parts = cookieString.split('=');
 
      var cookieValue;
 
-     // 쿠키가 있을 경우, 두 번째 부분(값)을 반환합니다.
      if (parts.length === 2) {
          cookieValue = decodeURIComponent(parts[1]); // URL 디코딩하여 반환
      }
-     //alert(cookieValue);
 
      if(cookieValue === 'Y'){
         like.classList.add('likeYesNo');
@@ -114,7 +142,7 @@
      else{
         likeNot.classList.add('likeYesNo');
         like.classList.remove('likeYesNo');
-     }
+     }*/
   </script>
 </body>
 </html>

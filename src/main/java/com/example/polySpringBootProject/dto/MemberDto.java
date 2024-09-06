@@ -57,6 +57,8 @@ public class MemberDto {
 
     private String grade;
 
+    private int accumulatedMoney;
+
     public MemberDto(Long num, int price, int stock, String id, LocalDateTime createdTime){
         this.num = num;
         this.id = id;
@@ -90,6 +92,7 @@ public class MemberDto {
         memberDto.setPhone2(member.getPhone().substring(3,7));
         memberDto.setPhone3(member.getPhone().substring(7,11));
         memberDto.setApproval(member.getApproval());
+        memberDto.setAccumulatedMoney(member.getAccumulatedMoney());
         memberDto.setRoleType(member.getRole().toString());
         return memberDto;
     }
