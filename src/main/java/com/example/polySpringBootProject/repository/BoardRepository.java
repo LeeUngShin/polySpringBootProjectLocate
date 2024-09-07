@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
+public interface  BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     Page<BoardEntity> findAllByDel(Pageable pageable, String del);
 

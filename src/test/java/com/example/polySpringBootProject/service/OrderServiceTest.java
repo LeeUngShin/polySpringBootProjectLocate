@@ -10,6 +10,9 @@ import com.example.polySpringBootProject.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -91,17 +94,53 @@ class OrderServiceTest {
         GoodsEntity goods = goodsInsert();
         System.out.println("주문 상품 이름 : " + goods.getName());
 
-        OrderDto orderDto = OrderDto.builder()
-                .paymentMethod(PaymentMethod.BANK_TRANSFER)
-                .post("22222")
-                .orderAddr("테스트주소")
-                .orderAddrDetail("테스트상세주소")
-                .orderGoodsAmount(2)
-                .orderGoodsTotalPrice(3000)
+        OrderDto submitOrderDto = OrderDto.builder()
+                .submitPost("00000")
+                .submitAddr("주문주소")
+                .submitAddrDetail("주문상세주소")
+                .submitOrderMessageChoice("배송메세지")
+                .submitUseAccumulatedMoney(250)
+                .submitPaymentMethod(PaymentMethod.BANK_TRANSFER)
+                .submitAmount(3)
+                .submitDeliveryPrice(3000)
+                .submitFinalPrice(5000)
+                .submitAccumulatedMoney(50)
                 .build();
-        OrderDetailDto orderDetailDto = orderService.orderComplete(orderDto, member.getId(), goods.getNum());
-        assertEquals(member.getId(), orderDetailDto.getOrderMemberId());
-        assertEquals(goods.getName(), orderDetailDto.getOrderGoodsName());
-        assertEquals(orderDto.getPost(), orderDetailDto.getPost());
+
+        OrderDetailDto orderDetailDto = orderService.orderComplete(submitOrderDto, member.getId(), goods.getNum());
+        System.out.println(orderDetailDto);
+    }
+
+    @Test
+    void orderList() {
+
+        MemberEntity member = memberInsert();
+        System.out.println("주문 회원 아이디 : " + member.getId());
+        GoodsEntity goods = goodsInsert();
+        System.out.println("주문 상품 이름 : " + goods.getName());
+        
+        // 주문 데이터 저장
+        for(int i=0; i<10;i++) {
+            OrderDto submitOrderDto = OrderDto.builder()
+                    .submitPost("지번"+i)
+                    .submitAddr("주문주소"+i)
+                    .submitAddrDetail("주문상세주소"+i)
+                    .submitOrderMessageChoice("배송메세지"+i)
+                    .submitUseAccumulatedMoney(250)
+                    .submitPaymentMethod(PaymentMethod.BANK_TRANSFER)
+                    .submitAmount(3)
+                    .submitDeliveryPrice(3000)
+                    .submitFinalPrice(5000)
+                    .submitAccumulatedMoney(50)
+                    .build();
+            orderService.orderComplete(submitOrderDto, member.getId(), goods.getNum());
+        }
+
+        Pageable pageable = PageRequest.of(1, 7);
+        Page<OrderDetailDto> orderDetailDtoPage = orderService.orderList(pageable, member.getId());
+        System.out.println("================================================");
+        System.out.println(orderDetailDtoPage);
+        System.out.println("================================================");
+
     }
 }

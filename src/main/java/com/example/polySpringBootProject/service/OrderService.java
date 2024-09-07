@@ -17,6 +17,10 @@ import org.aspectj.weaver.ast.Or;
 import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -49,22 +53,25 @@ public class OrderService {
     }
 
 
-    public OrderDetailDto orderComplete(OrderDto orderDto, String loginId, Long goodsNum){
+    public OrderDetailDto orderComplete(OrderDto orderDto, String loginId, Long goodsNum) {
 
         MemberEntity member = memberRepository.findById(loginId).orElseThrow(() -> new EntityNotFoundException("해당 아이디를 찾을 수 없습니다."));
-        GoodsEntity goods = goodsRepository.findById(goodsNum).orElseThrow(()-> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
+        GoodsEntity goods = goodsRepository.findById(goodsNum).orElseThrow(() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
 
         long orderUniqueNumber = System.currentTimeMillis() + member.getNum();
 
         OrderEntity orderEntity = OrderEntity.builder()
                 .orderUniqueNumber(orderUniqueNumber)
-                .totalPrice(orderDto.getOrderGoodsTotalPrice())
-                .orderGoodsAmount(orderDto.getOrderGoodsAmount())
-                .orderPost(orderDto.getPost())
-                .orderAddr(orderDto.getOrderAddr())
-                .orderAddrDetail(orderDto.getOrderAddrDetail())
+                .submitPost(orderDto.getSubmitPost())
+                .submitAddr(orderDto.getSubmitAddr())
+                .submitAddrDetail(orderDto.getSubmitAddrDetail())
                 .deliveryType(DeliveryType.READY)
-                .paymentMethod(orderDto.getPaymentMethod())
+                .submitOrderMessageChoice(orderDto.getSubmitOrderMessageChoice())
+                .submitUseAccumulatedMoney(orderDto.getSubmitUseAccumulatedMoney())
+                .submitAmount(orderDto.getSubmitAmount())
+                .submitDeliveryPrice(orderDto.getSubmitDeliveryPrice())
+                .submitAccumulatedMoney(orderDto.getSubmitAccumulatedMoney())
+                .paymentMethod(orderDto.getSubmitPaymentMethod())
                 .goods(goods)
                 .member(member)
                 .build();
@@ -74,10 +81,31 @@ public class OrderService {
             OrderDetailDto orderDetailDto = OrderDetailDto.EntityToDtoOrderComplete(savedOrderEntity);
 
             return orderDetailDto;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("주문처리 중 에러 발생했습니다.");
         }
+    }
+
+    public Page<OrderDetailDto> orderList(Pageable pageable, String loginId){
+        
+        int page = pageable.getPageNumber()-1;  // 0(처음페이지)부터 시작
+        int pageLimit = 5; // 한페이지에 보여줄 주문 개수
+        
+        Page<OrderEntity> orderEntityPage = orderRepository.findByMemberId(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "createdTime")), loginId);
+
+        Page<OrderDetailDto> orderDetailDtoPage = orderEntityPage.map
+                (order -> {  // 이미지가 없으면 null예외 발생 -> null 체크 먼저하기!!
+                    if(order.getGoods().getGoodsImageEntity() == null || order.getGoods().getGoodsImageEntity().isEmpty()){
+                        return new OrderDetailDto(order.getNum(), order.getOrderUniqueNumber(), order.getDeliveryType(), order.getGoods().getName(), order.getSubmitFinalPrice(), order.getSubmitAmount(), order.getCreatedTime());
+                    }
+                    else {
+                        return new OrderDetailDto(order.getNum(), order.getOrderUniqueNumber(), order.getDeliveryType(), order.getGoods().getName(), order.getSubmitFinalPrice(), order.getSubmitAmount(), order.getCreatedTime(), order.getGoods().getGoodsImageEntity().get(0).getStoredFileNameWithExtension());
+                    }
+                });
+        
+        return orderDetailDtoPage;
+
     }
 
 }

@@ -9,6 +9,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +78,15 @@ public class OrderController {
             e.printStackTrace();
             return utils.showMessageAlert("주문 처리중 에러가 발생했습니다.", "/goods/detail/"+goodsNum, model);
         }
+    }
+
+    @GetMapping("/orderList")
+    public String orderList(Model model, @PageableDefault(page = 1) Pageable pageable,
+                            HttpSession session){
+        String loginId = (String)session.getAttribute("loginId");
+        Page<OrderDetailDto> orderDetailDtoPage = orderService.orderList(pageable, loginId);
+
+        return "my/myOrder";
     }
 
 //    @GetMapping("/orderResult")
