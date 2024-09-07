@@ -7,6 +7,7 @@ import com.example.polySpringBootProject.enumClass.MemberGrade;
 import com.example.polySpringBootProject.enumClass.PaymentMethod;
 import com.example.polySpringBootProject.enumClass.RoleType;
 import com.example.polySpringBootProject.repository.*;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,6 +39,9 @@ class OrderServiceTest {
     GoodsImageRepository goodsImageRepository;
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    EntityManager em;
 
     @Test
     MemberEntity memberInsert(){
@@ -136,10 +140,18 @@ class OrderServiceTest {
             orderService.orderComplete(submitOrderDto, member.getId(), goods.getNum());
         }
 
+        em.flush();
+        em.clear();
+
+        System.out.println("*******************************************");
         Pageable pageable = PageRequest.of(1, 7);
         Page<OrderDetailDto> orderDetailDtoPage = orderService.orderList(pageable, member.getId());
         System.out.println("================================================");
-        System.out.println(orderDetailDtoPage);
+        List<OrderDetailDto> orderDetailDtoList = orderDetailDtoPage.getContent();
+        for(OrderDetailDto order : orderDetailDtoList){
+            System.out.println(order);
+            System.out.println("-------------------------------------");
+        }
         System.out.println("================================================");
 
     }
