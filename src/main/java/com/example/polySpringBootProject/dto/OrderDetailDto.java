@@ -22,11 +22,18 @@ public class OrderDetailDto {
     private int submitUseAccumulatedMoney;
     private PaymentMethod submitPaymentMethod;
     private int submitAmount;
+    private int submitGoodsTotalPrice;
     private int submitDeliveryPrice;
     private int submitFinalPrice;
     private int submitAccumulatedMoney;
     private String goodsName;
 
+    private Long goodsNum;
+    private String memberName;
+    private String phone;
+    private String phone1;
+    private String phone2;
+    private String phone3;
     private Long orderNum;
     private long orderUniqueNumber;
     private DeliveryType deliveryType;
@@ -37,8 +44,10 @@ public class OrderDetailDto {
     // 이미지 존재
     public OrderDetailDto(Long orderNum, long orderUniqueNumber, DeliveryType deliveryType,
                           String orderGoodsName, int orderGoodsFinalPrice,
-                          int orderGoodsAmount, LocalDateTime orderDate, String goodsStoredImgName){
+                          int orderGoodsAmount, LocalDateTime orderDate, String goodsStoredImgName,
+                          Long goodsNum){
         this.orderNum = orderNum;
+        this.goodsNum = goodsNum;
         this.orderUniqueNumber = orderUniqueNumber;
         this.deliveryType = deliveryType;
         this.goodsName = orderGoodsName;
@@ -51,8 +60,10 @@ public class OrderDetailDto {
     // 이미지 존재X
     public OrderDetailDto(Long orderNum, long orderUniqueNumber, DeliveryType deliveryType,
                           String orderGoodsName, int orderGoodsFinalPrice,
-                          int orderGoodsAmount, LocalDateTime orderDate){
+                          int orderGoodsAmount, LocalDateTime orderDate,
+                          Long goodsNum){
         this.orderNum = orderNum;
+        this.goodsNum = goodsNum;
         this.orderUniqueNumber = orderUniqueNumber;
         this.deliveryType = deliveryType;
         this.goodsName = orderGoodsName;
@@ -63,6 +74,7 @@ public class OrderDetailDto {
 
     public static OrderDetailDto EntityToDtoOrderComplete(OrderEntity orderEntity){
         OrderDetailDto orderDetailDto = new OrderDetailDto();
+        orderDetailDto.setMemberName(orderEntity.getMember().getName());
         orderDetailDto.setOrderUniqueNumber(orderEntity.getOrderUniqueNumber());
         orderDetailDto.setOrderDate(orderEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         orderDetailDto.setSubmitPaymentMethod(orderEntity.getPaymentMethod());
@@ -71,13 +83,21 @@ public class OrderDetailDto {
         orderDetailDto.setSubmitAddrDetail(orderEntity.getSubmitAddrDetail());
         orderDetailDto.setGoodsName(orderEntity.getGoods().getName());
         orderDetailDto.setSubmitAmount(orderEntity.getSubmitAmount());
+        orderDetailDto.setSubmitGoodsTotalPrice(orderEntity.getSubmitGoodsTotalPrice());
         orderDetailDto.setSubmitFinalPrice(orderEntity.getSubmitFinalPrice());
+        orderDetailDto.setSubmitUseAccumulatedMoney(orderEntity.getSubmitUseAccumulatedMoney());
+        orderDetailDto.setSubmitDeliveryPrice(orderEntity.getSubmitDeliveryPrice());
+        orderDetailDto.setSubmitOrderMessageChoice(orderEntity.getSubmitOrderMessageChoice());
+        orderDetailDto.setPhone1(orderEntity.getMember().getPhone().substring(0,3));
+        orderDetailDto.setPhone2(orderEntity.getMember().getPhone().substring(3,7));
+        orderDetailDto.setPhone3(orderEntity.getMember().getPhone().substring(7,11));
         // 이미지 존재하면
-        if(orderEntity.getGoods().getGoodsImageEntity()!=null && orderEntity.getGoods().getGoodsImageEntity().isEmpty()){
+        if(orderEntity.getGoods().getGoodsImageEntity()!=null && !orderEntity.getGoods().getGoodsImageEntity().isEmpty()){
             orderDetailDto.setGoodsStoredImgName(orderEntity.getGoods().getGoodsImageEntity().get(0).getStoredFileNameWithExtension());
         }
         return orderDetailDto;
     }
+
 
     public static OrderDetailDto EntityToDtoDetailOrder(OrderEntity orderEntity){
         OrderDetailDto orderDetailDto = new OrderDetailDto();
@@ -95,7 +115,9 @@ public class OrderDetailDto {
         orderDetailDto.setSubmitAccumulatedMoney(orderEntity.getSubmitAccumulatedMoney());
         orderDetailDto.setGoodsName(orderEntity.getGoods().getName());
         orderDetailDto.setOrderDate(orderEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))    );
-
+        orderDetailDto.setPhone1(orderEntity.getMember().getPhone().substring(0,3));
+        orderDetailDto.setPhone2(orderEntity.getMember().getPhone().substring(3,7));
+        orderDetailDto.setPhone3(orderEntity.getMember().getPhone().substring(7,11));
         // 이미지 존재하면
         if(orderEntity.getGoods().getGoodsImageEntity()!=null && orderEntity.getGoods().getGoodsImageEntity().isEmpty()){
             orderDetailDto.setGoodsStoredImgName(orderEntity.getGoods().getGoodsImageEntity().get(0).getStoredFileNameWithExtension());

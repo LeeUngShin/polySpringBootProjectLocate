@@ -60,10 +60,10 @@
                     <div class="orderPayment">
                         <p>적립금 사용</p>
                         <hr>
-                        <p>나의 적립금 ${memberDto.accumulatedMoney}원</p>
+                        <p>나의 적립금 <span id="myAccumulateMoney">${memberDto.accumulatedMoney}</span>원</p>
                         <p>
                             <input type="text" class="form-control" id="useAccumulateMoney" value="0" style="width: 50%; display: inline-block">
-                            <button type="button" class="btn btn-outline-dark" onclick="accumulatedMoneyUse(${memberDto.accumulatedMoney}, ${finalPrice})">적립금 적용</button>
+                            <button type="button" class="btn btn-outline-dark" onclick="accumulatedMoneyUse(${memberDto.accumulatedMoney})">적립금 적용</button>
                         </p>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                 <p>주문상품</p>
                 <hr>
                 <div id="orderGoods">
-                    <img src="/img/home/cakeCategoryImg.jpg" alt="주문상품이미지" id="orderPaymentImg">
+                    <img src="/upload/goods/${goodsDto.storedGoodsImageName}" alt="주문상품이미지" id="orderPaymentImg">
                     <div style="margin-left: 10px;">
                         <p>상품명</p>
                         <p><span>${goodsDto.price}</span><span>원 / <span id="amount" name="amount"> ${amount}</span><span>개</span></p>
@@ -104,7 +104,7 @@
                 <hr style="margin-top: 30px; margin-bottom: 30px;">
                 <div>
                     <div class="goodsPrice">
-                        <div>상품금액</div> <div><span id="goodsOriginalPrice">${finalPrice}</span><span>원</span></div>
+                        <div>상품금액</div> <div><span id="goodsTotalPrice">${goodsTotalPrice}</span><span>원</span></div>
                     </div>
                     <div class="goodsPrice">
                         <div>할인금액</div> <div><span id="disCountPrice">0</span><span>원</span></div>
@@ -112,24 +112,25 @@
                 </div>
                 <hr style="margin-top: 30px; margin-bottom: 30px;">
                 <div class="goodsPrice">
-                    <div style="font-size: 20px;">총 결제금액</div> <div><span id="finalPrice">${finalPrice}</span><span>원</span></div>
+                    <div style="font-size: 20px;">총 결제금액</div> <div><span id="finalPrice"></span><span>원</span></div>
                 </div>
                 <div style="text-align: right; padding-right: 10px;"><span>적립금</span> <span id="accumulateMoney"></span><span>원 적립예정</span></div>
                 <div id="paymentButtonDiv">
-                <form method="post">
-                    <input type="hidden" name="submitMemberId" id="submitMemberId">
-                    <input type="hidden" name="submitGoodsNum" id="submitGoodsNum">
-                    <input type="hidden" name="submitPost" id="submitPost">
-                    <input type="hidden" name="submitAddr" id="submitAddr">
-                    <input type="hidden" name="submitAddrDetail" id="submitAddrDetail">
-                    <input type="hidden" name="submitOrderMessageChoice" id="submitOrderMessageChoice">
-                    <input type="hidden" name="submitUseAccumulatedMoney" id="submitUseAccumulatedMoney">
-                    <input type="hidden" name="submitPaymentMethod" id="submitPaymentMethod">
-                    <input type="hidden" name="submitAmount" id="submitAmount">
-                    <input type="hidden" name="submitDeliveryPrice" id="submitDeliveryPrice">
-                    <input type="hidden" name="submitFinalPrice" id="submitFinalPrice">
-                    <input type="hidden" name="submitAccumulatedMoney" id="submitAccumulatedMoney">
-                    <button type="button" class="btn btn-primary" id="paymentButton" onclick="submitOrderInfo(${goodsDto.num}, '${sessionScope.loginId}')">결제하기</button>
+                <form action="/order/orderResult" method="post">
+                    <input type="hidden" name="submitMemberId" id="submitMemberId" required>
+                    <input type="hidden" name="submitGoodsNum" id="submitGoodsNum" required>
+                    <input type="hidden" name="submitPost" id="submitPost" required>
+                    <input type="hidden" name="submitAddr" id="submitAddr" required>
+                    <input type="hidden" name="submitAddrDetail" id="submitAddrDetail" required>
+                    <input type="hidden" name="submitOrderMessageChoice" id="submitOrderMessageChoice" required>
+                    <input type="hidden" name="submitUseAccumulatedMoney" id="submitUseAccumulatedMoney" required>
+                    <input type="hidden" name="submitPaymentMethod" id="submitPaymentMethod" required>
+                    <input type="hidden" name="submitAmount" id="submitAmount" required>
+                    <input type="hidden" name="submitDeliveryPrice" id="submitDeliveryPrice" required>
+                    <input type="hidden" name="submitGoodsTotalPrice" id="submitGoodsTotalPrice" required>
+                    <input type="hidden" name="submitFinalPrice" id="submitFinalPrice" required>
+                    <input type="hidden" name="submitAccumulatedMoney" id="submitAccumulatedMoney" required>
+                    <button type="submit" class="btn btn-primary" id="paymentButton" onclick="submitOrderInfo(${goodsDto.num}, '${sessionScope.loginId}')">결제하기</button>
                 </form>
                 </div>
             </div>
@@ -180,8 +181,12 @@
   <script>
     var disCountPrice = document.getElementById("useAccumulateMoney").value;
     document.getElementById("disCountPrice").textContent = disCountPrice;
-    var goodsPrice = '${finalPrice}';
-    accumulatedMoney = Math.round(goodsPrice/100)
+    var goodsTotalPrice = document.getElementById("goodsTotalPrice").textContent;
+    goodsTotalPrice = parseInt(goodsTotalPrice, 10);
+    var deliveryPrice = document.getElementById("deliveryPrice").textContent;
+    deliveryPrice = parseInt(deliveryPrice,10);
+    document.getElementById("finalPrice").textContent =  goodsTotalPrice + deliveryPrice;
+    accumulatedMoney = Math.round((goodsTotalPrice)/100);
     document.getElementById("accumulateMoney").textContent =  accumulatedMoney;
   </script>
 

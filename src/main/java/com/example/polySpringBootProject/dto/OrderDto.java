@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 @Builder
 public class OrderDto {
 
+    private Long submitGoodsNum;
     private String submitPost;
     private String submitAddr;
     private String submitAddrDetail;
@@ -25,6 +26,7 @@ public class OrderDto {
     private PaymentMethod submitPaymentMethod;
     private int submitAmount;
     private int submitDeliveryPrice;
+    private int submitGoodsTotalPrice;
     private int submitFinalPrice;
     private int submitAccumulatedMoney;
 

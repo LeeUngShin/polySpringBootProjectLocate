@@ -39,6 +39,8 @@ class OrderServiceTest {
     GoodsImageRepository goodsImageRepository;
     @Autowired
     OrderService orderService;
+    @Autowired
+    MyService myService;
 
     @Autowired
     EntityManager em;
@@ -145,7 +147,7 @@ class OrderServiceTest {
 
         System.out.println("*******************************************");
         Pageable pageable = PageRequest.of(1, 7);
-        Page<OrderDetailDto> orderDetailDtoPage = orderService.orderList(pageable, member.getId());
+        Page<OrderDetailDto> orderDetailDtoPage = myService.orderList(pageable, member.getId());
         System.out.println("================================================");
         List<OrderDetailDto> orderDetailDtoList = orderDetailDtoPage.getContent();
         for(OrderDetailDto order : orderDetailDtoList){

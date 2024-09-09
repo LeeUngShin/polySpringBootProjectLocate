@@ -51,6 +51,8 @@ public class QOrderEntity extends EntityPathBase<OrderEntity> {
 
     public final NumberPath<Integer> submitFinalPrice = createNumber("submitFinalPrice", Integer.class);
 
+    public final NumberPath<Integer> submitGoodsTotalPrice = createNumber("submitGoodsTotalPrice", Integer.class);
+
     public final StringPath submitOrderMessageChoice = createString("submitOrderMessageChoice");
 
     public final StringPath submitPost = createString("submitPost");

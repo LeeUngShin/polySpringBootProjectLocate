@@ -22,19 +22,21 @@
             <div id="orderDetailDiv">
               <h3 class="fontBold">주문내역</h3>
               <hr>
-              <p><span class="fontBold">2024.08.10</span><a href="/my/myOrderDetail"><span style="float : right">주문상세보기<i class="bi bi-chevron-right"></i></span></a></p>
-              <div class="orderDetail">
-                <div id="orderDetail1">
-                  <div><img src="./catdog.jpg" class="goodsImg"></div>
-                  <div id="orderDetail1_info">
-                    <span class="fontBold">상품준비중</span> <i class="bi bi-chevron-right"></i>
-                    <hr>
-                    <a href="#"><p>베리크린 야채/과일 세정제 칼슘파우더</a> <a href="#"><span class="cartButton"><i class="bi bi-cart"></i></span></a></p>
-                    <p><span class="fontBold">5000원</span></5000> / 1개</p>
-                    <p>주문번호 00000000000</p>
+              <c:forEach items="${orderDetailDtoPage.content}" var="order">
+                  <p><span class="fontBold">${order.orderDate}</span><a href="/my/myOrderDetail/${order.orderNum}"><span style="float : right">주문상세보기<i class="bi bi-chevron-right"></i></span></a></p>
+                  <div class="orderDetail">
+                    <div id="orderDetail1">
+                      <div><img src="/upload/goods/${order.goodsStoredImgName}" class="goodsImg"></div>
+                      <div id="orderDetail1_info">
+                        <span class="fontBold">${order.deliveryType}</span> <i class="bi bi-chevron-right"></i>
+                        <hr> ${order.goodsNum}
+                        <a href="/goods/detail/${order.goodsNum}"><p>${order.goodsName}</a> <a href="#"><span class="cartButton"><i class="bi bi-cart"></i></span></a></p>
+                        <p><span class="fontBold">${order.submitFinalPrice}원</span> / 1개</p>
+                        <p>주문번호 ${order.orderUniqueNumber}</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+              </c:forEach>
             </div>
           </div>
       </article>

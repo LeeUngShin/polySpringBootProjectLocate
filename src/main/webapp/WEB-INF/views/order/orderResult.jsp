@@ -19,17 +19,18 @@
         <div id="orderComplete">
           <h3 class="fontBold">주문이 완료되었습니다.</h3>
           <div>
-            <p>받는 사람 : 이웅신(010-0000 0000)</p>
-            <p>받는 주소 : 인천광역시 소성로 211 신동아아파트 1차 2동 909호</p>
-            <p>배송요청사항 : 문 앞에 놔주세요</p>
+            <p>받는 사람 : ${savedOrderDetailDto.memberName}(${savedOrderDetailDto.phone1}-${savedOrderDetailDto.phone2}-${savedOrderDetailDto.phone3})</p>
+            <p>받는 주소 : (${savedOrderDetailDto.submitPost}) ${savedOrderDetailDto.submitAddr} ${savedOrderDetailDto.submitAddrDetail} </p>
+            <p>배송요청사항 : ${savedOrderDetailDto.submitOrderMessageChoice}</p>
             <hr>
-            <p>총 상품가격 5000원</p>
-            <p>배송비 +0원</p>
+            <p>총 상품가격 ${savedOrderDetailDto.submitGoodsTotalPrice}원</p>
+            <p>적립금 사용 -${savedOrderDetailDto.submitUseAccumulatedMoney}원</p>
+            <p>배송비 +${savedOrderDetailDto.submitDeliveryPrice}원</p>
             <hr>
-            <p>총 결제 금액 28500원</p>
+            <p>총 결제 금액 ${savedOrderDetailDto.submitFinalPrice}원</p>
           </div>
           <button type="button" class="btn btn-primary">주문 상세보기</button>
-          <button type="button" class="btn btn-light">쇼핑 계속 하기</button>
+          <a href="/goods/menu" class="btn btn-light">쇼핑 계속 하기</button>
         </div>
       </div>
     </section>

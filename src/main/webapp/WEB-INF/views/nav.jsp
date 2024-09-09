@@ -52,7 +52,7 @@
                 </li>
             </ul>
            <div id="itemBucketDiv">
-                <a class="itemBucket" href="/my/myOrder">
+                <a class="itemBucket" href="/my/orderList?page=1">
                     <i class="bi bi-person-fill"></i>
                     내 주문
                 </a>

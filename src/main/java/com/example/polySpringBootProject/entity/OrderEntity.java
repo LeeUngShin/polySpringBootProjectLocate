@@ -51,6 +51,9 @@ public class OrderEntity extends BaseEntity{
     private int submitDeliveryPrice;
 
     @Column
+    private int submitGoodsTotalPrice;
+
+    @Column
     private int submitFinalPrice;
 
     @Column

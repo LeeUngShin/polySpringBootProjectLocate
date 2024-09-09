@@ -44,7 +44,7 @@ public class OrderController {
             model.addAttribute("memberDto", memberDto);
             model.addAttribute("goodsDto", goodsDto);
             model.addAttribute("amount", amount);
-            model.addAttribute("finalPrice", goodsDto.getPrice()*amount);
+            model.addAttribute("goodsTotalPrice", goodsDto.getPrice()*amount);
             return "order/orderForm";
         }catch (EntityNotFoundException e){
             e.printStackTrace();
@@ -80,17 +80,22 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/orderList")
-    public String orderList(Model model, @PageableDefault(page = 1) Pageable pageable,
-                            HttpSession session){
-        String loginId = (String)session.getAttribute("loginId");
-        Page<OrderDetailDto> orderDetailDtoPage = orderService.orderList(pageable, loginId);
 
-        return "my/myOrder";
+    @PostMapping("/orderResult")
+    public String orderResult(OrderDto orderDto, HttpSession session, Model model){
+        String id= (String)session.getAttribute("loginId");
+        Long goodsNum = orderDto.getSubmitGoodsNum();
+        System.out.println("결제하기 클릭함");
+        //System.out.println(orderDto.toString());
+        try {
+            OrderDetailDto savedOrderDetailDto = orderService.orderComplete(orderDto, id, goodsNum);
+            System.out.println(savedOrderDetailDto.toString());
+            model.addAttribute("savedOrderDetailDto", savedOrderDetailDto);
+        }catch (RuntimeException e){
+            e.printStackTrace();
+            utils.showMessageAlert("주문 처리중 에러가 발생했습니다.", "/home", model);
+        }
+
+        return "order/orderResult";
     }
-
-//    @GetMapping("/orderResult")
-//    public String orderResult(){
-//        return "order/orderResult";
-//    }
 }
