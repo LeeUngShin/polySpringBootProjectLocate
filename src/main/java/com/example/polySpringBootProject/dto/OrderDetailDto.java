@@ -101,7 +101,8 @@ public class OrderDetailDto {
 
     public static OrderDetailDto EntityToDtoDetailOrder(OrderEntity orderEntity){
         OrderDetailDto orderDetailDto = new OrderDetailDto();
-        //orderDetailDto.setOrderNum(orderEntity.getNum());
+        orderDetailDto.setOrderNum(orderEntity.getNum());
+        orderDetailDto.setMemberName(orderEntity.getMember().getName());
         orderDetailDto.setOrderUniqueNumber(orderEntity.getOrderUniqueNumber());
         orderDetailDto.setDeliveryType(orderEntity.getDeliveryType());
         orderDetailDto.setSubmitAddr(orderEntity.getSubmitAddr());
@@ -111,15 +112,17 @@ public class OrderDetailDto {
         orderDetailDto.setSubmitPaymentMethod(orderEntity.getPaymentMethod());
         orderDetailDto.setSubmitAmount(orderEntity.getSubmitAmount());
         orderDetailDto.setSubmitDeliveryPrice(orderEntity.getSubmitDeliveryPrice());
+        orderDetailDto.setSubmitGoodsTotalPrice(orderEntity.getSubmitGoodsTotalPrice());
         orderDetailDto.setSubmitFinalPrice(orderEntity.getSubmitFinalPrice());
         orderDetailDto.setSubmitAccumulatedMoney(orderEntity.getSubmitAccumulatedMoney());
+        orderDetailDto.setSubmitOrderMessageChoice(orderEntity.getSubmitOrderMessageChoice());
         orderDetailDto.setGoodsName(orderEntity.getGoods().getName());
         orderDetailDto.setOrderDate(orderEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))    );
         orderDetailDto.setPhone1(orderEntity.getMember().getPhone().substring(0,3));
         orderDetailDto.setPhone2(orderEntity.getMember().getPhone().substring(3,7));
         orderDetailDto.setPhone3(orderEntity.getMember().getPhone().substring(7,11));
         // 이미지 존재하면
-        if(orderEntity.getGoods().getGoodsImageEntity()!=null && orderEntity.getGoods().getGoodsImageEntity().isEmpty()){
+        if(orderEntity.getGoods().getGoodsImageEntity()!=null && !orderEntity.getGoods().getGoodsImageEntity().isEmpty()){
             orderDetailDto.setGoodsStoredImgName(orderEntity.getGoods().getGoodsImageEntity().get(0).getStoredFileNameWithExtension());
         }
         return orderDetailDto;

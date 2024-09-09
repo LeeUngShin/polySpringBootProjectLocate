@@ -50,7 +50,9 @@ public class MyController {
                                 @PathVariable("orderNum") Long orderNum,
                                 HttpSession session){
         String loginId = (String) session.getAttribute("loginId");
+        OrderDetailDto orderDetailDto = myService.orderDetail(orderNum);
 
+        model.addAttribute("orderDetailDto", orderDetailDto);
 
         return "my/myOrderDetail";
     }

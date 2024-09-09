@@ -3,6 +3,7 @@ package com.example.polySpringBootProject.service;
 import com.example.polySpringBootProject.dto.OrderDetailDto;
 import com.example.polySpringBootProject.entity.OrderEntity;
 import com.example.polySpringBootProject.repository.OrderRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +35,13 @@ public class MyService {
                 });
 
         return orderDetailDtoPage;
+    }
 
+    public OrderDetailDto orderDetail(Long orderNum){
+        OrderEntity order = orderRepository.findById(orderNum).orElseThrow(()-> new EntityNotFoundException("해당 주문을 찾을 수 없습니다."));
+
+        OrderDetailDto orderDetailDto = OrderDetailDto.EntityToDtoDetailOrder(order);
+
+        return orderDetailDto;
     }
 }
