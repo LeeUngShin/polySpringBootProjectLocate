@@ -84,4 +84,8 @@ public class MemberEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderEntity> orderEntityList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, orphanRemoval = true)
+    CartEntity cart;
+
 }

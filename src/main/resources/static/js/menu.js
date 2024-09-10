@@ -54,7 +54,7 @@ function menuHoverOut(goodsNum){
     menuHover.style.visibility = "hidden";
 }
 
-function amountPlus(stock){
+function amountPlusOrder(stock){
     //alert(stock);
     var currentAmount = document.getElementById("amount").value;
     var currentAmountNum = parseInt(currentAmount, 10);
@@ -66,9 +66,9 @@ function amountPlus(stock){
 
 }
 
-function amountMinus(stock){
+function amountMinusOrder(stock){
 
-    //alert(stock);
+    alert(stock);
     var currentAmount = document.getElementById("amount").value;
     var currentAmountNum = parseInt(currentAmount, 10);
     if(currentAmountNum<=1){
@@ -78,7 +78,7 @@ function amountMinus(stock){
     document.getElementById("amount").value = currentAmountNum-1;
 }
 
-function amountPlusMinus(stock){
+function amountPlusMinusOrder(stock){
 
     //alert(stock);
     var currentAmount = document.getElementById("amount").value;
@@ -93,4 +93,54 @@ function amountPlusMinus(stock){
         document.getElementById("amount").value = 1;
         return;
     }
+}
+
+function amountMinusCart(stock){
+    var currentAmount = document.getElementById("cartAmount").value;
+    var currentAmountNum = parseInt(currentAmount,10);
+    if(currentAmountNum <=1 ){
+        alert("최소 1개를 선택해야 합니다.");
+        return;
+    }
+    document.getElementById("cartAmount").value = currentAmountNum-1;
+}
+
+function amountPlusCart(stock){
+    var currentAmount = document.getElementById("cartAmount").value;
+    var currentAmountNum = parseInt(currentAmount,10);
+    if(currentAmountNum >= stock ){
+        alert("현재 재고를 넘을 수 없습니다..");
+        return;
+    }
+    document.getElementById("cartAmount").value = currentAmountNum+1;
+}
+
+function amountPlusMinusCart(stock){
+
+    //alert(stock);
+    var currentAmount = document.getElementById("cartAmount").value;
+    var currentAmountNum = parseInt(currentAmount, 10);
+    if(currentAmountNum >= stock){
+        alert("상품 재고를 넘을 수 없습니다.");
+        document.getElementById("cartAmount").value = 1;
+        return;
+    }
+    if(currentAmountNum<=1){
+        alert("최소 1개를 선택해야 합니다.");
+        document.getElementById("cartAmount").value = 1;
+        return;
+    }
+}
+
+function cartClick(loginId, price){
+    alert(loginId);
+    alert(price);
+    if(loginId == null || loginId == ""){
+        alert("회원만 장바구니에 담을 수 있습니다.");
+    }
+    var amount = document.getElementById("cartAmount").value;
+    amount = parseInt(amount, 10);
+    document.getElementById("cartPrice").value= amount * price;
+    alert(amount);
+    alert(amount * price);
 }

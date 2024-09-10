@@ -84,16 +84,25 @@
                             </button>
                             수량
                             <span>
-                                <button type="button" class="amountButton" onclick="amountMinus(${goodsDto.stock})" >-</button>
-                                <input id="amount" name="amount" value="1" onchange="amountPlusMinus(${goodsDto.stock})"></input>
-                                <button type="button" class="amountButton" onclick="amountPlus(${goodsDto.stock})" change="amountPlus(${goodsDto.stock})">+</button>
+                                <button type="button" class="amountButton" onclick="amountMinusOrder(${goodsDto.stock})" >-</button>
+                                <input id="amount" name="amount" value="1" onchange="amountPlusMinusOrder(${goodsDto.stock})"></input>
+                                <button type="button" class="amountButton" onclick="amountPlusOrder(${goodsDto.stock})">+</button>
                             </span>
                         </form>
                         <div>
-                        <button type="button" class="btn btn-outline-secondary"
-                        onclick="javascript:location.replace('/order/orderForm/${goodsDto.num}')">
-                          <i class="bi bi-cart-plus"></i> 장바구니
-                        </button>
+                            <form action"/my/cartInput/${goodsDto.num}" action="POST">
+                                <button type="submit" class="btn btn-outline-secondary"
+                                onclick="cartClick('${sessionScope.loginId}', ${goodsDto.price})">
+                                  <i class="bi bi-cart-plus"></i> 장바구니
+                                </button>
+                                    수량
+                                <span>
+                                    <button type="button" class="amountButton" onclick="amountMinusCart(${goodsDto.stock})" >-</button>
+                                    <input id="cartAmount" name="goodsCartAmount" value="1" onchange="amountPlusMinusCart(${goodsDto.stock})"></input>
+                                    <button type="button" class="amountButton" onclick="amountPlusCart(${goodsDto.stock})">+</button>
+                                    <input type="hidden" name="price" id="cartPrice">
+                                </span>
+                            </form>
                         </div>
                     </div>
                 </div>

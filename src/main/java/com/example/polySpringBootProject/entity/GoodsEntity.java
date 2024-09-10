@@ -90,5 +90,8 @@ public class GoodsEntity extends BaseEntity{
     @OneToMany(mappedBy = "goods", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderEntity> orderEntityList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CartItemEntity> cartItemEntityList = new ArrayList<>();
+
 }
 
