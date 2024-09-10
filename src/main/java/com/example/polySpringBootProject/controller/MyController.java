@@ -35,6 +35,8 @@ public class MyController {
         int endPage = ((startPage + blockLimit - 1) < orderDetailDtoPage.getTotalPages()) ? startPage + blockLimit - 1 : orderDetailDtoPage.getTotalPages();  // 3 6 9 12 ~~
         boolean isLast = (startPage + blockLimit-1) >= orderDetailDtoPage.getTotalPages();
         int currentPage = orderDetailDtoPage.getNumber()+1;
+        boolean lastPageSet = (startPage + blockLimit-1) >= orderDetailDtoPage.getTotalPages();
+        int lastPage = orderDetailDtoPage.getTotalPages();
 
         model.addAttribute("orderDetailDtoPage", orderDetailDtoPage);
         model.addAttribute("startPage", startPage);
@@ -42,6 +44,8 @@ public class MyController {
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("blockLimit", blockLimit);
         model.addAttribute("isLast", isLast);
+        model.addAttribute("lastPageSet", lastPageSet);
+        model.addAttribute("lastPage", lastPage);
         return "my/myOrder";
     }
 

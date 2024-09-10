@@ -57,7 +57,7 @@ ul{
 li{
   height: 25px;
 }
-a{
+.a_black{
   text-decoration: none;
     color: black;
 }
@@ -103,5 +103,8 @@ a{
 
 .myOrder{
     display:flex;
+}
 
+#pagingNum{
+    text-align : center;
 }

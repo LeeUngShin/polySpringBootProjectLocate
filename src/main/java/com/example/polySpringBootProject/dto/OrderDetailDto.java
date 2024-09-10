@@ -21,6 +21,7 @@ public class OrderDetailDto {
     private String submitOrderMessageChoice;
     private int submitUseAccumulatedMoney;
     private PaymentMethod submitPaymentMethod;
+    private String submitPaymentMethodStr;
     private int submitAmount;
     private int submitGoodsTotalPrice;
     private int submitDeliveryPrice;
@@ -37,6 +38,7 @@ public class OrderDetailDto {
     private Long orderNum;
     private long orderUniqueNumber;
     private DeliveryType deliveryType;
+    private String deliveryTypeStr;
     private String orderDate;
 
     private String goodsStoredImgName;
@@ -50,6 +52,7 @@ public class OrderDetailDto {
         this.goodsNum = goodsNum;
         this.orderUniqueNumber = orderUniqueNumber;
         this.deliveryType = deliveryType;
+        this.deliveryTypeStr = deliveryType.getDelivery();
         this.goodsName = orderGoodsName;
         this.submitFinalPrice = orderGoodsFinalPrice;
         this.submitAmount = orderGoodsAmount;
@@ -66,6 +69,7 @@ public class OrderDetailDto {
         this.goodsNum = goodsNum;
         this.orderUniqueNumber = orderUniqueNumber;
         this.deliveryType = deliveryType;
+        this.deliveryTypeStr = deliveryType.getDelivery();
         this.goodsName = orderGoodsName;
         this.submitFinalPrice = orderGoodsFinalPrice;
         this.submitAmount = orderGoodsAmount;
@@ -101,15 +105,18 @@ public class OrderDetailDto {
 
     public static OrderDetailDto EntityToDtoDetailOrder(OrderEntity orderEntity){
         OrderDetailDto orderDetailDto = new OrderDetailDto();
+        orderDetailDto.setGoodsNum(orderEntity.getGoods().getNum());
         orderDetailDto.setOrderNum(orderEntity.getNum());
         orderDetailDto.setMemberName(orderEntity.getMember().getName());
         orderDetailDto.setOrderUniqueNumber(orderEntity.getOrderUniqueNumber());
         orderDetailDto.setDeliveryType(orderEntity.getDeliveryType());
+        orderDetailDto.setDeliveryTypeStr(orderEntity.getDeliveryType().getDelivery());
         orderDetailDto.setSubmitAddr(orderEntity.getSubmitAddr());
         orderDetailDto.setSubmitAddr(orderEntity.getSubmitAddr());
         orderDetailDto.setSubmitAddrDetail(orderEntity.getSubmitAddrDetail());
         orderDetailDto.setSubmitUseAccumulatedMoney(orderEntity.getSubmitUseAccumulatedMoney());
         orderDetailDto.setSubmitPaymentMethod(orderEntity.getPaymentMethod());
+        orderDetailDto.setSubmitPaymentMethodStr(orderEntity.getPaymentMethod().getPaymentMethodStr());
         orderDetailDto.setSubmitAmount(orderEntity.getSubmitAmount());
         orderDetailDto.setSubmitDeliveryPrice(orderEntity.getSubmitDeliveryPrice());
         orderDetailDto.setSubmitGoodsTotalPrice(orderEntity.getSubmitGoodsTotalPrice());

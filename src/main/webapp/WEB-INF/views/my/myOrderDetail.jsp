@@ -24,15 +24,15 @@
               <p class="fontBold">2024.08.10</p>
               <div class="orderDetail">
                 <div id="orderDetail1">
-                  <div><img src="./catdog.jpg" class="goodsImg"></div>
+                  <div><img src="./upload/goods/${orderDetailDto.goodsStoredImgName}" class="goodsImg"></div>
                   <div id="orderDetail1_info">
-                    <span class="fontBold">상품준비중</span> <i class="bi bi-chevron-right"></i>
+                    <span class="fontBold">${orderDetailDto.deliveryTypeStr}</span> <i class="bi bi-chevron-right"></i>
                     <hr>
-                    <a href="#"><p>베리크린 야채/과일 세정제 칼슘파우더</a><a href="#"><span class="cartButton"><i class="bi bi-cart"></i></span></a></p>
-                    주문번호 00000000000
+                    <a href="/goods/detail/${orderDetailDto.goodsNum}" class="a_black"><p>${orderDetailDto.goodsName}</a><a href="#" class="a_black"><span class="cartButton"><i class="bi bi-cart"></i></span></a></p>
+                    주문번호 ${orderDetailDto.orderUniqueNumber}
                     <hr>
                     <ul>
-                      <li>결제금액 10000 / 2개 </li>
+                      <li>결제금액 ${orderDetailDto.submitFinalPrice} / ${orderDetailDto.submitAmount}개 </li>
                     </ul>
                   </div>
                 </div>
@@ -50,10 +50,10 @@
                       <p>배송 요청사항</p>
                     </div>
                     <div id="orderDetail2Right">
-                      <p>이웅신</p>
-                      <p>010-0000-0000</p>
-                      <p>(0000) 인천광역시 미추홀구 소성로 211 2동 909호</p>
-                      <p>문 앞에 놔주세요</p>
+                      <p>${orderDetailDto.memberName}</p>
+                      <p>${orderDetailDto.phone1}-${orderDetailDto.phone2}-${orderDetailDto.phone3}</p>
+                      <p>(${orderDetailDto.submitPost}) ${orderDetailDto.submitAddr} ${orderDetailDto.submitAddrDetail}</p>
+                      <p>${orderDetailDto.submitOrderMessageChoice}</p>
                     </div>
                   </div>
                 </div>
@@ -65,23 +65,23 @@
                 <div id="orderDetail3">
                   <div id="orderDetail3Left">
                     <p>결제수단</p>
-                    <p>신용카드결제</p>
-                    <p>사용적립금 0원</p>
+                    <p>${orderDetailDto.submitPaymentMethodStr}</p>
                     <hr>
-                    <p>예상 적립금 : 50원</p>
+                    <p>사용적립금 ${orderDetailDto.submitUseAccumulatedMoney}원</p>
+                    <p>예상 적립금 : ${orderDetailDto.submitAccumulatedMoney}원</p>
                   </div>
                   <div id="orderDetail3Right">
                     <div class="orderDetail3Right">
-                      <div class="fontBold" >총 결제금액</div> <div class="fontBold">5000원</div>
+                      <div class="fontBold" >총 결제금액</div> <div class="fontBold">${orderDetailDto.submitFinalPrice}원</div>
                     </div>
                     <div class="orderDetail3Right">
-                      <div>총 상품금액</div> <div>5000원</div>
+                      <div>총 상품금액</div> <div>${orderDetailDto.submitGoodsTotalPrice}원</div>
                     </div>
                     <div class="orderDetail3Right">
-                      <div>총 배송비</div> <div>0원</div>
+                      <div>총 배송비</div> <div>${orderDetailDto.submitDeliveryPrice}원</div>
                     </div>
                     <div class="orderDetail3Right">
-                      <div>총 할인금액</div> <div>0원</div>
+                      <div>총 할인금액</div> <div>${orderDetailDto.submitUseAccumulatedMoney}원</div>
                     </div>
                   </div>
                 </div>

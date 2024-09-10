@@ -23,22 +23,67 @@
               <h3 class="fontBold">주문내역</h3>
               <hr>
               <c:forEach items="${orderDetailDtoPage.content}" var="order">
-                  <p><span class="fontBold">${order.orderDate}</span><a href="/my/myOrderDetail/${order.orderNum}"><span style="float : right">주문상세보기<i class="bi bi-chevron-right"></i></span></a></p>
+                  <p><span class="fontBold">${order.orderDate}</span><a href="/my/myOrderDetail/${order.orderNum}" class="a_black"><span style="float : right">주문상세보기<i class="bi bi-chevron-right"></i></span></a></p>
                   <div class="orderDetail">
                     <div id="orderDetail1">
                       <div><img src="/upload/goods/${order.goodsStoredImgName}" class="goodsImg"></div>
                       <div id="orderDetail1_info">
                         <span class="fontBold">${order.deliveryType}</span> <i class="bi bi-chevron-right"></i>
                         <hr> ${order.goodsNum}
-                        <a href="/goods/detail/${order.goodsNum}"><p>${order.goodsName}</a> <a href="#"><span class="cartButton"><i class="bi bi-cart"></i></span></a></p>
+                        <a href="/goods/detail/${order.goodsNum}" class="a_black"><p>${order.goodsName}</a> <a href="#" class="a_black"><span class="cartButton"><i class="bi bi-cart"></i></span></a></p>
                         <p><span class="fontBold">${order.submitFinalPrice}원</span> / 1개</p>
                         <p>주문번호 ${order.orderUniqueNumber}</p>
                       </div>
                     </div>
+
                   </div>
               </c:forEach>
             </div>
           </div>
+                   <div id="pagingNum">
+                      <c:choose>
+                           <c:when test="${orderDetailDtoPage.isFirst()}">
+                              처음
+                           </c:when>
+                           <c:otherwise>
+                             <a href="/my/orderList?page=1">처음</a>
+                           </c:otherwise>
+                      </c:choose>
+                      <c:choose>
+                           <c:when test="${currentPage<=blockLimit}">
+                              이전
+                           </c:when>
+                           <c:otherwise>
+                             <a href="/my/orderList?page=${startPage-1}">이전</a>
+                           </c:otherwise>
+                      </c:choose>
+                      <c:forEach begin="${startPage}" end="${endPage}" var="count">
+                        <c:choose>
+                          <c:when test="${currentPage==count}">
+                            ${currentPage}
+                          </c:when>
+                          <c:otherwise>
+                            <a href="/my/orderList?page=${count}">${count}</a>
+                          </c:otherwise>
+                        </c:choose>
+                      </c:forEach>
+                      <c:choose>
+                         <c:when test="${lastPageSet==true}">
+                            다음
+                         </c:when>
+                         <c:otherwise>
+                           <a href="/my/orderList?page=${endPage+1}">다음</a>
+                         </c:otherwise>
+                      </c:choose>
+                      <c:choose>
+                         <c:when test="${orderDetailDtoPage.isLast()}">
+                            마지막
+                         </c:when>
+                         <c:otherwise>
+                           <a href="/my/orderList?page=${lastPage}">마지막</a>
+                         </c:otherwise>
+                      </c:choose>
+                    </div>
       </article>
     </section>
 
