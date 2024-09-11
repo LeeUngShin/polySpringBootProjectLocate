@@ -73,12 +73,13 @@
                             함유
                         </p>
                         <hr>
-                        <form action="/order/orderForm/${goodsDto.num}" method="get">
+                        <form action="/order/orderForm" method="get">
                             <!--
                             <button type="button" class="btn btn-outline-secondary"
                             onclick="javascript:location.replace('/order/orderForm/${goodsDto.num}')">
                                 구매
                             </button>-->
+                            <input type="hidden" value="${goodsDto.num}" name="goodsNum">
                             <button type="submit" class="btn btn-outline-secondary" style="margin-bottom : 10px;">
                               <i class="bi bi-cart-plus"></i> 구매
                             </button>
@@ -90,9 +91,9 @@
                             </span>
                         </form>
                         <div>
-                            <form action"/my/cartInput/${goodsDto.num}" action="POST">
+                            <form action="/my/cartInput/${goodsDto.num}" method="POST">
                                 <button type="submit" class="btn btn-outline-secondary"
-                                onclick="cartClick('${sessionScope.loginId}', ${goodsDto.price})">
+                                onclick="cartClick('${sessionScope.loginId}', ${goodsDto.price}, ${goodsDto.num})">
                                   <i class="bi bi-cart-plus"></i> 장바구니
                                 </button>
                                     수량

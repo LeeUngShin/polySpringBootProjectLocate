@@ -108,3 +108,16 @@ li{
 #pagingNum{
     text-align : center;
 }
+
+/*장바구니*/
+#cartList{
+    display : flex;
+}
+
+.cartAmount{
+    border: solid 1px black;
+    margin : 0px;
+    display: inline-block;
+    width: 30px;
+    text-align: center;
+}

@@ -19,7 +19,7 @@ public class CartEntity extends BaseEntity{
 
     @Id  // 기본키 속성
     @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
-    private Long cartNum;
+    private Long num;
 
     @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY)
@@ -34,8 +34,4 @@ public class CartEntity extends BaseEntity{
         cartEntity.setMember(member);
         return cartEntity;
     }
-
-
-
-
 }

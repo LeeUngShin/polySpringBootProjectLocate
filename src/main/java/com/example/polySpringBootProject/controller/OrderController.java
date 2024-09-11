@@ -25,10 +25,10 @@ public class OrderController {
     @Autowired
     Utils utils;
 
-    @GetMapping("/orderForm/{goodsNum}")
+    @GetMapping("/orderForm")
     public String orderForm(HttpSession session, Model model,
-                            @PathVariable("goodsNum")Long goodsNum,
-                            @RequestParam("amount")int amount){
+                            @RequestParam("amount")int amount,
+                            @RequestParam("goodsNum") Long goodsNum){
         String loginId = (String) session.getAttribute("loginId");
         try{
             MemberDto memberDto = orderService.loginMemberInfo(loginId);

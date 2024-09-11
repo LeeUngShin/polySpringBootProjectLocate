@@ -132,15 +132,59 @@ function amountPlusMinusCart(stock){
     }
 }
 
-function cartClick(loginId, price){
-    alert(loginId);
-    alert(price);
+function cartClick(loginId, price, goodsNum){
+
     if(loginId == null || loginId == ""){
         alert("회원만 장바구니에 담을 수 있습니다.");
+        window.location.href="http://127.0.0.1:8080/goods/detail/"+goodsNum;
     }
+
     var amount = document.getElementById("cartAmount").value;
     amount = parseInt(amount, 10);
     document.getElementById("cartPrice").value= amount * price;
-    alert(amount);
-    alert(amount * price);
+
+    //alert(amount);
+    //alert(amount * price);
+}
+
+function amountMinusCartOrder(stock, cartItemNum, goodsPrice){
+    var currentAmount = document.getElementById("cartAmount_"+cartItemNum).value;
+    var currentAmountNum = parseInt(currentAmount,10);
+    if(currentAmountNum <=1 ){
+        alert("최소 1개를 선택해야 합니다.");
+        return;
+    }
+    document.getElementById("cartAmount_"+cartItemNum).value = currentAmountNum-1;
+    document.getElementById("cartItemPrice_" + cartItemNum).textContent = (currentAmountNum-1) * goodsPrice;
+
+}
+
+function amountPlusCartOrder(stock, cartItemNum, goodsPrice){
+    var currentAmount = document.getElementById("cartAmount_"+cartItemNum).value;
+    var currentAmountNum = parseInt(currentAmount,10);
+    if(currentAmountNum >= stock ){
+        alert("현재 재고를 넘을 수 없습니다..");
+        return;
+    }
+    document.getElementById("cartAmount_"+cartItemNum).value = currentAmountNum+1;
+    document.getElementById("cartItemPrice_" + cartItemNum).textContent = (currentAmountNum+1) * goodsPrice;
+
+}
+
+function amountPlusMinusCartOrder(stock, cartItemNum, goodsPrice){
+
+    //alert(stock);
+    var currentAmount = document.getElementById("cartAmount_"+cartItemNum).value;
+    var currentAmountNum = parseInt(currentAmount, 10);
+    if(currentAmountNum > stock){
+        alert("상품 재고를 넘을 수 없습니다.");
+        document.getElementById("cartAmount_"+cartItemNum).value = 1;
+        return;
+    }
+    if(currentAmountNum<1){
+        alert("최소 1개를 선택해야 합니다.");
+        document.getElementById("cartAmount_"+cartItemNum).value = 1;
+        return;
+    }
+    document.getElementById("cartItemPrice_" + cartItemNum).textContent = currentAmountNum * goodsPrice;
 }

@@ -35,7 +35,6 @@
                         <p>주문번호 ${order.orderUniqueNumber}</p>
                       </div>
                     </div>
-
                   </div>
               </c:forEach>
             </div>

@@ -39,6 +39,8 @@ public class CartItemEntity extends BaseEntity{
     }
 
     public void addGoodsAmount(int goodsAmount){  // this를 사용하려면 static 사용 불가
+        System.out.println("원래 수량 : "+this.goodsAmount);
+        System.out.println("추가할 수량 : "+goodsAmount);
         this.goodsAmount += goodsAmount;
     }
 }

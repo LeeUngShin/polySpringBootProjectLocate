@@ -5,6 +5,7 @@ import com.example.polySpringBootProject.dto.OrderDetailDto;
 import com.example.polySpringBootProject.service.MyService;
 import com.example.polySpringBootProject.service.OrderService;
 import com.oracle.wls.shaded.org.apache.xpath.operations.Mod;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,9 @@ public class MyController {
 
     @Autowired
     MyService myService;
+
+    @Autowired
+    Utils utils;
 
     @GetMapping("/orderList")
     public String orderList(Model model, @PageableDefault(page = 1) Pageable pageable,
@@ -67,17 +71,34 @@ public class MyController {
     @PostMapping("/cartInput/{goodsNum}")
     public String cartInput(HttpSession session, CartItemDto cartItemDto, Model model,
                               @PathVariable("goodsNum") Long goodsNum ){
+        System.out.println("카트에 넣을 정보 : " + cartItemDto);
         String loginId = (String) session.getAttribute("loginId");
-        boolean cartInput = myService.cartInput(cartItemDto, loginId);
+        try{
+           boolean cartInput = myService.cartInput(cartItemDto, loginId, goodsNum);
+           if(cartInput==false){
+               return utils.showMessageAlert("장바구니에 상품을 넣는 도중 에러가 발생했습니다.", "/goods/detail/"+goodsNum, model);
+           }
 
-        return null;
+        }catch (EntityNotFoundException e){
+            e.printStackTrace();
+            return utils.showMessageAlert("데이터를 찾지 못했습니다.", "/goods/detail/"+goodsNum, model);
+        }catch (Exception e){
+            e.printStackTrace();
+            return utils.showMessageAlert("장바구니에 상품을 넣는 도중 에러가 발생했습니다.", "/goods/detail/"+goodsNum, model);
+        }
+
+        return "redirect:/my/myCartList";
     }
 
     @GetMapping("/myCartList")
     public String myCart(HttpSession session, Model model){
         String loginId= (String) session.getAttribute("loginId");
 
+
         List<CartItemDto> cartItemDtoList = myService.getCartItemList(loginId);
-        return null;
+        System.out.println("aaaaa : " + cartItemDtoList);
+        model.addAttribute("cartItemDtoList", cartItemDtoList);
+
+        return "my/myCart";
     }
 }
