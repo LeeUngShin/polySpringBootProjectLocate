@@ -56,7 +56,7 @@
                     <i class="bi bi-person-fill"></i>
                     내 주문
                 </a>
-                <a class="itemBucket" href="#">
+                <a class="itemBucket" href="/my/myCartList">
                     <i class="bi bi-cart"></i>
                     장바구니
                 </a>

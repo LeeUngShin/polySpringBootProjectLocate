@@ -10,7 +10,7 @@
 <link rel="stylesheet" href = "/css/my.css">
 <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-barun-gothic.css" rel="stylesheet">
 </head>
-<body>
+<body onload = "getList()">
 <div id="container">
     <%@include file = "../header.jsp" %>
     <%@include file = "../nav.jsp" %>
@@ -21,37 +21,8 @@
             <div id="orderDetailDiv">
               <h3 class="fontBold">장바구니</h3>
               <hr>
-              <div>
-                  <c:forEach items="${cartItemDtoList}" var="cartItem">
-                    <div class="orderDetail" id="cartList">
-                      <input type="checkbox">
-                      <div> <img src="/upload/goods/${cartItem.storedGoodsImageName}" alt="상품이미지"></div>
-                      <div>${cartItem.goodsName}</div>
-                      <div>
-                          <button type="button" class="amountButton" onclick="amountMinusCartOrder(${cartItem.stock}, ${cartItem.cartItemNum}, ${cartItem.goodsPrice})" >-</button>
-                          <input id="cartAmount_${cartItem.cartItemNum}" class="cartAmount" name="goodsCartAmount" value="${cartItem.goodsCartAmount}" onchange="amountPlusMinusCartOrder(${cartItem.stock}, ${cartItem.cartItemNum}, ${cartItem.goodsPrice})"></input>
-                          <button type="button" class="amountButton" onclick="amountPlusCartOrder(${cartItem.stock}, ${cartItem.cartItemNum}, ${cartItem.goodsPrice})">+</button>
-                          <input type="hidden" name="price" id="cartPrice">
-                      </div>
-                      <div id="cartItemPrice_${cartItem.cartItemNum}"></div><span>원</span>
-                      <div><a href="#"><i class="bi bi-x-lg"></i></a></div>
-                      ${cartItem.stock}
-                    </div>
-                      <script>
-                        var cartItemNum = "${cartItem.cartItemNum}";
-                        var amount = document.getElementById("cartAmount_" + cartItemNum).value;
-                        amount = parseInt(amount, 10);
-                        var stock = parseInt("${cartItem.stock}", 10);
-                        if(amount > stock){
-                           alert("${cartItem.goodsName} 상품의 선택 수량이 재고보다 많습니다. 다시 수량을 입력하세요");
-                           document.getElementById("cartAmount_" + cartItemNum).value = 1;
-                           amount = document.getElementById("cartAmount_" + cartItemNum).value;
-                        }
-                        var goodsPrice = parseInt(${cartItem.goodsPrice}, 10);
+              <div id="cartListRest">
 
-                        document.getElementById("cartItemPrice_" + cartItemNum).textContent = amount * goodsPrice;
-                      </script>
-                  </c:forEach>
               </div>
               <div>
                   <h2>결제정보</h2>
@@ -81,32 +52,49 @@
     }
   </script>
   <script>
-      var cartItemNum = "${cartItem.cartItemNum}";
-    var amount = document.getElementById("cartAmount_" + cartItemNum).value;
-    amount = parseInt(amount, 10);
-    var goodsPrice = "${cartItem.goodsPrice}";
-    goodsPrice = parseInt(goodsPrice, 10);
+    function getList() {
+        fetch("http://127.0.0.1:8080/my/cartList")
+            .then((response) => response.json())
+            .then((data) => {
+                let htmlContent = ''; // HTML 문자열을 저장할 변수
 
-    document.getElementById("cartItemPrice_"+cartItemNum).textContent = amount * goodsPrice;
+for (let index = 0; index < data.length; index++) {
+    htmlContent +=
+        "<div class='orderDetail cartList' id='cartList_" + data[index].cartItemNum + "'>" +
+            "<input type='checkbox' checked>" +
+            "<div class= 'cartImgDiv' id='cartImgDiv_" + data[index].cartItemNum + "'><img src='/upload/goods/" + data[index].storedGoodsImageName + "' alt='상품이미지' class='cartImg'></div>" +
+            "<div>" + data[index].goodsName + "</div>" +
+            "<div>" +
+                "<button type='button' class='amountButton' onclick='amountMinusCartOrder(" + data[index].stock + ", " + data[index].cartItemNum + ", " + data[index].goodsPrice + ")'> - </button>" +
+                "<input id='cartAmount_" + data[index].cartItemNum + "' class='cartAmount' name='goodsCartAmount' value='1' onchange='amountPlusMinusCartOrder(" + data[index].stock + ", " + data[index].cartItemNum + ", " + data[index].goodsPrice + ")'>" +
+                "<button type='button' class='amountButton' onclick='amountPlusCartOrder(" + data[index].stock + ", " + data[index].cartItemNum + ", " + data[index].goodsPrice + ")'> + </button>" +
+            "</div>" +
+            "<div><span id='cartItemPrice_" + data[index].cartItemNum + "'>" + data[index].goodsPrice + "</span><span>원</span></span></div>" +
+            "<div><a href='javascript:goDelete(" + data[index].cartItemNum + ")'><i class='bi bi-x-lg'></i></a></div>" +
+        "</div>"; // 각 루프마다 'orderDetail' div를 정확히 닫기
+}
 
+                document.getElementById("cartListRest").innerHTML = htmlContent; // 한 번에 업데이트
+            })
+            .catch((error) => console.error('Error fetching cart list:', error));
+    }
 
-  // 총 상품 금액 계산 함수
-  function calculateTotalPrice() {
-    var total = 0;
-    <c:forEach items="${cartItemDtoList}" var="cartItem">
-      var cartItemNum = "${cartItem.cartItemNum}";
-      var amount = parseInt(document.getElementById("cartAmount_" + cartItemNum).value, 10);
-      var goodsPrice = parseInt(${cartItem.goodsPrice}, 10);
-      total += amount * goodsPrice;
-    </c:forEach>
-    document.getElementById("goodsPrice").textContent = total;
-    //document.getElementById("finalPrice").textContent = total + parseInt(document.getElementById("deliveryPrice").textContent);
-  }
+    function goDelete(cartItemNum) { // 함수 이름 수정
+        fetch("http://127.0.0.1:8080/my/cartDel?cartItemNum=" + cartItemNum)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Item deleted:", data);
+                if(data.result == "success"){
+                    getList(); // 카트 목록 갱신
+                }
+                else{
+                    alert("삭제에 실패했습니다.");
+                }
+            })
+            .catch((error) => console.error('Error deleting cart item:', error));
+    }
 
-  // 페이지 로드 시 총 금액 계산
-  window.onload = function() {
-    calculateTotalPrice();
-  }
   </script>
+
 </body>
 </html>

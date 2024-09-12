@@ -79,7 +79,6 @@ public class MyService {
             CartItemEntity cartItem = CartItemEntity.builder()
                     .cartEntity(myCartEntity)
                     .goods(goods)
-                    .goodsAmount(cartItemDto.getGoodsCartAmount())
                     .build();
 
             CartItemEntity savedCartItemEntity = cartItemRepository.save(cartItem);
@@ -88,7 +87,6 @@ public class MyService {
         }
         else{
             CartItemEntity cartItem = cartItemEntity.get();
-            cartItem.addGoodsAmount(cartItemDto.getGoodsCartAmount());
             CartItemEntity savedCartItemEntity = cartItemRepository.save(cartItem);
             if(savedCartItemEntity == null) return false;
             else return true;
@@ -110,5 +108,28 @@ public class MyService {
             }
         }
         return cartItemDtoList;
+    }
+
+    public String cartExists(String loginId, Long goodsNum){
+
+        boolean cartItem = cartItemRepository.existsByCartEntityMemberIdAndGoodsNum(loginId, goodsNum);
+        if(cartItem){
+            return "Y";
+        }
+        else {
+            return "N";
+        }
+    }
+
+    public String myCartDel(String loginId, Long cartItemNum){
+
+        Optional<CartItemEntity> cartItemEntity = cartItemRepository.findById(cartItemNum);
+        if(cartItemEntity.isEmpty()){
+            throw new EntityNotFoundException("해당 장바구니 상품을 찾지 못했습니다.");
+        }
+        else{
+            cartItemRepository.delete(cartItemEntity.get());
+            return "Y";
+        }
     }
 }

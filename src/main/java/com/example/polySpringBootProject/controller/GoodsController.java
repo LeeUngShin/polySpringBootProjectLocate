@@ -5,6 +5,7 @@ import com.example.polySpringBootProject.entity.GoodsEntity;
 import com.example.polySpringBootProject.entity.GoodsSubCategoryEntity;
 import com.example.polySpringBootProject.repository.GoodsSubCategoryRepository;
 import com.example.polySpringBootProject.service.GoodsService;
+import com.example.polySpringBootProject.service.MyService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,8 @@ public class GoodsController {
 
     @Autowired
     GoodsService goodsService;
+    @Autowired
+    MyService myService;
 
     @Autowired
     Utils utils;
@@ -77,6 +80,7 @@ public class GoodsController {
                               HttpSession session,
                               HttpServletRequest request,
                               HttpServletResponse response){
+        String loginId = (String) session.getAttribute("loginId");
         try {
             GoodsDto goodsDto = goodsService.goodsDetail(goodsNum);
             String goodsMyLike = goodsService.goodsMyLike((String) session.getAttribute("loginId"), goodsNum);
@@ -92,7 +96,7 @@ public class GoodsController {
             model.addAttribute("page", page);
             model.addAttribute("topCategory", goodsDto.getGoodsCategory());
             model.addAttribute("subCategory", goodsDto.getGoodsSubCategory());
-//            Cookie cookie = new Cookie("goodsMyLike", goodsMyLike);
+            model.addAttribute("cartExists", myService.cartExists(loginId, goodsNum));//            Cookie cookie = new Cookie("goodsMyLike", goodsMyLike);
 //
 //            if (goodsMyLike.equals("Y")) {
 //                response.addCookie(cookie);

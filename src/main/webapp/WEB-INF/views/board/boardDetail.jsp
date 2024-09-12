@@ -10,7 +10,7 @@
 
 	</head>
 	<body onload="getCommentList(${boardDto.num})">
-        <div id="container">
+                                    <div id="container">
             <%@include file = "../header.jsp" %>
             <%@include file = "../nav.jsp" %>
             <hr>

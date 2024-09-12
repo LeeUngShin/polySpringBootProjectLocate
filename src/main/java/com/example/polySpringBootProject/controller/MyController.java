@@ -4,8 +4,10 @@ import com.example.polySpringBootProject.dto.CartItemDto;
 import com.example.polySpringBootProject.dto.OrderDetailDto;
 import com.example.polySpringBootProject.service.MyService;
 import com.example.polySpringBootProject.service.OrderService;
+import com.google.gson.Gson;
 import com.oracle.wls.shaded.org.apache.xpath.operations.Mod;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,13 +16,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://127.0.0.1:8080")
 @Controller
 @RequestMapping("/my")
 public class MyController {
@@ -81,7 +80,7 @@ public class MyController {
 
         }catch (EntityNotFoundException e){
             e.printStackTrace();
-            return utils.showMessageAlert("데이터를 찾지 못했습니다.", "/goods/detail/"+goodsNum, model);
+            return utils.showMessageAlert("회원만 상품을 장바구니에 넣을 수 있습니다.", "/goods/detail/"+goodsNum, model);
         }catch (Exception e){
             e.printStackTrace();
             return utils.showMessageAlert("장바구니에 상품을 넣는 도중 에러가 발생했습니다.", "/goods/detail/"+goodsNum, model);
@@ -100,5 +99,36 @@ public class MyController {
         model.addAttribute("cartItemDtoList", cartItemDtoList);
 
         return "my/myCart";
+    }
+
+    @GetMapping("/cartList")
+    @ResponseBody
+    public String myCartRest(HttpSession session, Model model){
+        String loginId= (String) session.getAttribute("loginId");
+
+
+        List<CartItemDto> cartItemDtoList = myService.getCartItemList(loginId);
+        System.out.println("aaaaa : " + cartItemDtoList);
+        String json = new Gson().toJson(cartItemDtoList);
+        return json;
+    }
+
+    @GetMapping("/cartDel")
+    @ResponseBody
+    public String myCartDel(HttpSession session, HttpServletRequest request, Model model){
+         String loginId = (String) session.getAttribute("loginId");
+         Long cartItemNum = Long.parseLong(request.getParameter("cartItemNum"));
+        System.out.println("장바구니에서 지운 번호 : " + cartItemNum );
+         try{
+             String cartDel = myService.myCartDel(loginId, cartItemNum);
+             System.out.println("지우기 성공? " + cartDel);
+             if(cartDel.equals("Y")) return "{\"result\" : \"success\"}";
+             else return "{\"result\" : \"fail\"}";
+         }catch (EntityNotFoundException e){
+             e.printStackTrace();
+             utils.showMessageAlert("해당 상품을 장바구니에서 찾지 못했습니다.", "my/myCartLis", model);
+         }
+
+        return "";
     }
 }

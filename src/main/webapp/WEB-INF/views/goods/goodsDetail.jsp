@@ -91,18 +91,11 @@
                             </span>
                         </form>
                         <div>
-                            <form action="/my/cartInput/${goodsDto.num}" method="POST">
-                                <button type="submit" class="btn btn-outline-secondary"
-                                onclick="cartClick('${sessionScope.loginId}', ${goodsDto.price}, ${goodsDto.num})">
+                            <form id="cartInput">
+                                <button type="button" class="btn btn-outline-secondary"
+                                onclick="cartClick('${sessionScope.loginId}', ${goodsDto.price}, ${goodsDto.num}, '${cartExists}')">
                                   <i class="bi bi-cart-plus"></i> 장바구니
                                 </button>
-                                    수량
-                                <span>
-                                    <button type="button" class="amountButton" onclick="amountMinusCart(${goodsDto.stock})" >-</button>
-                                    <input id="cartAmount" name="goodsCartAmount" value="1" onchange="amountPlusMinusCart(${goodsDto.stock})"></input>
-                                    <button type="button" class="amountButton" onclick="amountPlusCart(${goodsDto.stock})">+</button>
-                                    <input type="hidden" name="price" id="cartPrice">
-                                </span>
                             </form>
                         </div>
                     </div>

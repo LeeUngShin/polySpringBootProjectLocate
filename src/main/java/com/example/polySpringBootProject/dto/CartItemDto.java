@@ -10,13 +10,12 @@ import lombok.*;
 @ToString
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class CartItemDto {
 
     private Long cartItemNum;
     private Long goodsNum;
     private String goodsName;
-    private int goodsCartAmount;
     private int stock;
     private int goodsPrice;
     private String storedGoodsImageName;
@@ -26,7 +25,6 @@ public class CartItemDto {
         this.cartItemNum = cartItemNum;
         this.goodsNum = goodsNum;
         this.goodsName =  goodsName;
-        this.goodsCartAmount = goodsCartAmount;
     }
 
     // 이미지 있는 경우
@@ -34,7 +32,6 @@ public class CartItemDto {
         this.cartItemNum = cartItemNum;
         this.goodsNum = goodsNum;
         this.goodsName =  goodsName;
-        this.goodsCartAmount = goodsCartAmount;
         this.storedGoodsImageName = storedGoodsImageName;
     }
     
@@ -44,7 +41,6 @@ public class CartItemDto {
         cartItemDto.setCartItemNum(cartItemEntity.getNum());
         cartItemDto.setGoodsNum(cartItemEntity.getGoods().getNum());
         cartItemDto.setGoodsName(cartItemEntity.getGoods().getName());
-        cartItemDto.setGoodsCartAmount(cartItemEntity.getGoodsAmount());
         cartItemDto.setStock(cartItemEntity.getGoods().getStock());
         cartItemDto.setGoodsPrice(cartItemEntity.getGoods().getPrice());
         return cartItemDto;
@@ -56,7 +52,6 @@ public class CartItemDto {
         cartItemDto.setCartItemNum(cartItemEntity.getNum());
         cartItemDto.setGoodsNum(cartItemEntity.getGoods().getNum());
         cartItemDto.setGoodsName(cartItemEntity.getGoods().getName());
-        cartItemDto.setGoodsCartAmount(cartItemEntity.getGoodsAmount());
         cartItemDto.setStoredGoodsImageName(cartItemEntity.getGoods().getGoodsImageEntity().get(0).getStoredFileNameWithExtension());
         cartItemDto.setStock(cartItemEntity.getGoods().getStock());
         cartItemDto.setGoodsPrice(cartItemEntity.getGoods().getPrice());

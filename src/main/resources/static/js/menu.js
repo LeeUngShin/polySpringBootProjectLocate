@@ -95,53 +95,25 @@ function amountPlusMinusOrder(stock){
     }
 }
 
-function amountMinusCart(stock){
-    var currentAmount = document.getElementById("cartAmount").value;
-    var currentAmountNum = parseInt(currentAmount,10);
-    if(currentAmountNum <=1 ){
-        alert("최소 1개를 선택해야 합니다.");
-        return;
-    }
-    document.getElementById("cartAmount").value = currentAmountNum-1;
-}
-
-function amountPlusCart(stock){
-    var currentAmount = document.getElementById("cartAmount").value;
-    var currentAmountNum = parseInt(currentAmount,10);
-    if(currentAmountNum >= stock ){
-        alert("현재 재고를 넘을 수 없습니다..");
-        return;
-    }
-    document.getElementById("cartAmount").value = currentAmountNum+1;
-}
-
-function amountPlusMinusCart(stock){
-
-    //alert(stock);
-    var currentAmount = document.getElementById("cartAmount").value;
-    var currentAmountNum = parseInt(currentAmount, 10);
-    if(currentAmountNum >= stock){
-        alert("상품 재고를 넘을 수 없습니다.");
-        document.getElementById("cartAmount").value = 1;
-        return;
-    }
-    if(currentAmountNum<=1){
-        alert("최소 1개를 선택해야 합니다.");
-        document.getElementById("cartAmount").value = 1;
-        return;
-    }
-}
-
-function cartClick(loginId, price, goodsNum){
+function cartClick(loginId, price, goodsNum, cartExist){
 
     if(loginId == null || loginId == ""){
-        alert("회원만 장바구니에 담을 수 있습니다.");
-        window.location.href="http://127.0.0.1:8080/goods/detail/"+goodsNum;
+        alert("회원만 장바구니에 담을 수 있습니다.!!");
+        //window.location.href="http://127.0.0.1:8080/goods/detail/"+goodsNum;
+        return;
     }
 
-    var amount = document.getElementById("cartAmount").value;
-    amount = parseInt(amount, 10);
-    document.getElementById("cartPrice").value= amount * price;
+    if(cartExist=="Y"){
+        console.log(cartExist);
+        alert("이미 장바구니에 있습니다.");
+        //window.location.href="http://127.0.0.1:8080/goods/detail/"+goodsNum;
+        return;
+    }
+
+    var form = document.getElementById("cartInput");
+    form.method="POST";
+    form.action = "/my/cartInput/"+goodsNum;
+    form.submit();
 
     //alert(amount);
     //alert(amount * price);
@@ -156,7 +128,6 @@ function amountMinusCartOrder(stock, cartItemNum, goodsPrice){
     }
     document.getElementById("cartAmount_"+cartItemNum).value = currentAmountNum-1;
     document.getElementById("cartItemPrice_" + cartItemNum).textContent = (currentAmountNum-1) * goodsPrice;
-
 }
 
 function amountPlusCartOrder(stock, cartItemNum, goodsPrice){
@@ -168,7 +139,6 @@ function amountPlusCartOrder(stock, cartItemNum, goodsPrice){
     }
     document.getElementById("cartAmount_"+cartItemNum).value = currentAmountNum+1;
     document.getElementById("cartItemPrice_" + cartItemNum).textContent = (currentAmountNum+1) * goodsPrice;
-
 }
 
 function amountPlusMinusCartOrder(stock, cartItemNum, goodsPrice){

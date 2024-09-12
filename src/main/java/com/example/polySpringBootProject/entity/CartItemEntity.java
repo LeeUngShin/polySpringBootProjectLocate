@@ -27,20 +27,12 @@ public class CartItemEntity extends BaseEntity{
     @JoinColumn(name="GoodsNum")
     private GoodsEntity goods;
 
-    @Column
-    private int goodsAmount;
 
     public static CartItemEntity createCartItem(CartEntity cart, GoodsEntity goods, int goodsAmount){
         CartItemEntity cartItemEntity = new CartItemEntity();
         cartItemEntity.setCartEntity(cart);
         cartItemEntity.setGoods(goods);
-        cartItemEntity.setGoodsAmount(goodsAmount);
         return cartItemEntity;
     }
 
-    public void addGoodsAmount(int goodsAmount){  // this를 사용하려면 static 사용 불가
-        System.out.println("원래 수량 : "+this.goodsAmount);
-        System.out.println("추가할 수량 : "+goodsAmount);
-        this.goodsAmount += goodsAmount;
-    }
 }

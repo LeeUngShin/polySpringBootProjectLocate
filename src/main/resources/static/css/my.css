@@ -110,8 +110,10 @@ li{
 }
 
 /*장바구니*/
-#cartList{
+.cartList{
     display : flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .cartAmount{
@@ -120,4 +122,14 @@ li{
     display: inline-block;
     width: 30px;
     text-align: center;
+}
+
+.cartImgDiv{
+    height : 80%;
+    width : 30%;
+}
+
+.cartImg{
+    max-height : 100%;
+    max-width : 100%;
 }
