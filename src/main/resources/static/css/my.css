@@ -15,7 +15,7 @@ section{
 
 #myMenuSection{
     display : flex;
-    justify-content : center;
+    justify-content: center;
 }
 
 .myNavDiv{
@@ -132,4 +132,8 @@ li{
 .cartImg{
     max-height : 100%;
     max-width : 100%;
+}
+
+#emptyCart{
+    width : 500px;
 }

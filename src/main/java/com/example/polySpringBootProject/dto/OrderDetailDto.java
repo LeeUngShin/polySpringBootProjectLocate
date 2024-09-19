@@ -24,7 +24,6 @@ public class OrderDetailDto {
     private String submitPaymentMethodStr;
     private int submitAmount;
     private int submitGoodsTotalPrice;
-    private int submitDeliveryPrice;
     private int submitFinalPrice;
     private int submitAccumulatedMoney;
     private String goodsName;
@@ -90,7 +89,6 @@ public class OrderDetailDto {
         orderDetailDto.setSubmitGoodsTotalPrice(orderEntity.getSubmitGoodsTotalPrice());
         orderDetailDto.setSubmitFinalPrice(orderEntity.getSubmitFinalPrice());
         orderDetailDto.setSubmitUseAccumulatedMoney(orderEntity.getSubmitUseAccumulatedMoney());
-        orderDetailDto.setSubmitDeliveryPrice(orderEntity.getSubmitDeliveryPrice());
         orderDetailDto.setSubmitOrderMessageChoice(orderEntity.getSubmitOrderMessageChoice());
         orderDetailDto.setPhone1(orderEntity.getMember().getPhone().substring(0,3));
         orderDetailDto.setPhone2(orderEntity.getMember().getPhone().substring(3,7));
@@ -118,7 +116,6 @@ public class OrderDetailDto {
         orderDetailDto.setSubmitPaymentMethod(orderEntity.getPaymentMethod());
         orderDetailDto.setSubmitPaymentMethodStr(orderEntity.getPaymentMethod().getPaymentMethodStr());
         orderDetailDto.setSubmitAmount(orderEntity.getSubmitAmount());
-        orderDetailDto.setSubmitDeliveryPrice(orderEntity.getSubmitDeliveryPrice());
         orderDetailDto.setSubmitGoodsTotalPrice(orderEntity.getSubmitGoodsTotalPrice());
         orderDetailDto.setSubmitFinalPrice(orderEntity.getSubmitFinalPrice());
         orderDetailDto.setSubmitAccumulatedMoney(orderEntity.getSubmitAccumulatedMoney());

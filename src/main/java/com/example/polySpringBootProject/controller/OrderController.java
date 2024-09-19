@@ -33,14 +33,6 @@ public class OrderController {
         try{
             MemberDto memberDto = orderService.loginMemberInfo(loginId);
             GoodsDto goodsDto = orderService.orderGoodsInfo(goodsNum);
-            if(goodsDto.getPrice()*amount >=30000){
-                System.out.println("배송비 없음");
-                model.addAttribute("deliveryPrice", "N");
-            }
-            else{
-                System.out.println("배송비 있음");
-                model.addAttribute("deliveryPrice", "Y");
-            }
             model.addAttribute("memberDto", memberDto);
             model.addAttribute("goodsDto", goodsDto);
             model.addAttribute("amount", amount);

@@ -25,7 +25,6 @@
             <hr>
             <p>총 상품가격 ${savedOrderDetailDto.submitGoodsTotalPrice}원</p>
             <p>적립금 사용 -${savedOrderDetailDto.submitUseAccumulatedMoney}원</p>
-            <p>배송비 +${savedOrderDetailDto.submitDeliveryPrice}원</p>
             <hr>
             <p>총 결제 금액 ${savedOrderDetailDto.submitFinalPrice}원</p>
           </div>

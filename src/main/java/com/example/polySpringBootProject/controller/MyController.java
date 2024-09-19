@@ -2,6 +2,7 @@ package com.example.polySpringBootProject.controller;
 
 import com.example.polySpringBootProject.dto.CartItemDto;
 import com.example.polySpringBootProject.dto.OrderDetailDto;
+import com.example.polySpringBootProject.entity.CartItemEntity;
 import com.example.polySpringBootProject.service.MyService;
 import com.example.polySpringBootProject.service.OrderService;
 import com.google.gson.Gson;
@@ -19,6 +20,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
 @CrossOrigin(origins = "http://127.0.0.1:8080")
 @Controller
 @RequestMapping("/my")
@@ -32,16 +35,16 @@ public class MyController {
 
     @GetMapping("/orderList")
     public String orderList(Model model, @PageableDefault(page = 1) Pageable pageable,
-                            HttpSession session){
-        String loginId = (String)session.getAttribute("loginId");
+                            HttpSession session) {
+        String loginId = (String) session.getAttribute("loginId");
         Page<OrderDetailDto> orderDetailDtoPage = myService.orderList(pageable, loginId);
 
         int blockLimit = 3;  // 선택 페이지 개수 3개
-        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
+        int startPage = (((int) (Math.ceil((double) pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
         int endPage = ((startPage + blockLimit - 1) < orderDetailDtoPage.getTotalPages()) ? startPage + blockLimit - 1 : orderDetailDtoPage.getTotalPages();  // 3 6 9 12 ~~
-        boolean isLast = (startPage + blockLimit-1) >= orderDetailDtoPage.getTotalPages();
-        int currentPage = orderDetailDtoPage.getNumber()+1;
-        boolean lastPageSet = (startPage + blockLimit-1) >= orderDetailDtoPage.getTotalPages();
+        boolean isLast = (startPage + blockLimit - 1) >= orderDetailDtoPage.getTotalPages();
+        int currentPage = orderDetailDtoPage.getNumber() + 1;
+        boolean lastPageSet = (startPage + blockLimit - 1) >= orderDetailDtoPage.getTotalPages();
         int lastPage = orderDetailDtoPage.getTotalPages();
 
         model.addAttribute("orderDetailDtoPage", orderDetailDtoPage);
@@ -58,7 +61,7 @@ public class MyController {
     @GetMapping("/myOrderDetail/{orderNum}")
     public String myOrderDetail(Model model,
                                 @PathVariable("orderNum") Long orderNum,
-                                HttpSession session){
+                                HttpSession session) {
         String loginId = (String) session.getAttribute("loginId");
         OrderDetailDto orderDetailDto = myService.orderDetail(orderNum);
 
@@ -69,42 +72,47 @@ public class MyController {
 
     @PostMapping("/cartInput/{goodsNum}")
     public String cartInput(HttpSession session, CartItemDto cartItemDto, Model model,
-                              @PathVariable("goodsNum") Long goodsNum ){
+                            @PathVariable("goodsNum") Long goodsNum) {
         System.out.println("카트에 넣을 정보 : " + cartItemDto);
         String loginId = (String) session.getAttribute("loginId");
-        try{
-           boolean cartInput = myService.cartInput(cartItemDto, loginId, goodsNum);
-           if(cartInput==false){
-               return utils.showMessageAlert("장바구니에 상품을 넣는 도중 에러가 발생했습니다.", "/goods/detail/"+goodsNum, model);
-           }
+        try {
+            boolean cartInput = myService.cartInput(cartItemDto, loginId, goodsNum);
+            if (cartInput == false) {
+                return utils.showMessageAlert("장바구니에 상품을 넣는 도중 에러가 발생했습니다.", "/goods/detail/" + goodsNum, model);
+            }
 
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             e.printStackTrace();
-            return utils.showMessageAlert("회원만 상품을 장바구니에 넣을 수 있습니다.", "/goods/detail/"+goodsNum, model);
-        }catch (Exception e){
+            return utils.showMessageAlert("회원만 상품을 장바구니에 넣을 수 있습니다.", "/goods/detail/" + goodsNum, model);
+        } catch (Exception e) {
             e.printStackTrace();
-            return utils.showMessageAlert("장바구니에 상품을 넣는 도중 에러가 발생했습니다.", "/goods/detail/"+goodsNum, model);
+            return utils.showMessageAlert("장바구니에 상품을 넣는 도중 에러가 발생했습니다.", "/goods/detail/" + goodsNum, model);
         }
 
         return "redirect:/my/myCartList";
     }
 
     @GetMapping("/myCartList")
-    public String myCart(HttpSession session, Model model){
-        String loginId= (String) session.getAttribute("loginId");
+    public String myCart(HttpSession session, Model model) {
+        String loginId = (String) session.getAttribute("loginId");
 
 
         List<CartItemDto> cartItemDtoList = myService.getCartItemList(loginId);
         System.out.println("aaaaa : " + cartItemDtoList);
         model.addAttribute("cartItemDtoList", cartItemDtoList);
+        int cartTotalPrice = 0;
+        for(CartItemDto cartItemDto : cartItemDtoList){
+            cartTotalPrice += cartItemDto.getGoodsPrice() * cartItemDto.getCartItemAmount();
+        }
+        model.addAttribute("cartTotalPrice", cartTotalPrice);
 
         return "my/myCart";
     }
 
     @GetMapping("/cartList")
     @ResponseBody
-    public String myCartRest(HttpSession session, Model model){
-        String loginId= (String) session.getAttribute("loginId");
+    public String myCartRest(HttpSession session, Model model) {
+        String loginId = (String) session.getAttribute("loginId");
 
 
         List<CartItemDto> cartItemDtoList = myService.getCartItemList(loginId);
@@ -113,22 +121,73 @@ public class MyController {
         return json;
     }
 
-    @GetMapping("/cartDel")
+    @DeleteMapping("/cartDel")
     @ResponseBody
-    public String myCartDel(HttpSession session, HttpServletRequest request, Model model){
-         String loginId = (String) session.getAttribute("loginId");
-         Long cartItemNum = Long.parseLong(request.getParameter("cartItemNum"));
-        System.out.println("장바구니에서 지운 번호 : " + cartItemNum );
-         try{
-             String cartDel = myService.myCartDel(loginId, cartItemNum);
-             System.out.println("지우기 성공? " + cartDel);
-             if(cartDel.equals("Y")) return "{\"result\" : \"success\"}";
-             else return "{\"result\" : \"fail\"}";
-         }catch (EntityNotFoundException e){
-             e.printStackTrace();
-             utils.showMessageAlert("해당 상품을 장바구니에서 찾지 못했습니다.", "my/myCartLis", model);
-         }
+    public String myCartDel(@RequestBody Map<String, Object> requestData, HttpSession session, Model model) {
+        String loginId = (String) session.getAttribute("loginId");
+        Long cartItemNum = Long.parseLong(requestData.get("cartNum").toString());
+        System.out.println("장바구니에서 지운 번호 : " + cartItemNum);
+        try {
+            String cartDel = myService.myCartDel(loginId, cartItemNum);
+            System.out.println("지우기 성공? " + cartDel);
+            if (cartDel.equals("Y")) return "{\"result\" : \"success\"}";
+            else return "{\"result\" : \"fail\"}";
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            utils.showMessageAlert("해당 상품을 장바구니에서 찾지 못했습니다.", "my/myCartLis", model);
+        }
 
-        return "";
+        return "{\"result\" : \"fail\"}";
+    }
+
+    @PutMapping("/cartUpdate")
+    @ResponseBody
+    public String cartUpdate(HttpServletRequest request, Model model) {
+
+        Long cartItemNum = Long.parseLong(request.getParameter("cartItemNum"));
+        int cartAmount = Integer.parseInt(request.getParameter("amount"));
+        System.out.println("수정한 장바구니 수량 : " + cartAmount);
+        try {
+            String updateCart = myService.updateCart(cartItemNum, cartAmount);
+            if (updateCart.equals("Y")) {
+                return "{\"result\" : \"success\"}";
+            } else if (updateCart.equals("N")) {
+                return "{\"result\" : \"fail\"}";
+            } else {
+                return "{\"result\" : \"fail\"}";
+            }
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/my/myCartList", model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/my/myCartList", model);
+        }
+        return "{\"result\" : \"fail\"}";
+    }
+
+    @PutMapping("/cartCheck")
+    @ResponseBody
+    public String cartCheck(@RequestBody Map<String, Object> requestData, HttpSession session, Model model){
+        Long cartItemNum = Long.parseLong(requestData.get("cartItemNum").toString());
+        boolean cartCheck = Boolean.parseBoolean(requestData.get("cartCheck").toString());
+        System.out.println("해당 장바구니 체크 여부 : " + cartItemNum + ",  " + cartCheck);
+        try {
+            String cartChecked = myService.checkCart(cartItemNum, cartCheck);
+            if (cartChecked.equals("Y")) {
+                return "{\"result\" : \"success\"}";
+            } else if (cartChecked.equals("N")) {
+                return "{\"result\" : \"fail\"}";
+            } else {
+                return "{\"result\" : \"fail\"}";
+            }
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/my/myCartList", model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/my/myCartList", model);
+        }
+        return "{\"result\" : \"fail\"}";
     }
 }

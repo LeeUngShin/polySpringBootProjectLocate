@@ -69,7 +69,6 @@ public class OrderService {
                 .submitOrderMessageChoice(orderDto.getSubmitOrderMessageChoice())
                 .submitUseAccumulatedMoney(orderDto.getSubmitUseAccumulatedMoney())
                 .submitAmount(orderDto.getSubmitAmount())
-                .submitDeliveryPrice(orderDto.getSubmitDeliveryPrice())
                 .submitGoodsTotalPrice(orderDto.getSubmitGoodsTotalPrice())
                 .submitFinalPrice(orderDto.getSubmitFinalPrice())
                 .submitAccumulatedMoney(orderDto.getSubmitAccumulatedMoney())

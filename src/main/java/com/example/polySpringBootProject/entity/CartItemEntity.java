@@ -27,12 +27,10 @@ public class CartItemEntity extends BaseEntity{
     @JoinColumn(name="GoodsNum")
     private GoodsEntity goods;
 
+    @Column
+    private int cartAmount;
 
-    public static CartItemEntity createCartItem(CartEntity cart, GoodsEntity goods, int goodsAmount){
-        CartItemEntity cartItemEntity = new CartItemEntity();
-        cartItemEntity.setCartEntity(cart);
-        cartItemEntity.setGoods(goods);
-        return cartItemEntity;
-    }
+    @Column
+    private String checked;
 
 }

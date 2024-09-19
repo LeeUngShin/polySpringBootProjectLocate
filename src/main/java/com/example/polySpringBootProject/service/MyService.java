@@ -79,6 +79,8 @@ public class MyService {
             CartItemEntity cartItem = CartItemEntity.builder()
                     .cartEntity(myCartEntity)
                     .goods(goods)
+                    .cartAmount(1)
+                    .checked("N")
                     .build();
 
             CartItemEntity savedCartItemEntity = cartItemRepository.save(cartItem);
@@ -130,6 +132,38 @@ public class MyService {
         else{
             cartItemRepository.delete(cartItemEntity.get());
             return "Y";
+        }
+    }
+
+    public String updateCart(Long cartItemNum, int cartAmount){
+
+        CartItemEntity cartItem = cartItemRepository.findById(cartItemNum).orElseThrow(() -> new EntityNotFoundException("해당 상품이 장바구니에 없습니다."));
+
+        cartItem.setCartAmount(cartAmount);
+        CartItemEntity cartItemEntity = cartItemRepository.save(cartItem);
+        if(cartItemEntity.getCartAmount() == cartAmount){
+            return "Y";
+        }
+        else{
+            return "N";
+        }
+    }
+
+    public String checkCart(Long cartItemNum, boolean cartCheck){
+        CartItemEntity cartItem = cartItemRepository.findById(cartItemNum).orElseThrow(()->new EntityNotFoundException("해당 장바구니 번호를 찾을 수 없습니다."));
+
+        try {
+            if (cartCheck) {
+                cartItem.setChecked("Y");
+                cartItemRepository.save(cartItem);
+                return "Y";
+            } else {
+                cartItem.setChecked("N");
+                cartItemRepository.save(cartItem);
+                return "Y";
+            }
+        }catch (Exception e){
+            return "N";
         }
     }
 }

@@ -94,8 +94,6 @@ function submitOrderInfo(goodsNum, loginId){
         }
     var amount = document.getElementById("amount").innerText;
     document.getElementById("submitAmount").value= amount;
-    var deliveryPrice = document.getElementById("deliveryPrice").innerText;
-    document.getElementById("submitDeliveryPrice").value= deliveryPrice;
     var goodsTotalPrice = document.getElementById("goodsTotalPrice").innerText;
     document.getElementById("submitGoodsTotalPrice").value= goodsTotalPrice;
     var finalPrice = document.getElementById("finalPrice").innerText;
@@ -111,7 +109,6 @@ function submitOrderInfo(goodsNum, loginId){
     alert("결제방법 : " + orderPaymentMethod);
     alert("구매수량 : " + amount);
     alert("상품만 가격 : " + goodsTotalPrice);
-    alert("배송비 : " + deliveryPrice);
     alert("결제가격 : " + finalPrice);
     alert("적립금 : " + accumulateMoney);
 }

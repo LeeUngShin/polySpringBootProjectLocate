@@ -10,7 +10,7 @@
 <link rel="stylesheet" href = "/css/my.css">
 <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-barun-gothic.css" rel="stylesheet">
 </head>
-<body onload = "getList()">
+<body>
 <div id="container">
     <%@include file = "../header.jsp" %>
     <%@include file = "../nav.jsp" %>
@@ -22,16 +22,15 @@
               <h3 class="fontBold">장바구니</h3>
               <hr>
               <div id="cartListRest">
-
               </div>
+      </article>
+      <article style="margin-left : 100px;">
               <div>
                   <h2>결제정보</h2>
                   <hr>
-                  <div>상품금액 <span id="goodsPrice"></span></div>
-                  <div>배송비 <span id="deliveryPrice"></span></div>
-                  <hr>
+                  <form action="/my/"
                   <div>총 결제금액 <span id="finalPrice"></span></div>
-                  <button>구매하기</button>
+                <button type="button" class="btn btn-primary">구매하기</button>
               <div>
             </div>
           </div>
@@ -52,47 +51,6 @@
     }
   </script>
   <script>
-    function getList() {
-        fetch("http://127.0.0.1:8080/my/cartList")
-            .then((response) => response.json())
-            .then((data) => {
-                let htmlContent = ''; // HTML 문자열을 저장할 변수
-
-for (let index = 0; index < data.length; index++) {
-    htmlContent +=
-        "<div class='orderDetail cartList' id='cartList_" + data[index].cartItemNum + "'>" +
-            "<input type='checkbox' checked>" +
-            "<div class= 'cartImgDiv' id='cartImgDiv_" + data[index].cartItemNum + "'><img src='/upload/goods/" + data[index].storedGoodsImageName + "' alt='상품이미지' class='cartImg'></div>" +
-            "<div>" + data[index].goodsName + "</div>" +
-            "<div>" +
-                "<button type='button' class='amountButton' onclick='amountMinusCartOrder(" + data[index].stock + ", " + data[index].cartItemNum + ", " + data[index].goodsPrice + ")'> - </button>" +
-                "<input id='cartAmount_" + data[index].cartItemNum + "' class='cartAmount' name='goodsCartAmount' value='1' onchange='amountPlusMinusCartOrder(" + data[index].stock + ", " + data[index].cartItemNum + ", " + data[index].goodsPrice + ")'>" +
-                "<button type='button' class='amountButton' onclick='amountPlusCartOrder(" + data[index].stock + ", " + data[index].cartItemNum + ", " + data[index].goodsPrice + ")'> + </button>" +
-            "</div>" +
-            "<div><span id='cartItemPrice_" + data[index].cartItemNum + "'>" + data[index].goodsPrice + "</span><span>원</span></span></div>" +
-            "<div><a href='javascript:goDelete(" + data[index].cartItemNum + ")'><i class='bi bi-x-lg'></i></a></div>" +
-        "</div>"; // 각 루프마다 'orderDetail' div를 정확히 닫기
-}
-
-                document.getElementById("cartListRest").innerHTML = htmlContent; // 한 번에 업데이트
-            })
-            .catch((error) => console.error('Error fetching cart list:', error));
-    }
-
-    function goDelete(cartItemNum) { // 함수 이름 수정
-        fetch("http://127.0.0.1:8080/my/cartDel?cartItemNum=" + cartItemNum)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("Item deleted:", data);
-                if(data.result == "success"){
-                    getList(); // 카트 목록 갱신
-                }
-                else{
-                    alert("삭제에 실패했습니다.");
-                }
-            })
-            .catch((error) => console.error('Error deleting cart item:', error));
-    }
 
   </script>
 

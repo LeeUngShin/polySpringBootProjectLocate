@@ -10,30 +10,33 @@ import lombok.*;
 @ToString
 @Builder
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 public class CartItemDto {
 
     private Long cartItemNum;
     private Long goodsNum;
     private String goodsName;
     private int stock;
+    private int cartItemAmount;
+    private int cartItemPrice;
     private int goodsPrice;
     private String storedGoodsImageName;
+    private String checked;
 
     // 이미지 없는 경우
-    public CartItemDto(Long cartItemNum, Long goodsNum, String goodsName, int goodsCartAmount, int price){
-        this.cartItemNum = cartItemNum;
-        this.goodsNum = goodsNum;
-        this.goodsName =  goodsName;
-    }
+//    public CartItemDto(Long cartItemNum, Long goodsNum, String goodsName, int goodsCartAmount, int price){
+//        this.cartItemNum = cartItemNum;
+//        this.goodsNum = goodsNum;
+//        this.goodsName =  goodsName;
+//    }
 
-    // 이미지 있는 경우
-    public CartItemDto(Long cartItemNum, Long goodsNum, String goodsName, int goodsCartAmount, int price, String storedGoodsImageName){
-        this.cartItemNum = cartItemNum;
-        this.goodsNum = goodsNum;
-        this.goodsName =  goodsName;
-        this.storedGoodsImageName = storedGoodsImageName;
-    }
+//    // 이미지 있는 경우
+//    public CartItemDto(Long cartItemNum, Long goodsNum, String goodsName, int goodsCartAmount, int price, String storedGoodsImageName){
+//        this.cartItemNum = cartItemNum;
+//        this.goodsNum = goodsNum;
+//        this.goodsName =  goodsName;
+//        this.storedGoodsImageName = storedGoodsImageName;
+//    }
     
     // 이미지 없는 경우
     public static CartItemDto entityToDtoNotImg(CartItemEntity cartItemEntity){
@@ -43,6 +46,9 @@ public class CartItemDto {
         cartItemDto.setGoodsName(cartItemEntity.getGoods().getName());
         cartItemDto.setStock(cartItemEntity.getGoods().getStock());
         cartItemDto.setGoodsPrice(cartItemEntity.getGoods().getPrice());
+        cartItemDto.setCartItemAmount(cartItemEntity.getCartAmount());
+        cartItemDto.setCartItemPrice(cartItemEntity.getGoods().getPrice() * cartItemEntity.getCartAmount());
+        cartItemDto.setChecked(cartItemEntity.getChecked());
         return cartItemDto;
     }
     
@@ -55,6 +61,9 @@ public class CartItemDto {
         cartItemDto.setStoredGoodsImageName(cartItemEntity.getGoods().getGoodsImageEntity().get(0).getStoredFileNameWithExtension());
         cartItemDto.setStock(cartItemEntity.getGoods().getStock());
         cartItemDto.setGoodsPrice(cartItemEntity.getGoods().getPrice());
+        cartItemDto.setCartItemAmount(cartItemEntity.getCartAmount());
+        cartItemDto.setCartItemPrice(cartItemEntity.getGoods().getPrice() * cartItemEntity.getCartAmount());
+        cartItemDto.setChecked(cartItemEntity.getChecked());
         return cartItemDto;
     }
 }

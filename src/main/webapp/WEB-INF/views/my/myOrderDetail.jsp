@@ -78,9 +78,6 @@
                       <div>총 상품금액</div> <div>${orderDetailDto.submitGoodsTotalPrice}원</div>
                     </div>
                     <div class="orderDetail3Right">
-                      <div>총 배송비</div> <div>${orderDetailDto.submitDeliveryPrice}원</div>
-                    </div>
-                    <div class="orderDetail3Right">
                       <div>총 할인금액</div> <div>${orderDetailDto.submitUseAccumulatedMoney}원</div>
                     </div>
                   </div>

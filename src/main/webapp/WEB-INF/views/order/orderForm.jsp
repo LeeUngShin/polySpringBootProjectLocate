@@ -183,9 +183,7 @@
     document.getElementById("disCountPrice").textContent = disCountPrice;
     var goodsTotalPrice = document.getElementById("goodsTotalPrice").textContent;
     goodsTotalPrice = parseInt(goodsTotalPrice, 10);
-    var deliveryPrice = document.getElementById("deliveryPrice").textContent;
-    deliveryPrice = parseInt(deliveryPrice,10);
-    document.getElementById("finalPrice").textContent =  goodsTotalPrice + deliveryPrice;
+    document.getElementById("finalPrice").textContent =  goodsTotalPrice;
     accumulatedMoney = Math.round((goodsTotalPrice)/100);
     document.getElementById("accumulateMoney").textContent =  accumulatedMoney;
   </script>
