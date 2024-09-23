@@ -10,7 +10,7 @@
 	<body>
 	    <div class="middleLogo">
             <a href="/home">
-                <img src="../img/logo.PNG">
+                <img src="/img/home/logo.PNG" style="width : 400px;">
             </a>
         </div>
 

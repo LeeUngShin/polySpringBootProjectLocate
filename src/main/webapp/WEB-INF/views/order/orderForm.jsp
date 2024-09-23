@@ -17,13 +17,14 @@
     <%@include file = "../header.jsp" %>
     <%@include file = "../nav.jsp" %>
     <hr>
-    ${memberDto}
     <section class="section">
       <article>
         <div>
           <div class="row">
-            <div class="col-12">
+            <div class="col-12" style="text-align : center; margin-top : 20px;">
               <h2>주문결제</h2>
+              ${goodsDto.num}
+              <button type="button" onclick="TEST(`${goodsDto.num}`)">버튼</button>
             </div>
           </div>
         </div>
@@ -89,17 +90,8 @@
                     <img src="/upload/goods/${goodsDto.storedGoodsImageName}" alt="주문상품이미지" id="orderPaymentImg">
                     <div style="margin-left: 10px;">
                         <p>상품명</p>
-                        <p><span>${goodsDto.price}</span><span>원 / <span id="amount" name="amount"> ${amount}</span><span>개</span></p>
+                        <p><span>${goodsDto.price}</span><span>원 / <span id="orderAmount" name="amount"> ${amount}</span><span>개</span></p>
                     </div>
-                </div>
-                <div id="delivery">
-                    <div>배송비</div>
-                    <c:if test="${deliveryPrice eq 'Y'}">
-                        <div><span id="deliveryPrice" name="deliveryPrice">3000</span>원</div>
-                    </c:if>
-                    <c:if test="${deliveryPrice eq 'N'}">
-                        <div><span id="deliveryPrice" name="deliveryPrice">0</span>원(무료배송)</div>
-                    </c:if>
                 </div>
                 <hr style="margin-top: 30px; margin-bottom: 30px;">
                 <div>
@@ -112,12 +104,11 @@
                 </div>
                 <hr style="margin-top: 30px; margin-bottom: 30px;">
                 <div class="goodsPrice">
-                    <div style="font-size: 20px;">총 결제금액</div> <div><span id="finalPrice"></span><span>원</span></div>
+                    <div style="font-size: 20px;">총 결제금액</div> <div><span id="finalPrice">${goodsTotalPrice}</span><span>원</span></div>
                 </div>
                 <div style="text-align: right; padding-right: 10px;"><span>적립금</span> <span id="accumulateMoney"></span><span>원 적립예정</span></div>
                 <div id="paymentButtonDiv">
                 <form action="/order/orderResult" method="post">
-                    <input type="hidden" name="submitMemberId" id="submitMemberId" required>
                     <input type="hidden" name="submitGoodsNum" id="submitGoodsNum" required>
                     <input type="hidden" name="submitPost" id="submitPost" required>
                     <input type="hidden" name="submitAddr" id="submitAddr" required>
@@ -126,11 +117,10 @@
                     <input type="hidden" name="submitUseAccumulatedMoney" id="submitUseAccumulatedMoney" required>
                     <input type="hidden" name="submitPaymentMethod" id="submitPaymentMethod" required>
                     <input type="hidden" name="submitAmount" id="submitAmount" required>
-                    <input type="hidden" name="submitDeliveryPrice" id="submitDeliveryPrice" required>
                     <input type="hidden" name="submitGoodsTotalPrice" id="submitGoodsTotalPrice" required>
                     <input type="hidden" name="submitFinalPrice" id="submitFinalPrice" required>
                     <input type="hidden" name="submitAccumulatedMoney" id="submitAccumulatedMoney" required>
-                    <button type="submit" class="btn btn-primary" id="paymentButton" onclick="submitOrderInfo(${goodsDto.num}, '${sessionScope.loginId}')">결제하기</button>
+                    <button type="submit" class="btn btn-primary" id="paymentButton" onclick="submitOrderInfo(${goodsDto.num})">결제하기</button>
                 </form>
                 </div>
             </div>
@@ -177,14 +167,11 @@
         location.href="/home";
     }
   </script>
-  // 데이터 보내기
+
   <script>
-    var disCountPrice = document.getElementById("useAccumulateMoney").value;
-    document.getElementById("disCountPrice").textContent = disCountPrice;
-    var goodsTotalPrice = document.getElementById("goodsTotalPrice").textContent;
-    goodsTotalPrice = parseInt(goodsTotalPrice, 10);
-    document.getElementById("finalPrice").textContent =  goodsTotalPrice;
-    accumulatedMoney = Math.round((goodsTotalPrice)/100);
+    var finalPrice = document.getElementById("finalPrice").textContent;
+    finalPrice = parseInt(finalPrice, 10);
+    accumulatedMoney = Math.round((finalPrice)/100);
     document.getElementById("accumulateMoney").textContent =  accumulatedMoney;
   </script>
 

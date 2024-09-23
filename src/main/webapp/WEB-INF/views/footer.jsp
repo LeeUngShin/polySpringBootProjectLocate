@@ -2,11 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 		  <footer id="footer">
 		    <div class="footerDiv">
-		        <a href="/home">
-                    <img src="/img/home/logo.PNG">
-		        </a>
-		    </div>
-		    <div class="footerDiv">
 		        상호명 및 호스팅 서비스 제공 : 상호명(주)<br>
 		        대표이사 : 이웅신<br>
 		        성남시 분당구 수내로<br>

@@ -24,12 +24,12 @@
             <p>배송요청사항 : ${savedOrderDetailDto.submitOrderMessageChoice}</p>
             <hr>
             <p>총 상품가격 ${savedOrderDetailDto.submitGoodsTotalPrice}원</p>
-            <p>적립금 사용 -${savedOrderDetailDto.submitUseAccumulatedMoney}원</p>
+            <p>적립금 사용 ${savedOrderDetailDto.submitUseAccumulatedMoney}원</p>
             <hr>
             <p>총 결제 금액 ${savedOrderDetailDto.submitFinalPrice}원</p>
           </div>
-          <button type="button" class="btn btn-primary">주문 상세보기</button>
-          <a href="/goods/menu" class="btn btn-light">쇼핑 계속 하기</button>
+          <a href="/my/myOrderDetail/${savedOrderDetailDto.orderNum}" type="button" class="btn btn-primary">주문 상세보기</a>
+          <a href="/goods/menu" class="btn btn-light">쇼핑 계속 하기</a>
         </div>
       </div>
     </section>

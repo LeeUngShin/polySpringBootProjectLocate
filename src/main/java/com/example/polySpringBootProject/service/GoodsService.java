@@ -5,7 +5,6 @@ import com.example.polySpringBootProject.entity.*;
 import com.example.polySpringBootProject.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -197,9 +196,6 @@ public class GoodsService {
                         .goods(goodsEntity)
                         .build();
                 LikeEntity savedLikeEntity = likeRepository.save(likeEntity);
-                System.out.println("좋아요 엔티티 : " + savedLikeEntity);
-                System.out.println("좋아요 엔티티 회원 : " + savedLikeEntity.getMember());
-                System.out.println("좋아요 엔티티 상품 : " + savedLikeEntity.getGoods());
                 if(savedLikeEntity==null){
                     return false;
                 }
@@ -236,5 +232,24 @@ public class GoodsService {
         }
     }
 
+
+    public Page<GoodsDto> searchGoods(Pageable pageable, String keyword){
+        int page = pageable.getPageNumber() - 1;
+        int pageLimit = 8;
+
+        Page<GoodsEntity> goodsEntityPage = goodsRepository.findByNameContaining(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC,"num")), keyword);
+
+        Page<GoodsDto> goodsDtos = goodsEntityPage.map
+            (goods -> {
+                if (goods.getGoodsImageEntity() != null && !goods.getGoodsImageEntity().isEmpty()) {
+                    String imageFileName = goods.getGoodsImageEntity().get(0).getStoredFileNameWithExtension();
+                    return new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice(), imageFileName);
+                } else {
+                    // 비어 있는 경우
+                    return new GoodsDto(goods.getNum(), goods.getName(), goods.getPrice());
+                }
+            });
+        return goodsDtos;
+    }
 
 }

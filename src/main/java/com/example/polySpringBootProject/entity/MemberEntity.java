@@ -1,6 +1,5 @@
 package com.example.polySpringBootProject.entity;
 
-import com.example.polySpringBootProject.enumClass.MemberGrade;
 import com.example.polySpringBootProject.enumClass.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -56,28 +55,18 @@ public class MemberEntity extends BaseEntity{
     private String approval;
 
     @Column
-    private int sellTotalPrice;
-
-    @Column
     private int accumulatedMoney;
-
-//    @CreationTimestamp
-//    //@Temporal(TemporalType.TIMESTAMP)
-//    LocalDateTime reg_date;
-//
-//    @UpdateTimestamp
-//    //@Temporal(TemporalType.TIMESTAMP)
-//    LocalDateTime mod_date;
 
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
-    @Enumerated(EnumType.STRING)
-    private MemberGrade grade;
 
     //  mappedBy : 연관관계 주인이 아님을 나타냄, 값으로 주인에서 사용하는 외래키 필드명을 씀
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BoardEntity> boardDatas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CommentEntity> commentEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     Set<LikeEntity> likeEntitySet = new HashSet<>();  // 중복 방지를 위해 Set 사용

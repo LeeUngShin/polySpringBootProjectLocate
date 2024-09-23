@@ -28,4 +28,9 @@ public class CommentEntity extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="board_num")
     private BoardEntity boardEntity;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_num")
+    private MemberEntity member;
 }

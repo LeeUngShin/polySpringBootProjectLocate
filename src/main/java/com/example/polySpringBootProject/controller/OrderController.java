@@ -9,9 +9,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -77,11 +74,8 @@ public class OrderController {
     public String orderResult(OrderDto orderDto, HttpSession session, Model model){
         String id= (String)session.getAttribute("loginId");
         Long goodsNum = orderDto.getSubmitGoodsNum();
-        System.out.println("결제하기 클릭함");
-        //System.out.println(orderDto.toString());
         try {
             OrderDetailDto savedOrderDetailDto = orderService.orderComplete(orderDto, id, goodsNum);
-            System.out.println(savedOrderDetailDto.toString());
             model.addAttribute("savedOrderDetailDto", savedOrderDetailDto);
         }catch (RuntimeException e){
             e.printStackTrace();

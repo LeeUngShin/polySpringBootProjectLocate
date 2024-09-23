@@ -38,7 +38,6 @@ public class adminController {
         String loginId = (String) session.getAttribute("loginId");
         String role = (String) session.getAttribute("role");
         if(loginId != null && !loginId.isEmpty() && role.equals("ROLE_ADMIN")) {
-            System.out.println("관리자홈으로 왔더니 현재 세션은 값이 있습니다.");
             model.addAttribute("loginId", loginId);
             model.addAttribute("role", role);
             return "admin/adminHome";
@@ -47,7 +46,6 @@ public class adminController {
             return utils.showMessageAlert("관리자 계정만 접근가능합니다.", "/home", model);
         }
         else{
-            System.out.println("홈으로 왔더니 현재 세션값은 없습니다.");
             return utils.showMessageAlert("관리자 계정만 접근가능합니다.", "/home", model);
         }
         // String searchId = (String) model.getAttribute("searchId");
@@ -69,9 +67,7 @@ public class adminController {
                                      Model model){
         try {
             Page<MemberDto> notApprovalMember = adminService.getNotApprovalMember(pageable);
-            System.out.println("현재페이지미승인 회원");
             List<MemberDto> memberDtos = notApprovalMember.getContent();
-            System.out.println(memberDtos);
 
             int totalLatPage = notApprovalMember.getTotalPages();
             int currentPage = notApprovalMember.getNumber()+1;
@@ -79,10 +75,6 @@ public class adminController {
             int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
             int endPage = ((startPage + blockLimit - 1) < notApprovalMember.getTotalPages()) ? startPage + blockLimit - 1 : notApprovalMember.getTotalPages();  // 3 6 9 12 ~~
             boolean lastPageSet = (startPage + blockLimit-1) >= notApprovalMember.getTotalPages();
-
-            System.out.println("전체 마지막페이지 : " + totalLatPage);
-            System.out.println("마지막 세트인가 : " + lastPageSet);
-
 
             model.addAttribute("notApprovalMember", notApprovalMember);
             model.addAttribute("blockLimit", blockLimit);
@@ -123,9 +115,7 @@ public class adminController {
     public String memberList(@PageableDefault(page=1) Pageable pageable, Model model){
         try {
             Page<MemberDto> memberList = adminService.getMemberList(pageable);
-            System.out.println("회원목록");
             List<MemberDto> memberDtos = memberList.getContent();
-            System.out.println(memberDtos);
 
             int totalLatPage = memberList.getTotalPages();
             int currentPage = memberList.getNumber() + 1;
@@ -133,9 +123,6 @@ public class adminController {
             int startPage = (((int) (Math.ceil((double) pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
             int endPage = ((startPage + blockLimit - 1) < memberList.getTotalPages()) ? startPage + blockLimit - 1 : memberList.getTotalPages();  // 3 6 9 12 ~~
             boolean lastPageSet = (startPage + blockLimit - 1) >= memberList.getTotalPages();
-
-            System.out.println("전체 마지막페이지 : " + totalLatPage);
-            System.out.println("마지막 세트인가 : " + lastPageSet);
 
             model.addAttribute("notApprovalMember", memberList);
             model.addAttribute("blockLimit", blockLimit);
@@ -188,8 +175,6 @@ public class adminController {
         int endPage = ((startPage + blockLimit - 1) < boardDtoPage.getTotalPages()) ? startPage + blockLimit - 1 : boardDtoPage.getTotalPages();  // 3 6 9 12 ~~
         boolean lastPageSet = (startPage + blockLimit - 1) >= boardDtoPage.getTotalPages();
 
-        System.out.println("전체 마지막페이지 : " + totalLatPage);
-        System.out.println("마지막 세트인가 : " + lastPageSet);
 
         model.addAttribute("boardDtoPage", boardDtoPage);
         model.addAttribute("blockLimit", blockLimit);
@@ -209,7 +194,6 @@ public class adminController {
         try{
             BoardDto boardDto = adminService.boardDetail(boardNum);
             String json = new Gson().toJson(boardDto);
-            System.out.println("json : " + json);
             return json;
         }catch (EntityNotFoundException e){
             Map<String, String> errorMap = new HashMap<>();
@@ -265,7 +249,6 @@ public class adminController {
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("컨트롤러에서 예외발생");
             return utils.showMessageAlert("상품 등록에 실패했습니다.", "/admin/goodsRegisterForm", model);
         }
     }
@@ -281,9 +264,6 @@ public class adminController {
         int startPage = (((int) (Math.ceil((double) pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
         int endPage = ((startPage + blockLimit - 1) < goodsDtoPage.getTotalPages()) ? startPage + blockLimit - 1 : goodsDtoPage.getTotalPages();  // 3 6 9 12 ~~
         boolean lastPageSet = (startPage + blockLimit - 1) >= goodsDtoPage.getTotalPages();
-
-        System.out.println("전체 마지막페이지 : " + totalLatPage);
-        System.out.println("마지막 세트인가 : " + lastPageSet);
 
         model.addAttribute("goodsDtoPage", goodsDtoPage);
         model.addAttribute("blockLimit", blockLimit);
@@ -302,8 +282,6 @@ public class adminController {
         try{
             GoodsDto goodsDto = adminService.goodsDetail(goodsNum);
             model.addAttribute("goodsDto", goodsDto);
-            System.out.println("등록일 : " + goodsDto.getRegTime());
-            System.out.println("상품 이미지" + goodsDto.getStoredGoodsImageName());
             return "admin/goods/goodsDetail";
         }catch (EntityNotFoundException e){
             e.printStackTrace();
@@ -340,7 +318,6 @@ public class adminController {
         try{
             GoodsDto goodsDto = adminService.goodsInfo(goodsNum);
             model.addAttribute("goodsDto", goodsDto);
-            System.out.println("수정할 객체 : " + goodsDto);
             return "/admin/goods/goodsModifyForm";
         }catch (EntityNotFoundException e){
             return utils.showMessageAlert("해당 상품을 찾을 수 없습니다.", "/admin/goodsList", model);
@@ -350,8 +327,6 @@ public class adminController {
     @PostMapping("/modifyGoods/{goodsNum}")
     public String modifyGoods(@PathVariable("goodsNum") Long goodNum, Model model,
                               GoodsDto goodsDto){
-        System.out.println("수정내용 객체 : " + goodsDto);
-
         try{
             GoodsDto modifyGoodsDto = adminService.goodsModify(goodNum, goodsDto);
             if(modifyGoodsDto != null){

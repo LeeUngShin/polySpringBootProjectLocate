@@ -17,7 +17,7 @@
     <hr style="margin-bottom : 45px;">
     <section id="myMenuSection">
       <%@include file = "./mySideBar.jsp" %>
-      <article>
+      <article style="min-width: 800px";>
           <div class="orderDiv">
             <div id="orderDetailDiv">
               <h3 class="fontBold">주문내역</h3>
@@ -29,9 +29,16 @@
                       <div><img src="/upload/goods/${order.goodsStoredImgName}" class="goodsImg"></div>
                       <div id="orderDetail1_info">
                         <span class="fontBold">${order.deliveryType}</span> <i class="bi bi-chevron-right"></i>
-                        <hr> ${order.goodsNum}
-                        <a href="/goods/detail/${order.goodsNum}" class="a_black"><p>${order.goodsName}</a> <a href="#" class="a_black"><span class="cartButton"><i class="bi bi-cart"></i></span></a></p>
-                        <p><span class="fontBold">${order.submitFinalPrice}원</span> / 1개</p>
+                        <hr>
+                        <div id="myOrderDiv">
+                        <a href="/goods/detail/${order.goodsNum}" class="a_black">${order.goodsName}</a>
+                        <form action="/my/cartInput/${order.goodsNum}" method="post">
+                          <button type="submit" class="cartButton">
+                            <i class="bi bi-cart"></i>
+                          </button>
+                        </form>
+                        </div>
+                        <p><span class="fontBold">${order.submitFinalPrice}원</span> / ${order.submitAmount}개</p>
                         <p>주문번호 ${order.orderUniqueNumber}</p>
                       </div>
                     </div>

@@ -2,11 +2,8 @@ package com.example.polySpringBootProject.controller;
 
 import com.example.polySpringBootProject.dto.CartItemDto;
 import com.example.polySpringBootProject.dto.OrderDetailDto;
-import com.example.polySpringBootProject.entity.CartItemEntity;
 import com.example.polySpringBootProject.service.MyService;
-import com.example.polySpringBootProject.service.OrderService;
 import com.google.gson.Gson;
-import com.oracle.wls.shaded.org.apache.xpath.operations.Mod;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -14,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -73,7 +69,6 @@ public class MyController {
     @PostMapping("/cartInput/{goodsNum}")
     public String cartInput(HttpSession session, CartItemDto cartItemDto, Model model,
                             @PathVariable("goodsNum") Long goodsNum) {
-        System.out.println("카트에 넣을 정보 : " + cartItemDto);
         String loginId = (String) session.getAttribute("loginId");
         try {
             boolean cartInput = myService.cartInput(cartItemDto, loginId, goodsNum);
@@ -98,7 +93,6 @@ public class MyController {
 
 
         List<CartItemDto> cartItemDtoList = myService.getCartItemList(loginId);
-        System.out.println("aaaaa : " + cartItemDtoList);
         model.addAttribute("cartItemDtoList", cartItemDtoList);
         int cartTotalPrice = 0;
         for(CartItemDto cartItemDto : cartItemDtoList){
@@ -116,7 +110,6 @@ public class MyController {
 
 
         List<CartItemDto> cartItemDtoList = myService.getCartItemList(loginId);
-        System.out.println("aaaaa : " + cartItemDtoList);
         String json = new Gson().toJson(cartItemDtoList);
         return json;
     }
@@ -125,11 +118,10 @@ public class MyController {
     @ResponseBody
     public String myCartDel(@RequestBody Map<String, Object> requestData, HttpSession session, Model model) {
         String loginId = (String) session.getAttribute("loginId");
-        Long cartItemNum = Long.parseLong(requestData.get("cartNum").toString());
-        System.out.println("장바구니에서 지운 번호 : " + cartItemNum);
+        Long cartItemNum = Long.parseLong(requestData.get("cartItemNum").toString());
+        System.out.println("카트아이템넘 : " + cartItemNum);
         try {
             String cartDel = myService.myCartDel(loginId, cartItemNum);
-            System.out.println("지우기 성공? " + cartDel);
             if (cartDel.equals("Y")) return "{\"result\" : \"success\"}";
             else return "{\"result\" : \"fail\"}";
         } catch (EntityNotFoundException e) {
@@ -146,7 +138,6 @@ public class MyController {
 
         Long cartItemNum = Long.parseLong(request.getParameter("cartItemNum"));
         int cartAmount = Integer.parseInt(request.getParameter("amount"));
-        System.out.println("수정한 장바구니 수량 : " + cartAmount);
         try {
             String updateCart = myService.updateCart(cartItemNum, cartAmount);
             if (updateCart.equals("Y")) {
@@ -171,7 +162,6 @@ public class MyController {
     public String cartCheck(@RequestBody Map<String, Object> requestData, HttpSession session, Model model){
         Long cartItemNum = Long.parseLong(requestData.get("cartItemNum").toString());
         boolean cartCheck = Boolean.parseBoolean(requestData.get("cartCheck").toString());
-        System.out.println("해당 장바구니 체크 여부 : " + cartItemNum + ",  " + cartCheck);
         try {
             String cartChecked = myService.checkCart(cartItemNum, cartCheck);
             if (cartChecked.equals("Y")) {

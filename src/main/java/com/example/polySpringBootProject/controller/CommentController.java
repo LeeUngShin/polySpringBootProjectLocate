@@ -27,7 +27,6 @@ public class CommentController {
     public String addComment(HttpServletRequest request, HttpSession session, CommentDto commentDto) {
         String boardNumStr = request.getParameter("boardNum");
         Long boardNum = Long.parseLong(boardNumStr);
-        System.out.println("댓글 쓸 게시글번호 : " + boardNum);
 
         boolean addComment = commentService.addComment(commentDto, boardNum);
 
@@ -46,7 +45,6 @@ public class CommentController {
         try{
         boolean delComment = commentService.delComment(commentNum);
             if(delComment) {
-                System.out.println("삭제된 댓글 : " + commentNum);
                 return "{\"result\" : \"success\"}";
             }
 
@@ -68,7 +66,6 @@ public class CommentController {
         try {
             List<CommentDto> commentDtos = commentService.commentList(boardNum);
             String commentDtosjson = new Gson().toJson(commentDtos);
-            System.out.println("현재 게시글의 댓글 : " + commentDtosjson);
             return commentDtosjson;
         }
         catch (Exception e){

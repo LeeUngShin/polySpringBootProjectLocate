@@ -1,6 +1,5 @@
 package com.example.polySpringBootProject.service;
 
-import com.example.polySpringBootProject.enumClass.MemberGrade;
 import com.example.polySpringBootProject.enumClass.RoleType;
 import com.example.polySpringBootProject.dto.BoardDto;
 import com.example.polySpringBootProject.dto.MemberDto;
@@ -64,7 +63,6 @@ public class MemberService {
                 .email(joinDto.getEmail())
                 .phone(joinDto.getPhone())
                 .role(RoleType.ROLE_USER)
-                .grade(MemberGrade.BRONZE)
                 .approval("N")
                 .accumulatedMoney(0)
                 .build();

@@ -33,6 +33,7 @@ section{
   width : 730px;
   margin-bottom: 20px;
   margin-top: 10px;
+  min-width : 100%;
 }
 
 /*주문 상세보기*/
@@ -98,7 +99,7 @@ li{
   border: 2px solid black;
   padding: 5px;
   border-radius: 50%;
-  margin-left: 50px;
+  margin-left: 20px;
 }
 
 .myOrder{
@@ -107,6 +108,10 @@ li{
 
 #pagingNum{
     text-align : center;
+}
+
+#myOrderDiv{
+    display : flex;
 }
 
 /*장바구니*/
@@ -125,8 +130,8 @@ li{
 }
 
 .cartImgDiv{
-    height : 80%;
-    width : 30%;
+    height : 60%;
+    width : 20%;
 }
 
 .cartImg{

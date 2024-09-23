@@ -62,7 +62,7 @@ public class AdminService {
         int pageLimit = 10;  // 한페이지에 보여줄 회원 수
         Page<MemberEntity> memberEntityPage = memberRepository.findByApproval(PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "num")), "N");
         Page<MemberDto> memberDtoPage = memberEntityPage.map
-                (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime(), member.getGrade().toString()));
+                (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime()));
         return memberDtoPage;
     }
     @Transactional
@@ -82,7 +82,7 @@ public class AdminService {
         int pageLimit = 10;  // 한페이지에 보여줄 회원 수
         Page<MemberEntity> memberEntityPage = memberRepository.findAll(PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "num")));
         Page<MemberDto> memberDtoPage = memberEntityPage.map
-                (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime(), member.getGrade().toString()));
+                (member -> new MemberDto(member.getNum(), member.getId(), member.getPost(), member.getAddr(), member.getAddrDetail(), member.getEmail(), member.getApproval(), member.getCreatedTime()));
         return memberDtoPage;
     }
 

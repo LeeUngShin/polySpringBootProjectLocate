@@ -66,8 +66,7 @@ function addrCh(){
       document.getElementById("accumulateMoney").textContent = finalAccumulateMoney;
     }
 
-function submitOrderInfo(goodsNum, loginId){
-    document.getElementById("submitMemberId").value=loginId;
+function submitOrderInfo(goodsNum){
     document.getElementById("submitGoodsNum").value=goodsNum;
     var post = document.getElementById("post").innerText;
     document.getElementById("submitPost").value= post;
@@ -84,15 +83,9 @@ function submitOrderInfo(goodsNum, loginId){
     var useAccumulateMoney = document.getElementById("useAccumulateMoney").value;
     document.getElementById("submitUseAccumulatedMoney").value= useAccumulateMoney;
     var orderPaymentMethodRadio = document.querySelector('input[name="option"]:checked');
-        if (orderPaymentMethodRadio) {
-            var orderPaymentMethod = orderPaymentMethodRadio.value;
-            document.getElementById("submitPaymentMethod").value= orderPaymentMethod;
-            //alert("선택된 값: " + orderPaymentMethod);
-        } else {
-            console.log(orderPaymentMethodRadio);
-            //alert("아직 선택된 항목이 없습니다.");
-        }
-    var amount = document.getElementById("amount").innerText;
+    var orderPaymentMethod = orderPaymentMethodRadio.value;
+    document.getElementById("submitPaymentMethod").value= orderPaymentMethod;
+    var amount = document.getElementById("orderAmount").innerText;
     document.getElementById("submitAmount").value= amount;
     var goodsTotalPrice = document.getElementById("goodsTotalPrice").innerText;
     document.getElementById("submitGoodsTotalPrice").value= goodsTotalPrice;
@@ -114,3 +107,43 @@ function submitOrderInfo(goodsNum, loginId){
 }
 
 
+function TEST(goodsNum){
+    document.getElementById("submitGoodsNum").value=goodsNum;
+    var post = document.getElementById("post").innerText;
+    document.getElementById("submitPost").value= post;
+    var addr = document.getElementById("addr").innerText;
+    document.getElementById("submitAddr").value= addr;
+    var addrDetail = document.getElementById("addrDetail").innerText;
+    document.getElementById("submitAddrDetail").value= addrDetail;
+    var orderMessageChoice = document.getElementById("orderMessageChoice").value;
+    document.getElementById("submitOrderMessageChoice").value= orderMessageChoice;
+    if(orderMessageChoice=="직접입력"){
+        var orderMessageChoice = document.getElementById("orderMessageInput").value;
+        document.getElementById("submitOrderMessageChoice").value= orderMessageChoice;
+    }
+    var useAccumulateMoney = document.getElementById("useAccumulateMoney").value;
+    document.getElementById("submitUseAccumulatedMoney").value= useAccumulateMoney;
+    var orderPaymentMethodRadio = document.querySelector('input[name="option"]:checked');
+    var orderPaymentMethod = orderPaymentMethodRadio.value;
+    document.getElementById("submitPaymentMethod").value= orderPaymentMethod;
+    var amount = document.getElementById("orderAmount").innerText;
+    document.getElementById("submitAmount").value= amount;
+    var goodsTotalPrice = document.getElementById("goodsTotalPrice").innerText;
+    document.getElementById("submitGoodsTotalPrice").value= goodsTotalPrice;
+    var finalPrice = document.getElementById("finalPrice").innerText;
+    document.getElementById("submitFinalPrice").value= finalPrice;
+    var accumulateMoney = document.getElementById("accumulateMoney").innerText;
+    document.getElementById("submitAccumulatedMoney").value= accumulateMoney;
+    alert(typeof("goodsNum"));
+    alert("상품번호 : " +goodsNum);
+    alert("우편주소 : " + post);
+    alert("주소 : " + addr);
+    alert("상세주소 : " + addrDetail);
+    alert("배송메세지 : " + orderMessageChoice);
+    alert("사용적립금 : " + useAccumulateMoney);
+    alert("결제방법 : " + orderPaymentMethodRadio.value);
+    alert("구매수량 : " + amount);
+    alert("상품만 가격 : " + goodsTotalPrice);
+    alert("결제가격 : " + finalPrice);
+    alert("적립금 : " + accumulateMoney);
+}

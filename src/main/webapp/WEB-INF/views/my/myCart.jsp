@@ -16,7 +16,7 @@
     <%@include file = "../nav.jsp" %>
     <hr style="margin-bottom : 45px;">
     <section id="myMenuSection">
-      <article>
+      <article style="min-width: 800px";>
           <div class="orderDiv">
             <div id="orderDetailDiv">
               <h3 class="fontBold">장바구니</h3>

@@ -2,8 +2,6 @@ package com.example.polySpringBootProject.controller;
 
 import com.example.polySpringBootProject.dto.BoardDto;
 import com.example.polySpringBootProject.dto.MemberDto;
-import com.example.polySpringBootProject.entity.BoardEntity;
-import com.example.polySpringBootProject.entity.GoodsSubCategoryEntity;
 import com.example.polySpringBootProject.repository.GoodsSubCategoryRepository;
 import com.example.polySpringBootProject.service.BoardService;
 import com.example.polySpringBootProject.service.MemberService;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.Subject;
 import java.io.IOException;
 import java.util.List;
 
@@ -72,11 +69,9 @@ public class BoardController {
         try {
             num = boardService.write(boardDto, id);
             if(num==-1L){
-                System.out.println("게시글 작성 실패, -1반환");
                 return utils.showMessageAlert("글 작성 실패", "/board/write", model);
             }
         }catch (Exception e){
-            System.out.println("게시글 작성 실패");
             e.printStackTrace();
         }
         return utils.showMessageAlert("글 작성 성공", "/board/detail/" + num, model);
@@ -91,10 +86,9 @@ public class BoardController {
 
         BoardDto boardDto = boardService.boardDetail(boardNum);
         String contentEnter = boardDto.getContent().replace("\n", "<br>");
-        System.out.println("상세로 볼 dto : " + boardDto );
         if((boardDto.getSecret().equals("Y") && !boardDto.getWriter().equals(session.getAttribute("loginId")))
             || boardDto.getSecret().equals("Y") && (session.getAttribute("loginId")==null || session.getAttribute("loginId")=="")){
-            return utils.showMessageAlert("접근불가", "/board/page", model);
+            return utils.showMessageAlert("접근불가", "/board/board?board=plain&page=" + currentPage, model);
         }else if(boardDto.getSecret().equals("Y") && boardDto.getWriter().equals(session.getAttribute("loginId"))){
             request.setAttribute("boardDto", boardDto);
             request.setAttribute("contentEnter", contentEnter);
@@ -116,8 +110,7 @@ public class BoardController {
         boolean confirmData = Boolean.parseBoolean(confirmDataStr);
         String currentPageStr = request.getParameter("currentPage");
         int currentPage = Integer.parseInt(currentPageStr);
-        System.out.println("삭제할까? " + confirmData);
-        System.out.println("삭제할 게시글번호 : " + boardNum);
+
         if(confirmData){
             try {
                 boardService.delete(boardNum);
@@ -135,7 +128,6 @@ public class BoardController {
 
     @RequestMapping(value="/modify/{boardNum}", method=RequestMethod.GET)
     public String boardModify(HttpServletRequest request, @PathVariable("boardNum") Long boardNum) {
-        System.out.println("수정할 게시글번호 : " + boardNum);
         BoardDto boardDto = boardService.getBoardDto(boardNum);
         String contentEnter = boardDto.getContent().replace("\n", "<br>");
         request.setAttribute("boardDto", boardDto);
@@ -205,14 +197,11 @@ public class BoardController {
 //        }
 
         MemberDto loginMemberDto = memberService.getMemberInfo((String)session.getAttribute("loginId"));
-        System.out.println("현재페이지 : " + pageable.getPageNumber());
-
         String boardType = request.getParameter("board");  // 게시판 종류
 
         Page<BoardDto> boardList = boardService.paging(pageable, boardType);
         List<BoardDto> noticeBoardList = boardService.noticeList();
         int currentPage = boardList.getNumber()+1;  // 파라미터로 받은 현재페이지
-        System.out.println("현재페이지 : " + currentPage);
 
         // 총 Page 개수 20개이고 페이지 선택을 3개씩 보여준다면
         // 3페이지를 보고 있으면 1 2 3 -> startPage = 1, endPage = 3
@@ -231,8 +220,6 @@ public class BoardController {
         model.addAttribute("isLast", isLast);
         model.addAttribute("loginDto", loginMemberDto);
         model.addAttribute("boardType", boardType);
-        System.out.println("보드타입 : " + boardType);
-        System.out.println("로그인 회원 : " + loginMemberDto);
 
         //model.addAttribute("sortStd", sortStd);
         return "board/boardPaging";

@@ -13,8 +13,8 @@
                   <hr>
                   <a class="nav-link myNav" href="/member/myBoard?page=1">게시글 모아보기</a>
                   <hr>
-                  <a class="nav-link myNav" href="#">주문내역</a>
-                  <a class="nav-link myNav" href="#">장바구니</a>
+                  <a class="nav-link myNav" href="/my/orderList">주문내역</a>
+                  <a class="nav-link myNav" href="/my/myCartList">장바구니</a>
                 </nav>
               </div>
             </div>

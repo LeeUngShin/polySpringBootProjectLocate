@@ -1,19 +1,15 @@
 package com.example.polySpringBootProject.controller;
 
 import com.example.polySpringBootProject.dto.BoardDto;
-import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.dto.MemberDto;
-import com.example.polySpringBootProject.entity.GoodsEntity;
-import com.example.polySpringBootProject.entity.LikeEntity;
-import com.example.polySpringBootProject.repository.LikeRepository;
 import com.example.polySpringBootProject.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,9 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletResponse;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,11 +75,9 @@ public class MemberController {
         }
 
         if(joinSuccess) {
-            System.out.println("회원가입 성공");
             return utils.showMessageAlert("회원가입 성공", "/member/login", model);
         }
         else {
-            System.out.println("회원가입 실패");
             return "member/join";
         }
     }
@@ -124,7 +115,6 @@ public class MemberController {
         Cookie rememberCookie = new Cookie("REMEMBER", request.getParameter("id"));
         rememberCookie.setPath("/");
         boolean check = idMemory;
-        System.out.println("아이디를 기억할까 체크여부 : " + check);
         if (check) {
             rememberCookie.setMaxAge(60 * 60 * 24 * 30);
 
@@ -141,7 +131,6 @@ public class MemberController {
             return "redirect:/home";
         }
         else if(loginStr.equals("notApproval")){
-            System.out.println("승인안됨");
             return utils.showMessageAlert("회원 인승 미완료", "/member/login", model);
         }
         else{
@@ -171,7 +160,6 @@ public class MemberController {
     public String deleteForm(HttpServletRequest request) {
         String id = request.getParameter("id");
         request.setAttribute("id", id);
-        System.out.println("AAAAA : "+ id);
         return "member/delete";
     }
 
@@ -185,7 +173,7 @@ public class MemberController {
     public String deleteProcess(HttpServletRequest request, HttpSession session, Model model) {
         String pw = request.getParameter("pw");
         String id = (String) session.getAttribute("loginId");
-        System.out.println("탈퇴하려는 id, pw : " + id + "   , " + pw);
+
         if(memberService.delete(id, pw, session)) {
             System.out.println("회원탈퇴 성공");
             return utils.showMessageAlert("회원탈퇴 성공", "/home", model);
@@ -207,7 +195,6 @@ public class MemberController {
         String id = (String) session.getAttribute("loginId");  // 로그인한 아이디
         MemberDto joinForm = memberService.modifyForm(id);
         request.setAttribute("member", joinForm);
-        System.out.println(joinForm);
 
         return "member/myPage";
     }
@@ -277,7 +264,6 @@ public class MemberController {
         }
         Page<BoardDto> myBoardList = memberService.myBoardList(pageable, myId);
         int currentPage = myBoardList.getNumber() + 1;
-        System.out.println("내 게시글 현재페이지 : " + currentPage);
         int blockLimit = 3;  // 선택 페이지 개수 3개
         int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
         int endPage = ((startPage + blockLimit - 1) < myBoardList.getTotalPages()) ? startPage + blockLimit - 1 : myBoardList.getTotalPages();  // 3 6 9 12 ~~
@@ -302,7 +288,6 @@ public class MemberController {
         Page<BoardDto> myBoardSearchList = memberService.myBoardSearch(pageable, myId, category, keyword);
 
         int currentPage = myBoardSearchList.getNumber() + 1;
-        System.out.println("내 게시글 현재페이지 : " + currentPage);
         int blockLimit = 3;  // 선택 페이지 개수 3개
         int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
         int endPage = ((startPage + blockLimit - 1) < myBoardSearchList.getTotalPages()) ? startPage + blockLimit - 1 : myBoardSearchList.getTotalPages();  // 3 6 9 12 ~~
@@ -321,7 +306,6 @@ public class MemberController {
 
         List<MemberDto> list = memberService.findAll();
         request.setAttribute("memberList", list);
-        System.out.println("aa : "+ list);
         return "member/list";
     }
 

@@ -1,11 +1,9 @@
 package com.example.polySpringBootProject.repository;
 
-import com.example.polySpringBootProject.entity.BoardEntity;
 import com.example.polySpringBootProject.entity.GoodsEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,6 +20,8 @@ public interface GoodsRepository extends JpaRepository<GoodsEntity, Long> {
 
     Page<GoodsEntity> findByGoodsCategoryCategoryNameOrderByNumDesc(Pageable pageable, String categoryName);
     Page<GoodsEntity> findByGoodsSubCategoryCategoryNameOrderByNumDesc(Pageable pageable, String subCategoryName);
+
+    Page<GoodsEntity> findByNameContaining(Pageable pageable, String keyword);
 
     //@Query()
     //List<GoodsEntity> findByGoodsCategoryCategoryName(String topCategory);

@@ -47,14 +47,6 @@ public class BoardEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
 
-//    @CreationTimestamp
-//    @Temporal(TemporalType.TIMESTAMP)
-//    LocalDateTime regDate;
-//
-//    @UpdateTimestamp
-//    @Temporal(TemporalType.TIMESTAMP)
-//    LocalDateTime modDate;
-
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)  // 다 대 일 (다 : 주인, 자식, 일 : 주인X, 부모)
     @JoinColumn(name = "member_id")  // 연관관계 주인임을 나타냄 , name = 외래키 이름

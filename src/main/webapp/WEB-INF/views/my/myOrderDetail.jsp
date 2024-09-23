@@ -17,14 +17,14 @@
     <hr style="margin-bottom : 45px;">
     <section id="myMenuSection">
       <%@include file = "./mySideBar.jsp" %>
-      <article>
+      <article style="min-width: 800px";>
           <div class="orderDiv">
             <div id="orderDetailDiv">
               <h3 class="fontBold" style="margin-bottom : 20px;">주문상세</h3>
-              <p class="fontBold">2024.08.10</p>
+              <p class="fontBold">${orderDetailDto.orderDate}</p>
               <div class="orderDetail">
                 <div id="orderDetail1">
-                  <div><img src="./upload/goods/${orderDetailDto.goodsStoredImgName}" class="goodsImg"></div>
+                  <div><img src="/upload/goods/${orderDetailDto.goodsStoredImgName}" class="goodsImg"></div>
                   <div id="orderDetail1_info">
                     <span class="fontBold">${orderDetailDto.deliveryTypeStr}</span> <i class="bi bi-chevron-right"></i>
                     <hr>

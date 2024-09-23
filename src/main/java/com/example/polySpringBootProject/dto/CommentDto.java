@@ -3,7 +3,6 @@ package com.example.polySpringBootProject.dto;
 import com.example.polySpringBootProject.entity.CommentEntity;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @ToString
@@ -23,7 +22,7 @@ public class CommentDto {
     public static CommentDto EntityToCommentDto(CommentEntity commentEntity){
         CommentDto commentDto = new CommentDto();
         commentDto.setNum(commentEntity.getNum());
-        commentDto.setCommentWriter(commentEntity.getBoardEntity().getMember().getId());
+        commentDto.setCommentWriter(commentEntity.getMember().getId());
         commentDto.setCommentContent(commentEntity.getCommentContent());
         commentDto.setCommentCreateTime(commentEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         return commentDto;

@@ -12,16 +12,7 @@ import com.example.polySpringBootProject.repository.GoodsRepository;
 import com.example.polySpringBootProject.repository.MemberRepository;
 import com.example.polySpringBootProject.repository.OrderRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.aspectj.weaver.Member;
-import org.aspectj.weaver.ast.Or;
-import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -78,9 +69,11 @@ public class OrderService {
                 .build();
         try {
             OrderEntity savedOrderEntity = orderRepository.save(orderEntity);
-
-            System.out.println("여기1 : " + orderEntity.getGoods().getGoodsImageEntity());
-
+            goods.setStock(goods.getStock() - orderDto.getSubmitAmount());
+            goods.setSellCnt(goods.getSellCnt()+1);
+            goodsRepository.save(goods);
+            member.setAccumulatedMoney(orderDto.getSubmitAccumulatedMoney());
+            memberRepository.save(member);
             OrderDetailDto orderDetailDto = OrderDetailDto.EntityToDtoOrderComplete(savedOrderEntity);
 
             return orderDetailDto;
