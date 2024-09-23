@@ -1,30 +1,26 @@
 package com.example.polySpringBootProject.controller;
 
 import com.example.polySpringBootProject.dto.BoardDto;
-import com.example.polySpringBootProject.dto.BoardResponse;
 import com.example.polySpringBootProject.dto.GoodsDto;
 import com.example.polySpringBootProject.dto.MemberDto;
 import com.example.polySpringBootProject.service.AdminService;
-import com.example.polySpringBootProject.service.BoardService;
 import com.google.gson.Gson;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import lombok.experimental.PackagePrivate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.rmi.server.ExportException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -253,7 +249,6 @@ public class adminController {
 
         try {
             String goodsRegister = adminService.goodsRegister(goodsDto);
-            System.out.println("반환받은 문자열 : " + goodsRegister);
             if (goodsRegister.equals("success")) {
                 return utils.showMessageAlert("상품 등록에 성공했습니다.", "/admin/goodsRegisterForm", model);
             }
