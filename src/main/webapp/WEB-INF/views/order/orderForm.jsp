@@ -23,8 +23,6 @@
           <div class="row">
             <div class="col-12" style="text-align : center; margin-top : 20px;">
               <h2>주문결제</h2>
-              ${goodsDto.num}
-              <button type="button" onclick="TEST(`${goodsDto.num}`)">버튼</button>
             </div>
           </div>
         </div>

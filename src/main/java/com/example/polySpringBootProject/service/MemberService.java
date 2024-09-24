@@ -47,8 +47,10 @@ public class MemberService {
         if(duplicatedId==true){ // 중복 아이디 존재하면
             // field 매개변수는 커맨드 객체의 매개변수와 동일해야 함
             bindingResult.rejectValue("id", "duplicatedId", "중복된 아이디입니다.");
+            System.out.println("중복 있음");
             return false;
         }else if (!joinDto.getPw().equals(joinDto.getPwCheck())){
+            System.out.println("비번과체크비번이 안맞음");
             bindingResult.rejectValue("pwCheck", "pwInCorrect", "비밀번호가 불일치합니다.");
             return  false;
         }

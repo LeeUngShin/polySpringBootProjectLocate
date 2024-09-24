@@ -31,6 +31,7 @@
           <a href="/my/myOrderDetail/${savedOrderDetailDto.orderNum}" type="button" class="btn btn-primary">주문 상세보기</a>
           <a href="/goods/menu" class="btn btn-light">쇼핑 계속 하기</a>
         </div>
+        ${savedOrderDetailDto.orderNum}
       </div>
     </section>
 </div>

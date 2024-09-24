@@ -180,4 +180,22 @@ public class MyController {
         }
         return "{\"result\" : \"fail\"}";
     }
+
+    @GetMapping("/cartOrder")
+    public String cartOrder(@RequestParam("orderItems")String orderItems,
+                            @RequestParam("finalPrice") int finalPrice,
+                            Model model, HttpSession session){
+
+        String[] goods = orderItems.split(",");  // , 기준 분리 후 배열 저장
+        for(String good : goods){
+            String[] parts = good.split(":");
+            String cartItemNum = parts[0];
+            int amount = Integer.parseInt(parts[1]);
+            System.out.println(cartItemNum);
+            System.out.println(amount);
+            System.out.println("-----------------------------");
+        }
+        System.out.println(finalPrice);
+        return null;
+    }
 }

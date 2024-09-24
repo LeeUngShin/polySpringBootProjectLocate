@@ -2,11 +2,8 @@ package com.example.polySpringBootProject.entity;
 
 import com.example.polySpringBootProject.enumClass.DeliveryType;
 import com.example.polySpringBootProject.enumClass.PaymentMethod;
-import com.example.polySpringBootProject.enumClass.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @ToString  // ToString 메서드 사용가능
 @Getter  // Getter 메서드 사용가능
@@ -68,5 +65,4 @@ public class OrderEntity extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="memberNum")
     private MemberEntity member;
-
 }

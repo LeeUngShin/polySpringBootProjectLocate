@@ -74,8 +74,10 @@ public class OrderController {
     public String orderResult(OrderDto orderDto, HttpSession session, Model model){
         String id= (String)session.getAttribute("loginId");
         Long goodsNum = orderDto.getSubmitGoodsNum();
+        //System.out.println(orderDto.toString());
         try {
             OrderDetailDto savedOrderDetailDto = orderService.orderComplete(orderDto, id, goodsNum);
+            System.out.println(savedOrderDetailDto.toString());
             model.addAttribute("savedOrderDetailDto", savedOrderDetailDto);
         }catch (RuntimeException e){
             e.printStackTrace();

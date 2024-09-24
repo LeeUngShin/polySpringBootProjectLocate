@@ -22,8 +22,8 @@
         String loginId = (String) session.getAttribute("loginId");
         if(loginId != null && loginId != "") { %>  <!--로그인 상태이면-->
     <div id="loginRegister">
-        ${sessionScope.loginId}님!!<br>
-        ${sessionScope.role}<br>
+        <!--${sessionScope.loginId}님!!<br>
+        ${sessionScope.role}<br>-->
     <form action="/member/logout" method="POST" id=logout-form>
         <button type="submit" class="btn btn-main">
             <i class="bi bi-person-fill"></i>

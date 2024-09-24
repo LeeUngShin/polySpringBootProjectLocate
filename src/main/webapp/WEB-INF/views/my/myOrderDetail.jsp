@@ -52,7 +52,7 @@
                     <div id="orderDetail2Right">
                       <p>${orderDetailDto.memberName}</p>
                       <p>${orderDetailDto.phone1}-${orderDetailDto.phone2}-${orderDetailDto.phone3}</p>
-                      <p>(${orderDetailDto.submitPost}) ${orderDetailDto.submitAddr} ${orderDetailDto.submitAddrDetail}</p>
+                      <p>${orderDetailDto.submitPost} ${orderDetailDto.submitAddr} ${orderDetailDto.submitAddrDetail}</p>
                       <p>${orderDetailDto.submitOrderMessageChoice}</p>
                     </div>
                   </div>

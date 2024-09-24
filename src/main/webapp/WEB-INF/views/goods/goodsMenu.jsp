@@ -84,7 +84,7 @@
                           </div>
                         </div>
                         <div class="card-body">
-                          <h6 class="card-title">베트스메뉴 ${item.goodsName}</h6>
+                          <h6 class="card-title">${item.goodsName}</h6>
                         </div>
                       </div>
                     </a>

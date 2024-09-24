@@ -71,7 +71,7 @@
                       <img src="/img/home/cakeCategoryImg.jpg" class="card-img-top homeMenuCategory" alt="...">
                       <div class="card-body">
                         <h2 class="card-title">CAKE</h2>
-                        <p class="card-text menuCategoryHashTag">#생크림케이크&nbsp&nbsp#티라미수&nbsp&nbsp#치즈케이크&nbsp&nbsp<br>#조각케이크&nbsp&nbsp#캐릭터케이크</p>
+                        <p class="card-text menuCategoryHashTag">#생크림케이크&nbsp&nbsp#티라미수&nbsp&nbsp#치즈케이크&nbsp&nbsp<br>#조각케이크&nbsp&nbsp#캐릭케이크</p>
                         <a href="/goods/menu?topCategory=케이크&subCategory=all&page=1" class="btn btn-outline-secondary">상품 보러가기</a>
                       </div>
                     </div>

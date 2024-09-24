@@ -79,6 +79,7 @@ public class OrderDetailDto {
         OrderDetailDto orderDetailDto = new OrderDetailDto();
         orderDetailDto.setMemberName(orderEntity.getMember().getName());
         orderDetailDto.setOrderUniqueNumber(orderEntity.getOrderUniqueNumber());
+        orderDetailDto.setOrderNum(orderEntity.getNum());
         orderDetailDto.setOrderDate(orderEntity.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         orderDetailDto.setSubmitPaymentMethod(orderEntity.getPaymentMethod());
         orderDetailDto.setSubmitPost(orderEntity.getSubmitPost());
@@ -109,7 +110,7 @@ public class OrderDetailDto {
         orderDetailDto.setOrderUniqueNumber(orderEntity.getOrderUniqueNumber());
         orderDetailDto.setDeliveryType(orderEntity.getDeliveryType());
         orderDetailDto.setDeliveryTypeStr(orderEntity.getDeliveryType().getDelivery());
-        orderDetailDto.setSubmitAddr(orderEntity.getSubmitAddr());
+        orderDetailDto.setSubmitPost(orderEntity.getSubmitPost());
         orderDetailDto.setSubmitAddr(orderEntity.getSubmitAddr());
         orderDetailDto.setSubmitAddrDetail(orderEntity.getSubmitAddrDetail());
         orderDetailDto.setSubmitUseAccumulatedMoney(orderEntity.getSubmitUseAccumulatedMoney());

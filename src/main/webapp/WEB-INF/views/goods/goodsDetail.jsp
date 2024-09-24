@@ -55,7 +55,6 @@
                               <i class="bi bi-heart" id="likeNot"></i>
                                찜하기
                             </button>
-                            ${goodsLike}
                         </h1>
                         <p id="menuExplain">${goodsDto.goodsExplanation}</p>
                         <h5>가격정보</h5>

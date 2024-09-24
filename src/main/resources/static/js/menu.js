@@ -231,11 +231,11 @@ function getList() {
 
                 console.log(data[index].checked);
                 if(data[index].checked === "Y"){
-                    var checkboxHtml = "<input type='checkbox' id='cartChecked_" + data[index].cartItemNum + "' onchange='goCheck(" + data[index].cartItemNum + ")' checked>"
+                    var checkboxHtml = "<input type='checkbox' name='checkGoods' id='cartChecked_" + data[index].cartItemNum + "' onchange='goCheck(" + data[index].cartItemNum + ")' data-index='" + index +"' value='" + data[index].cartItemNum + "' checked>"
                     totalPrice += data[index].cartItemPrice;
                 }
                 else{
-                    var checkboxHtml = "<input type='checkbox' id='cartChecked_" + data[index].cartItemNum + "' onchange='goCheck(" + data[index].cartItemNum + ")'>"
+                    var checkboxHtml = "<input type='checkbox' name='checkGoods' id='cartChecked_" + data[index].cartItemNum + "' onchange='goCheck(" + data[index].cartItemNum + ")'>"
                 }
 
                 htmlContent +=
@@ -250,6 +250,7 @@ function getList() {
                         "</div>" +
                         "<div><span id='cartItemPrice_" + data[index].cartItemNum + "'>" + data[index].cartItemPrice + "</span><span>원</span></span></div>" +
                         "<div><a href='javascript:goDelete(" + data[index].cartItemNum + ")'><i class='bi bi-x-lg'></i></a></div>" +
+                        "<div>" + data[index].cartItemNum + ", " + data[index].goodsNum + ", " + data[index].goodsPrice + "</div>" +
                     "</div>"; // 각 루프마다 'orderDetail' div를 정확히 닫기
             }
             document.getElementById("cartListRest").innerHTML = htmlContent; // 한 번에 업데이트
@@ -308,4 +309,29 @@ function goCheck(cartItemNum){
         }
     })
     .catch((error) => console.log(error))
+}
+
+function cartOrder(){
+    var checkedItems = document.querySelectorAll('input[name="checkGoods"]:checked');
+    var orderItems = [];
+
+    checkedItems.forEach(function(item){
+        var index = item.getAttribute('data-index');  // 체크한 경우
+        var amount = document.getElementById('cartAmount_' + item.value).value;  // 수량
+        orderItems.push(item.value + ':' + amount);  // 장바구니상품번호:수량 형태로 배열에 저장
+    });
+
+    if(orderItems.length === 0){
+        alert("상품을 선택하세요");
+        return;
+    }
+
+    var input = document.createElement('input');
+    input.type= 'hidden';
+    input.name = 'orderItems';
+    input.value = orderItems.join(',');  // 배열의 데이터를 ,로 구분해 문자열형식으로
+    var finalPrice = document.getElementById("finalPrice").textContent;
+    document.getElementById("hiddenFinalPrice").value = finalPrice;
+    document.getElementById("cartForm").appendChild(input);
+    document.getElementById("cartForm").submit();
 }
